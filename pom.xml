@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>PetManagement</name>
 
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
@@ -18,8 +19,9 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17.0.6</version>
+            <version>17.0.6</version> <!-- Cần đồng nhất với runtime -->
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
@@ -47,8 +49,26 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
 
+        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.mindrot</groupId>-->
+        <!--            <artifactId>jbcrypt</artifactId>-->
+        <!--            <version>0.4</version>-->
+        <!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itext7-core -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>8.0.2</version>
+            <type>pom</type>
+        </dependency>
+
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -69,7 +89,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.petmanagement/com.petmanagement.Main</mainClass>
+                            <mainClass>com.consenyeunghe/com.consenyeunghe.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

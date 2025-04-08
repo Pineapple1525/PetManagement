@@ -1,4 +1,4 @@
-package com.consenyeunghe.connection;
+package com.petmanagement.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

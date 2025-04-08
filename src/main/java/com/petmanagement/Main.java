@@ -1,4 +1,4 @@
-package com.consenyeunghe;
+package com.petmanagement;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/pages/main.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/main.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
             stage.setTitle("");
             stage.setScene(scene);

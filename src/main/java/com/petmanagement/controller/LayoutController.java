@@ -1,4 +1,4 @@
-package com.consenyeunghe.controller;
+package com.petmanagement.controller;
 
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -53,8 +53,8 @@ public class LayoutController {
 
         Platform.runLater(() -> {
             try {
-                Image normalPaw = new Image(getClass().getResource("/views/images/cat-paw.png").toExternalForm(), 32, 32, true, true);
-                Image selectedPaw = new Image(getClass().getResource("/views/images/cat-paw-selected.png").toExternalForm(), 32, 32, true, true);
+                Image normalPaw = new Image(getClass().getResource("/com/petmanagement/images/cat-paw.png").toExternalForm(), 32, 32, true, true);
+                Image selectedPaw = new Image(getClass().getResource("/com/petmanagement/images/cat-paw-selected.png").toExternalForm(), 32, 32, true, true);
                 Cursor pawCursor = new ImageCursor(normalPaw, 0, 0);
 
                 List<Node> newNodes = new ArrayList<>();
@@ -190,36 +190,36 @@ public class LayoutController {
 
     @FXML
     public void showUsers() {
-        loadView("/views/pages/users.fxml");
+        loadView("/com/petmanagement/pages/users.fxml");
     }
 
     @FXML
     public void showEmployees() {
-        loadView("/views/pages/employees.fxml");
+        loadView("/com/petmanagement/pages/employees.fxml");
     }
 
     @FXML
     public void showPets() {
-        loadView("/views/pages/pets.fxml");
+        loadView("/com/petmanagement/pages/pets.fxml");
     }
 
     @FXML
     public void showPetProducts() {
-        loadView("/views/pages/pet-products.fxml");
+        loadView("/com/petmanagement/pages/pet-products.fxml");
     }
 
     @FXML
     public void showOrders() {
-        loadView("/views/pages/orders.fxml");
+        loadView("/com/petmanagement/pages/orders.fxml");
     }
 
     @FXML
     public void showCustomers() {
-        loadView("/views/pages/customers.fxml");
+        loadView("/com/petmanagement/pages/customers.fxml");
     }
 
     @FXML
     public void showPreviousOwners() {
-        loadView("/views/pages/pre-owners.fxml");
+        loadView("/com/petmanagement/pages/pre-owners.fxml");
     }
 }
