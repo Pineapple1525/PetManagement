@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.EmployeeController">
+    <children>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
 
-            prefHeight="400.0" prefWidth="600.0">
+            <Label text="Danh sách nhân viên" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
+            <TableView fx:id="employeeTable" prefHeight="400" prefWidth="1200">
+                <columns>
+                    <TableColumn fx:id="colId" text="Mã ID" prefWidth="60"/>
+                    <TableColumn fx:id="colCode" text="Mã nhân viên" prefWidth="100"/>
+                    <TableColumn fx:id="colName" text="Họ tên" prefWidth="150"/>
+                    <TableColumn fx:id="colGender" text="Giới tính" prefWidth="80"/>
+                    <TableColumn fx:id="colBirth" text="Ngày sinh" prefWidth="100"/>
+                    <TableColumn fx:id="colPhone" text="SĐT" prefWidth="100"/>
+                    <TableColumn fx:id="colEmail" text="Email" prefWidth="150"/>
+                    <TableColumn fx:id="colRole" text="Vai trò" prefWidth="100"/>
+                    <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="150"/>
+                    <TableColumn fx:id="colSalary" text="Lương" prefWidth="100"/>
+                    <TableColumn fx:id="colWorkShift" text="Ca làm" prefWidth="80"/>
+                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="80"/>
+                    <TableColumn fx:id="colHiringDate" text="Ngày vào làm" prefWidth="120"/>
+                </columns>
+            </TableView>
+
+            <!-- Hành động: Thêm, Sửa, Xóa -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Thêm" fx:id="btnAdd" onAction="#handleAddEmployee"/>
+            </HBox>
+        </VBox>
+    </children>
 </AnchorPane>
