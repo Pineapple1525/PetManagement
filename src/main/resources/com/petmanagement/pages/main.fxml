@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.consenyeunghe.controller.LayoutController"
+            prefWidth="2000.0" prefHeight="800.0">
+
+    <children>
+        <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="800.0" stylesheets="@../styles/main.css">
+            <left>
+                <!-- Sidebar StackPane container -->
+                <StackPane fx:id="sidebarContainer" prefWidth="250.0">
+                    <!-- Sidebar Content (HBox chứa VBox) -->
+                    <HBox>
+                        <VBox fx:id="sidebar" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #d2b48c;">
+                            <!-- Logo -->
+                            <StackPane fx:id="logoContainer" prefHeight="175" prefWidth="175" styleClass="logo-container">
+                                <ImageView fx:id="logoImageView" fitWidth="175" fitHeight="175" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/logo.png" />
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+
+                            <!-- Navigation Buttons -->
+                            <Button fx:id="btnUsers" text="Users" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showUsers"/>
+                            <Button fx:id="btnEmployees" text="Employees" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showEmployees"/>
+                            <Button fx:id="btnPets" text="Pets" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPets"/>
+                            <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPetProducts"/>
+                            <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showOrders"/>
+                            <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showCustomers"/>
+                            <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPreviousOwners"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Toggle Button to hide/show sidebar -->
+                    <ToggleButton fx:id="toggleSidebarButton" style="-fx-background-color: #d2b48c; -fx-text-fill: white; -fx-padding: 10px; -fx-font-size: 18;" onAction="#toggleSidebar">
+                        <graphic>
+                            <ImageView fx:id="arrowIcon" fitWidth="20" fitHeight="20">
+                                <image>
+                                    <Image url="@../images/arrow-icon.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+
+                </StackPane>
+            </left>
+        </BorderPane>
+    </children>
+</AnchorPane>
