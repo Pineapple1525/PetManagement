@@ -1,4 +1,4 @@
-package com.petmanagement.Controller;
+package com.petmanagement.controller;
 
 public class OrderController {
 }

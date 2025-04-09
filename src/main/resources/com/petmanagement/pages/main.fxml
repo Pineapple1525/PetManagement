@@ -10,38 +10,48 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.ScrollPane?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.petmanagement.Controller.LayoutController"
-            prefWidth="2000.0" prefHeight="800.0">
+            fx:controller="com.petmanagement.controller.LayoutController"
+            prefWidth="2000.0" prefHeight="600.0">
 
     <children>
-        <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="800.0" stylesheets="@../styles/main.css">
+        <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="660.0" stylesheets="@../styles/main.css">
             <left>
                 <!-- Sidebar StackPane container -->
-                <StackPane fx:id="sidebarContainer" prefWidth="250.0">
-                    <!-- Sidebar Content (HBox chứa VBox) -->
+                <StackPane fx:id="sidebarContainer" prefWidth="250.0" prefHeight="600.0">
+                    <!-- Sidebar Content (HBox chứa ScrollPane và VBox) -->
                     <HBox>
-                        <VBox fx:id="sidebar" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #d2b48c;">
-                            <!-- Logo -->
-                            <StackPane fx:id="logoContainer" prefHeight="175" prefWidth="175" styleClass="logo-container">
-                                <ImageView fx:id="logoImageView" fitWidth="175" fitHeight="175" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../images/logo.png" />
-                                    </image>
-                                </ImageView>
-                            </StackPane>
+                        <ScrollPane fx:id="scrollPane" fitToWidth="true" pannable="true" vbarPolicy="AS_NEEDED" prefHeight="600.0">
+                            <content>
+                                <VBox fx:id="sidebar" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #d2b48c;">
+                                    <!-- Logo -->
+                                    <StackPane fx:id="logoContainer" prefHeight="175.0" prefWidth="175.0" styleClass="logo-container">
+                                        <ImageView fx:id="logoImageView"
+                                                   fitWidth="175.0" fitHeight="175.0"
+                                                   pickOnBounds="true" preserveRatio="true"
+                                                   onMouseClicked="#handleLogoClick">
+                                            <image>
+                                                <Image url="@../images/logo.png" />
+                                            </image>
+                                        </ImageView>
+                                    </StackPane>
 
-                            <!-- Navigation Buttons -->
-                            <Button fx:id="btnUsers" text="Users" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showUsers"/>
-                            <Button fx:id="btnEmployees" text="Employees" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showEmployees"/>
-                            <Button fx:id="btnPets" text="Pets" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPets"/>
-                            <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPetProducts"/>
-                            <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showOrders"/>
-                            <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showCustomers"/>
-                            <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPreviousOwners"/>
-                        </VBox>
+                                    <!-- Navigation Buttons -->
+                                    <Button fx:id="btnUsers" text="Users" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showUsers"/>
+                                    <Button fx:id="btnEmployees" text="Employees" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showEmployees"/>
+                                    <Button fx:id="btnPets" text="Pets" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPets"/>
+                                    <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPetProducts"/>
+                                    <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showOrders"/>
+                                    <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showCustomers"/>
+                                    <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPreviousOwners"/>
+                                    <Button text="Exit" style="-fx-text-fill: white; -fx-padding: 10px;"/>
+
+                                </VBox>
+                            </content>
+                        </ScrollPane>
                     </HBox>
 
                     <!-- Toggle Button to hide/show sidebar -->
@@ -54,8 +64,6 @@
                             </ImageView>
                         </graphic>
                     </ToggleButton>
-
-
                 </StackPane>
             </left>
         </BorderPane>

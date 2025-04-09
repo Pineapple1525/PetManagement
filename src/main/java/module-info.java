@@ -1,12 +1,16 @@
 module com.petmanagement {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.graphics;
+
+    requires org.controlsfx.controls;
+    requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires kernel;
+    requires layout;
+    requires io;
+    requires java.desktop;
 
-    opens com.petmanagement to javafx.graphics, javafx.fxml;
-    opens com.petmanagement.Controller to javafx.fxml;
-
+    opens com.petmanagement to javafx.fxml;
     exports com.petmanagement;
-    exports com.petmanagement.Controller;
+    opens com.petmanagement.controller to javafx.fxml;
 }
