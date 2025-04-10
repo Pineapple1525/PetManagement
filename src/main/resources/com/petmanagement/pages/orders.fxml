@@ -1,14 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.OrderController"  id="orders-root" stylesheets="@../styles/order.css">
 
-            prefHeight="400.0" prefWidth="600.0" >
+    <!-- ===== Top: Thanh tìm kiếm và lọc ===== -->
+    <top>
+        <HBox spacing="10" >
+            <TextField fx:id="searchField" promptText="Search by order code / customer name..." prefWidth="400" prefHeight="40"/>
+            <Button text="🔍" onAction="#onSearch"
+                    prefWidth="40" prefHeight="40"
+                    maxWidth="40" maxHeight="40"
+                    minWidth="40" minHeight="40"
+                    style="-fx-font-size: 14px; -fx-background-radius: 20;"/>
+            <VBox spacing="2">
+                <Label text="Trạng thái đơn" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <ComboBox fx:id="statusFilter" promptText="Tất cả" prefWidth="130">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Tất cả"/>
+                            <String fx:value="Pending"/>
+                            <String fx:value="Completed"/>
+                            <String fx:value="Cancelled"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </VBox>
 
-</AnchorPane>
+            <!-- Label + ComboBox: Trạng thái giao -->
+            <VBox spacing="2">
+                <Label text="Trạng thái giao" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <ComboBox fx:id="deliveryFilter" promptText="Tất cả" prefWidth="130">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Tất cả"/>
+                            <String fx:value="Pending"/>
+                            <String fx:value="Shipped"/>
+                            <String fx:value="Delivered"/>
+                            <String fx:value="Cancelled"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </VBox>
+        </HBox>
+    </top>
+
+    <!-- ===== Center: Bảng danh sách đơn hàng ===== -->
+    <center>
+        <TableView fx:id="orderTable" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="colCode" text="Mã Đơn" prefWidth="100"/>
+                <TableColumn fx:id="colCustomer" text="Khách Hàng" prefWidth="150"/>
+                <TableColumn fx:id="colDate" text="Ngày Đặt" prefWidth="130"/>
+                <TableColumn fx:id="colTotal" text="Tổng Tiền" prefWidth="100"/>
+                <TableColumn fx:id="colStatus" text="Trạng Thái" prefWidth="100"/>
+                <TableColumn fx:id="colPayment" text="Thanh Toán" prefWidth="100"/>
+                <TableColumn fx:id="colDelivery" text="Giao Hàng" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- ===== Bottom: Các nút thao tác ===== -->
+    <bottom>
+        <HBox spacing="10" >
+            <Button text="Tạo đơn mới" onAction="#onCreateOrder"/>
+            <Button text="Xem chi tiết" onAction="#onViewDetail"/>
+            <Button text="Cập nhật trạng thái" onAction="#onUpdateStatus"/>
+            <Button text="Xóa đơn" onAction="#onDeleteOrder"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

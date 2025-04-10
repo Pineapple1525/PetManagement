@@ -18,7 +18,7 @@
             prefWidth="2000.0" prefHeight="800.0">
 
     <children>
-        <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="800.0" stylesheets="@../styles/main.css">
+        <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="800.0" stylesheets="@../styles/main.css" >
             <left>
                 <!-- Sidebar StackPane container -->
                 <StackPane fx:id="sidebarContainer" prefWidth="250.0" prefHeight="600.0">
@@ -40,13 +40,13 @@
                                     </StackPane>
 
                                     <!-- Navigation Buttons -->
-                                    <Button fx:id="btnUsers" text="Users" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showUsers"/>
-                                    <Button fx:id="btnEmployees" text="Employees" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showEmployees"/>
-                                    <Button fx:id="btnPets" text="Pets" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPets"/>
-                                    <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPetProducts"/>
-                                    <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showOrders"/>
-                                    <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showCustomers"/>
-                                    <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPreviousOwners"/>
+                                    <Button fx:id="btnUsers" text="Users" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showUsers"/>
+                                    <Button fx:id="btnEmployees" text="Employees" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showEmployees"/>
+                                    <Button fx:id="btnPets" text="Pets" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPets"/>
+                                    <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPetProducts"/>
+                                    <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showOrders"/>
+                                    <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showCustomers"/>
+                                    <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPreviousOwners"/>
                                     <Button text="Exit" style="-fx-text-fill: white; -fx-padding: 10px;"/>
 
                                 </VBox>
