@@ -39,21 +39,21 @@ public class LayoutController {
 
     @FXML
     private ImageView arrowIcon;
-    @FXML
-    private void toggleSidebar() {
-        if (toggleSidebarButton.isSelected()) {
-            scrollPane.setVisible(false);
-            scrollPane.setManaged(false);
-
-            toggleSidebarButton.setText("");
-        } else {
-
-            scrollPane.setVisible(true);
-            scrollPane.setManaged(true);
-
-            toggleSidebarButton.setText("");
-        }
-    }
+//    @FXML
+//    private void toggleSidebar() {
+//        if (toggleSidebarButton.isSelected()) {
+//            scrollPane.setVisible(false);
+//            scrollPane.setManaged(false);
+//
+//            toggleSidebarButton.setText("");
+//        } else {
+//
+//            scrollPane.setVisible(true);
+//            scrollPane.setManaged(true);
+//
+//            toggleSidebarButton.setText("");
+//        }
+//    }
     public void initialize() {
         Font font = Font.loadFont(getClass().getResourceAsStream("/com/petmanagement/styles/font/PatrickHand-Regular.ttf"), 20);
         System.out.println("Loaded font: " + (font != null ? font.getName() : "Font not found"));
@@ -189,6 +189,7 @@ public class LayoutController {
     @FXML
     private void loadView(String file) {
         try {
+//           System.out.println("Loading view: " + file); // debug
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
             Parent root = fxmlLoader.load();
             borderPane.setCenter(root);
@@ -199,37 +200,37 @@ public class LayoutController {
 
     @FXML
     public void showUsers() {
-        loadView("/views/pages/users.fxml");
+        loadView("/com/petmanagement/pages/users.fxml");
     }
 
     @FXML
     public void showEmployees() {
-        loadView("/views/pages/employees.fxml");
+        loadView("/com/petmanagement/pages/employees.fxml");
     }
 
     @FXML
     public void showPets() {
-        loadView("/views/pages/pets.fxml");
+        loadView("/com/petmanagement/pages/pets.fxml");
     }
 
     @FXML
     public void showPetProducts() {
-        loadView("/views/pages/pet-products.fxml");
+        loadView("/com/petmanagement/pages/pet-products.fxml");
     }
 
     @FXML
     public void showOrders() {
-        loadView("/views/pages/orders.fxml");
+        loadView("/com/petmanagement/pages/orders.fxml");
     }
 
     @FXML
     public void showCustomers() {
-        loadView("/views/pages/customers.fxml");
+        loadView("/com/petmanagement/pages/customers.fxml");
     }
 
     @FXML
     public void showPreviousOwners() {
-        loadView("/views/pages/pre-owners.fxml");
+        loadView("/com/petmanagement/pages/pre-owners.fxml");
     }
 
     public void handleLogoClick(MouseEvent mouseEvent) {

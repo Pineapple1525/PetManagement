@@ -40,13 +40,13 @@
                                     </StackPane>
 
                                     <!-- Navigation Buttons -->
-                                    <Button fx:id="btnUsers" text="Users" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showUsers"/>
-                                    <Button fx:id="btnEmployees" text="Employees" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showEmployees"/>
-                                    <Button fx:id="btnPets" text="Pets" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPets"/>
-                                    <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPetProducts"/>
-                                    <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showOrders"/>
-                                    <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showCustomers"/>
-                                    <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onAction="#showPreviousOwners"/>
+                                    <Button fx:id="btnUsers" text="Users" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showUsers"/>
+                                    <Button fx:id="btnEmployees" text="Employees" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showEmployees"/>
+                                    <Button fx:id="btnPets" text="Pets" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPets"/>
+                                    <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPetProducts"/>
+                                    <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showOrders"/>
+                                    <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showCustomers"/>
+                                    <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPreviousOwners"/>
                                     <Button text="Exit" style="-fx-text-fill: white; -fx-padding: 10px;"/>
 
                                 </VBox>
@@ -54,16 +54,16 @@
                         </ScrollPane>
                     </HBox>
 
-                    <!-- Toggle Button to hide/show sidebar -->
-                    <ToggleButton fx:id="toggleSidebarButton" style="-fx-background-color: #d2b48c; -fx-text-fill: white; -fx-padding: 10px; -fx-font-size: 18;" onAction="#toggleSidebar">
-                        <graphic>
-                            <ImageView fx:id="arrowIcon" fitWidth="20" fitHeight="20">
-                                <image>
-                                    <Image url="@../images/arrow-icon.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </ToggleButton>
+<!--                    &lt;!&ndash; Toggle Button to hide/show sidebar &ndash;&gt;-->
+<!--                    <ToggleButton fx:id="toggleSidebarButton" style="-fx-background-color: #d2b48c; -fx-text-fill: white; -fx-padding: 10px; -fx-font-size: 18;" onAction="#toggleSidebar">-->
+<!--                        <graphic>-->
+<!--                            <ImageView fx:id="arrowIcon" fitWidth="20" fitHeight="20">-->
+<!--                                <image>-->
+<!--                                    <Image url="@../images/arrow-icon.png" />-->
+<!--                                </image>-->
+<!--                            </ImageView>-->
+<!--                        </graphic>-->
+<!--                    </ToggleButton>-->
                 </StackPane>
             </left>
         </BorderPane>
