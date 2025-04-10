@@ -15,10 +15,10 @@
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.petmanagement.controller.LayoutController"
-            prefWidth="2000.0" prefHeight="600.0">
+            prefWidth="2000.0" prefHeight="800.0">
 
     <children>
-        <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="660.0" stylesheets="@../styles/main.css">
+        <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="800.0" stylesheets="@../styles/main.css">
             <left>
                 <!-- Sidebar StackPane container -->
                 <StackPane fx:id="sidebarContainer" prefWidth="250.0" prefHeight="600.0">
@@ -55,15 +55,15 @@
                     </HBox>
 
                     <!-- Toggle Button to hide/show sidebar -->
-                    <ToggleButton fx:id="toggleSidebarButton" style="-fx-background-color: #d2b48c; -fx-text-fill: white; -fx-padding: 10px; -fx-font-size: 18;" onAction="#toggleSidebar">
-                        <graphic>
-                            <ImageView fx:id="arrowIcon" fitWidth="20" fitHeight="20">
-                                <image>
-                                    <Image url="@../images/arrow-icon.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </ToggleButton>
+<!--                    <ToggleButton fx:id="toggleSidebarButton" style="-fx-background-color: #d2b48c; -fx-text-fill: white; -fx-padding: 10px; -fx-font-size: 18;" onAction="#toggleSidebar">-->
+<!--                        <graphic>-->
+<!--                            <ImageView fx:id="arrowIcon" fitWidth="20" fitHeight="20">-->
+<!--                                <image>-->
+<!--                                    <Image url="@../images/arrow-icon.png" />-->
+<!--                                </image>-->
+<!--                            </ImageView>-->
+<!--                        </graphic>-->
+<!--                    </ToggleButton>-->
                 </StackPane>
             </left>
         </BorderPane>

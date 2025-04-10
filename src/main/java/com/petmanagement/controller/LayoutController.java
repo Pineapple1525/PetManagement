@@ -32,28 +32,28 @@ public class LayoutController {
     @FXML
     private BorderPane borderPane;
     private Button selectedButton = null;
-    @FXML
-    private ToggleButton toggleSidebarButton;
+//    @FXML
+//    private ToggleButton toggleSidebarButton;
     @FXML
     private ScrollPane scrollPane;
 
     @FXML
     private ImageView arrowIcon;
     @FXML
-    private void toggleSidebar() {
-        if (toggleSidebarButton.isSelected()) {
-            scrollPane.setVisible(false);
-            scrollPane.setManaged(false);
-
-            toggleSidebarButton.setText("");
-        } else {
-
-            scrollPane.setVisible(true);
-            scrollPane.setManaged(true);
-
-            toggleSidebarButton.setText("");
-        }
-    }
+//    private void toggleSidebar() {
+//        if (toggleSidebarButton.isSelected()) {
+//            scrollPane.setVisible(false);
+//            scrollPane.setManaged(false);
+//
+//            toggleSidebarButton.setText("");
+//        } else {
+//
+//            scrollPane.setVisible(true);
+//            scrollPane.setManaged(true);
+//
+//            toggleSidebarButton.setText("");
+//        }
+//    }
     public void initialize() {
         Font font = Font.loadFont(getClass().getResourceAsStream("/com/petmanagement/styles/font/PatrickHand-Regular.ttf"), 20);
         System.out.println("Loaded font: " + (font != null ? font.getName() : "Font not found"));
