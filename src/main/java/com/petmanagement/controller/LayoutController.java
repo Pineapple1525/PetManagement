@@ -11,9 +11,11 @@ import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
@@ -30,25 +32,30 @@ public class LayoutController {
     @FXML
     private BorderPane borderPane;
     private Button selectedButton = null;
+//    @FXML
+//    private ToggleButton toggleSidebarButton;
     @FXML
-    private ToggleButton toggleSidebarButton; // Nút ToggleButton để ẩn/hiện sidebar
+    private ScrollPane scrollPane;
 
     @FXML
     private ImageView arrowIcon;
     @FXML
-    public void toggleSidebar() {
-        if (toggleSidebarButton.isSelected()) {
-
-            sidebar.setVisible(false);
-
-            arrowIcon.setRotate(180);
-        } else {
-            sidebar.setVisible(true);
-            arrowIcon.setRotate(0);
-        }
-    }
+//    private void toggleSidebar() {
+//        if (toggleSidebarButton.isSelected()) {
+//            scrollPane.setVisible(false);
+//            scrollPane.setManaged(false);
+//
+//            toggleSidebarButton.setText("");
+//        } else {
+//
+//            scrollPane.setVisible(true);
+//            scrollPane.setManaged(true);
+//
+//            toggleSidebarButton.setText("");
+//        }
+//    }
     public void initialize() {
-        Font font = Font.loadFont(getClass().getResourceAsStream("/views/styles/font/PatrickHand-Regular.ttf"), 20);
+        Font font = Font.loadFont(getClass().getResourceAsStream("/com/petmanagement/styles/font/PatrickHand-Regular.ttf"), 20);
         System.out.println("Loaded font: " + (font != null ? font.getName() : "Font not found"));
 
         Platform.runLater(() -> {
@@ -174,6 +181,8 @@ public class LayoutController {
             }
         });
 
+        loadView("/com/petmanagement/pages/dashboard.fxml");
+
     }
 
 
@@ -221,5 +230,9 @@ public class LayoutController {
     @FXML
     public void showPreviousOwners() {
         loadView("/com/petmanagement/pages/pre-owners.fxml");
+    }
+
+    public void handleLogoClick(MouseEvent mouseEvent) {
+        loadView("/com/petmanagement/pages/dashboard.fxml");
     }
 }

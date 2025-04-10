@@ -1,0 +1,87 @@
+/* ========== DASHBOARD ========== */
+
+/* Tổng thể Dashboard */
+#dashboard-root {
+    -fx-font-family: "Patrick Hand";
+    -fx-background-color: #f5f5dc;
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+}
+
+/* Thẻ thống kê (cards) */
+.stat-card {
+    -fx-background-color: #f5deb3;
+    -fx-padding: 15px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: #a0522d;
+    -fx-border-width: 2px;
+    -fx-border-style: dashed;
+    -fx-effect: dropshadow(gaussian, rgba(160, 82, 45, 0.3), 8, 0.4, 2, 2);
+    -fx-min-width: 200px;
+    -fx-alignment: center;
+}
+
+.stat-card Label {
+    -fx-text-fill: #5c4033;
+    -fx-font-size: 16px;
+}
+
+.stat-card .value-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: brown;
+}
+
+/* TitledPane cho biểu đồ & bảng */
+.titled-pane {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5c4033;
+    -fx-collapsible: false;
+    -fx-background-color: #f5deb3;
+    -fx-border-color: #a0522d;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+}
+
+/* Biểu đồ */
+.chart {
+    -fx-background-color: transparent;
+}
+
+.chart-title {
+    -fx-text-fill: #5c4033;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.axis-label {
+    -fx-text-fill: #5c4033;
+    -fx-font-size: 14px;
+}
+
+/* TableView cho đơn hàng gần đây */
+.table-view {
+    -fx-background-color: #fffaf0;
+    -fx-border-color: #a0522d;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0.2, 2, 2);
+}
+
+.table-column {
+    -fx-font-size: 14px;
+    -fx-text-fill: #5c4033;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #deb887;
+}
+
+/* Pie chart label */
+.chart-pie-label {
+    -fx-text-fill: #5c4033;
+    -fx-font-weight: bold;
+}

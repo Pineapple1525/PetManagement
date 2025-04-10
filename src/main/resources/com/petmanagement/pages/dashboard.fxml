@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.petmanagement.controller.DashboardController"
+            prefWidth="2000" prefHeight="800"
+            id="dashboard-root">
+
+    <!-- ScrollPane cho phép cuộn cả 2 chiều -->
+    <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED"
+                AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- Nội dung chính -->
+        <VBox spacing="15" id="dashboard-root"
+              stylesheets="@../styles/dashboard.css">
+
+            <!-- Top cards -->
+            <HBox spacing="15">
+                <VBox styleClass="stat-card" prefWidth="300">
+                    <Label text="👥 Customer"/>
+                    <Label fx:id="labelCustomerCount" styleClass="value-label" text="120"/>
+                </VBox>
+                <VBox styleClass="stat-card" prefWidth="300">
+                    <Label text="📦 Order"/>
+                    <Label fx:id="labelOrderCount" styleClass="value-label" text="45"/>
+                </VBox>
+                <VBox styleClass="stat-card" prefWidth="300">
+                    <Label text="💰Monthly Revenue"/>
+                    <Label fx:id="labelRevenue" styleClass="value-label" text="75,000,000 đ"/>
+                </VBox>
+                <VBox styleClass="stat-card" prefWidth="300">
+                    <Label text="⚠️Out of stock"/>
+                    <Label fx:id="labelLowStock" styleClass="value-label" text="10"/>
+                </VBox>
+            </HBox>
+
+            <!-- Revenue Chart -->
+            <TitledPane text="📊Monthly Revenue" expanded="true" styleClass="titled-pane">
+                <LineChart fx:id="lineChartRevenue" title="Revenue in the last 6 months"
+                           prefHeight="250" prefWidth="1000">
+                    <xAxis>
+                        <CategoryAxis label="Month"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Revenue (VND)"/>
+                    </yAxis>
+                </LineChart>
+            </TitledPane>
+
+            <!-- Bottom: recent orders + top products -->
+            <HBox spacing="20">
+                <TitledPane text="🧾 Recent Orders" expanded="true" prefWidth="650" styleClass="titled-pane">
+                    <TableView fx:id="tableRecentOrders">
+                        <columns>
+                            <TableColumn text="Single code" prefWidth="150"/>
+                            <TableColumn text="Customer" prefWidth="250"/>
+                            <TableColumn text="Day" prefWidth="200"/>
+                            <TableColumn text="Total amount" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </TitledPane>
+
+                <TitledPane text="🏆Best selling products" expanded="true" prefWidth="400" styleClass="titled-pane">
+                    <PieChart fx:id="pieChartTopProducts" prefHeight="200"/>
+                </TitledPane>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</AnchorPane>

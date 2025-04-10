@@ -9,13 +9,9 @@ module com.petmanagement {
     requires layout;
     requires io;
     requires java.desktop;
-    requires kotlin.stdlib;
 
     opens com.petmanagement to javafx.fxml;
-    opens com.petmanagement.controller to javafx.fxml;
-    opens com.petmanagement.model to javafx.base;
-
     exports com.petmanagement;
     exports com.petmanagement.controller;
-    exports com.petmanagement.model;
+    opens com.petmanagement.controller to javafx.fxml;
 }
