@@ -32,14 +32,14 @@ public class LayoutController {
     @FXML
     private BorderPane borderPane;
     private Button selectedButton = null;
-//    @FXML
-//    private ToggleButton toggleSidebarButton;
+    @FXML
+    private ToggleButton toggleSidebarButton;
     @FXML
     private ScrollPane scrollPane;
 
     @FXML
     private ImageView arrowIcon;
-    @FXML
+//    @FXML
 //    private void toggleSidebar() {
 //        if (toggleSidebarButton.isSelected()) {
 //            scrollPane.setVisible(false);
@@ -189,6 +189,7 @@ public class LayoutController {
     @FXML
     private void loadView(String file) {
         try {
+//           System.out.println("Loading view: " + file); // debug
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
             Parent root = fxmlLoader.load();
             borderPane.setCenter(root);
