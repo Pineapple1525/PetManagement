@@ -1,34 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.AddEmployeeController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.petmanagement.controller.AddEmployeeController">
     <children>
-        <VBox spacing="10" alignment="TOP_LEFT">
+        <VBox alignment="TOP_LEFT" prefHeight="538.0" prefWidth="654.0" spacing="10" style="-fx-background-color: #FFF5E1; -fx-border-color: #D1A989; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 1;">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <Label text="Thêm nhân viên mới" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="621.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Thêm nhân viên mới" />
 
-            <TextField fx:id="txtCode" promptText="Mã nhân viên" />
-            <TextField fx:id="txtFullname" promptText="Họ và tên" />
-            <ComboBox fx:id="cbGender" promptText="Giới tính" />
-            <DatePicker fx:id="dpBirthdate" promptText="Ngày sinh" />
-            <TextField fx:id="txtAddress" promptText="Địa chỉ" />
-            <TextField fx:id="txtPhone" promptText="Số điện thoại" />
-            <TextField fx:id="txtEmail" promptText="Email" />
-            <TextField fx:id="txtRole" promptText="Vai trò" />
-            <TextField fx:id="txtSalary" promptText="Lương" />
-            <TextField fx:id="txtWorkShift" promptText="Ca làm" />
-            <TextField fx:id="txtStatus" promptText="Trạng thái" />
-            <DatePicker fx:id="dpHiringDate" promptText="Ngày vào làm" />
+            <TextField fx:id="txtCode" prefWidth="250" promptText="Mã nhân viên" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtFullname" prefWidth="250" promptText="Họ và tên" style="-fx-background-radius: 5;" />
+            <ComboBox fx:id="cbGender" prefWidth="250" promptText="Giới tính" style="-fx-background-radius: 5;" />
+            <DatePicker fx:id="dpBirthdate" prefWidth="250" promptText="Ngày sinh" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtAddress" prefWidth="250" promptText="Địa chỉ" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtPhone" prefWidth="250" promptText="Số điện thoại" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtEmail" prefWidth="250" promptText="Email" style="-fx-background-radius: 5;" />
 
-            <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button text="Lưu" onAction="#handleSave" />
-                <Button text="Hủy" onAction="#handleCancel" />
+            <!-- Thay txtRole thành ComboBox -->
+            <ComboBox fx:id="cbRole" prefWidth="250" promptText="Vai trò" style="-fx-background-radius: 5;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Quản lý" />
+                        <String fx:value="Nhân viên" />
+                        <String fx:value="Khách" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <TextField fx:id="txtSalary" prefWidth="250" promptText="Lương" style="-fx-background-radius: 5;" />
+
+            <!-- Thay txtWorkShift thành ComboBox -->
+            <ComboBox fx:id="cbWorkShift" prefWidth="250" promptText="Ca làm" style="-fx-background-radius: 5;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Sáng" />
+                        <String fx:value="Chiều" />
+                        <String fx:value="Tối" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <!-- Thay txtStatus thành ComboBox -->
+            <ComboBox fx:id="cbStatus" prefWidth="250" promptText="Trạng thái" style="-fx-background-radius: 5;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Đang làm" />
+                        <String fx:value="Nghỉ việc" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <DatePicker fx:id="dpHiringDate" prefWidth="250" promptText="Ngày vào làm" style="-fx-background-radius: 5;" />
+
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Button onAction="#handleSave" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Lưu" />
+                <Button onAction="#handleCancel" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Hủy" />
             </HBox>
         </VBox>
     </children>

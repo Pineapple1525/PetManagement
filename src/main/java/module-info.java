@@ -11,6 +11,9 @@ module com.petmanagement {
     requires java.desktop;
 
     opens com.petmanagement to javafx.fxml;
+    opens com.petmanagement.model to javafx.base;
+
+
     exports com.petmanagement;
     exports com.petmanagement.controller;
     opens com.petmanagement.controller to javafx.fxml;

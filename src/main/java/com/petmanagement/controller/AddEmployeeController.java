@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 public class AddEmployeeController {
 
-    @FXML private TextField txtCode, txtFullname, txtAddress, txtPhone, txtEmail, txtRole, txtSalary, txtWorkShift, txtStatus;
-    @FXML private ComboBox<String> cbGender;
+    @FXML private TextField txtCode, txtFullname, txtAddress, txtPhone, txtEmail, txtSalary;
+    @FXML private ComboBox<String> cbGender, cbRole, cbWorkShift, cbStatus;
     @FXML private DatePicker dpBirthdate, dpHiringDate;
 
     @FXML
@@ -66,45 +66,110 @@ public class AddEmployeeController {
             stmt.executeUpdate();
             System.out.println("Thêm nhân viên thành công!");
 
-        } catch (Exception e) {
+            // Hiển thị thông báo thành công
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm nhân viên thành công!");
+            alert.showAndWait();
+
+        } catch (SQLException e) {
             e.printStackTrace();
+            // Hiển thị thông báo lỗi
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi thêm nhân viên: " + e.getMessage());
+            alert.showAndWait();
         }
     }
 
     @FXML
     private void handleSave() {
-        Employee emp = new Employee();
-        emp.setCodeEmployee(txtCode.getText());
-        emp.setFullname(txtFullname.getText());
+        // Kiểm tra các trường bắt buộc
+        if (txtCode.getText().isEmpty() || txtFullname.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Mã nhân viên và Họ tên không được để trống!");
+            alert.showAndWait();
+            return;
+        }
 
-        // Ánh xạ giới tính tiếng Việt sang tiếng Anh phù hợp ENUM trong MySQL
+        Employee emp = new Employee();
+
+        emp.setCodeEmployee(txtCode.getText() != null ? txtCode.getText() : "");
+        emp.setFullname(txtFullname.getText() != null ? txtFullname.getText() : "");
+
+        // Ánh xạ giới tính tiếng Việt sang tiếng Anh
         String genderText = cbGender.getValue();
-        switch (genderText) {
-            case "Nam": emp.setGender("Male"); break;
-            case "Nữ": emp.setGender("Female"); break;
-            case "Khác": emp.setGender("Other"); break;
-            default: emp.setGender(null); break;
+        if (genderText != null) {
+            switch (genderText) {
+                case "Nam": emp.setGender("Male"); break;
+                case "Nữ": emp.setGender("Female"); break;
+                case "Khác": emp.setGender("Other"); break;
+                default: emp.setGender(null); break;
+            }
+        } else {
+            emp.setGender(null);
         }
 
         emp.setBirthdate(dpBirthdate.getValue());
-        emp.setAddress(txtAddress.getText());
-        emp.setPhone(txtPhone.getText());
-        emp.setEmail(txtEmail.getText());
-        emp.setRole(txtRole.getText());
+        emp.setAddress(txtAddress.getText() != null ? txtAddress.getText() : "");
+        emp.setPhone(txtPhone.getText() != null ? txtPhone.getText() : "");
+        emp.setEmail(txtEmail.getText() != null ? txtEmail.getText() : "");
 
-        if (!txtSalary.getText().isEmpty()) {
-            emp.setSalary(new BigDecimal(txtSalary.getText()));
+        // Ánh xạ vai trò tiếng Việt sang tiếng Anh
+        String roleText = cbRole.getValue();
+        if (roleText != null) {
+            switch (roleText) {
+                case "Quản lý": emp.setRole("Manager"); break;
+                case "Nhân viên": emp.setRole("Sales"); break; // Giả sử "Nhân viên" tương ứng với "Sales"
+                case "Khách": emp.setRole("Other"); break; // Giả sử "Khách" tương ứng với "Other"
+                default: emp.setRole("Other"); break;
+            }
+        } else {
+            emp.setRole("Other"); // Giá trị mặc định nếu không chọn
         }
 
-        emp.setWorkShift(txtWorkShift.getText());
-        emp.setStatus(txtStatus.getText());
+        // Lấy giá trị lương và kiểm tra rỗng
+        if (txtSalary.getText() != null && !txtSalary.getText().isEmpty()) {
+            try {
+                emp.setSalary(new BigDecimal(txtSalary.getText()));
+            } catch (NumberFormatException e) {
+                System.out.println("Lương không hợp lệ: " + txtSalary.getText());
+                emp.setSalary(BigDecimal.ZERO);
+            }
+        } else {
+            emp.setSalary(BigDecimal.ZERO);
+        }
 
+        // Ánh xạ ca làm tiếng Việt sang tiếng Anh
+        String workShiftText = cbWorkShift.getValue();
+        if (workShiftText != null) {
+            switch (workShiftText) {
+                case "Sáng": emp.setWorkShift("Morning"); break;
+                case "Chiều": emp.setWorkShift("Afternoon"); break;
+                case "Tối": emp.setWorkShift("Evening"); break;
+                default: emp.setWorkShift("Morning"); break; // Giá trị mặc định
+            }
+        } else {
+            emp.setWorkShift("Morning"); // Giá trị mặc định nếu không chọn
+        }
+
+        // Ánh xạ trạng thái tiếng Việt sang tiếng Anh
+        String statusText = cbStatus.getValue();
+        if (statusText != null) {
+            switch (statusText) {
+                case "Đang làm": emp.setStatus("Active"); break;
+                case "Nghỉ việc": emp.setStatus("Resigned"); break;
+                default: emp.setStatus("Active"); break; // Giá trị mặc định
+            }
+        } else {
+            emp.setStatus("Active"); // Giá trị mặc định nếu không chọn
+        }
+
+        // Lấy giá trị ngày vào làm
         if (dpHiringDate.getValue() != null) {
             emp.setHiringDate(dpHiringDate.getValue().atStartOfDay());
         }
 
-        insertEmployee(emp); // Gọi thêm dữ liệu vào MySQL
-        ((Stage) txtCode.getScene().getWindow()).close(); // Đóng form sau khi thêm
+        // Gọi phương thức để thêm nhân viên vào MySQL
+        insertEmployee(emp);
+
+        // Đóng form sau khi thêm
+        ((Stage) txtCode.getScene().getWindow()).close();
     }
 
     @FXML

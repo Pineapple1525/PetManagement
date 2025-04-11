@@ -4,22 +4,18 @@ import com.petmanagement.model.Employee;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
-
-import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import java.io.IOException;
-
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EmployeeController {
 
@@ -51,7 +47,8 @@ public class EmployeeController {
     private TableColumn<Employee, String> colStatus;
     @FXML
     private TableColumn<Employee, LocalDateTime> colHiringDate;
-
+    @FXML
+    private TableColumn<Employee, Void> colActions;
 
     private Connection getConnection() {
         try {
@@ -108,6 +105,32 @@ public class EmployeeController {
         return list;
     }
 
+    public void handleDeleteEmployee(Employee employee) {
+        // Xác nhận xóa
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Xác nhận xóa");
+        alert.setHeaderText("Bạn có chắc chắn muốn xóa nhân viên này không?");
+        alert.setContentText("Nhân viên: " + employee.getFullname());
+
+        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            String sql = "DELETE FROM employees WHERE employee_id = ?";
+
+            try (Connection conn = getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setInt(1, employee.getEmployeeId());
+                stmt.executeUpdate();
+
+                // Cập nhật bảng sau khi xóa
+                employeeTable.setItems(getAllEmployees());
+                System.out.println("Nhân viên đã được xóa: " + employee.getFullname());
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showErrorAlert("Lỗi khi xóa nhân viên: " + e.getMessage());
+            }
+        }
+    }
+
     @FXML
     public void initialize() {
         // Gán thuộc tính các cột
@@ -125,12 +148,37 @@ public class EmployeeController {
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colHiringDate.setCellValueFactory(new PropertyValueFactory<>("hiringDate"));
 
+        // Thiết lập cột "Hành động"
+        colActions.setCellFactory(column -> new TableCell<Employee, Void>() {
+            private final HBox buttons = new HBox();
+
+            {
+                Button editButton = new Button("Sửa");
+                editButton.setOnAction(event -> {
+                    Employee employee = getTableView().getItems().get(getIndex());
+                    handleEditEmployee(employee); // Gọi phương thức với nhân viên đã chọn
+                });
+
+                Button deleteButton = new Button("Xóa");
+                deleteButton.setOnAction(event -> {
+                    Employee employee = getTableView().getItems().get(getIndex());
+                    handleDeleteEmployee(employee);
+                });
+
+                buttons.getChildren().addAll(editButton, deleteButton);
+                buttons.setSpacing(10);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : buttons);
+            }
+        });
 
         // Load dữ liệu
         employeeTable.setItems(getAllEmployees());
     }
-
-
 
     @FXML
     private void handleAddEmployee(ActionEvent event) {
@@ -144,12 +192,39 @@ public class EmployeeController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            showErrorAlert("Lỗi khi mở trang thêm nhân viên: " + e.getMessage());
         }
     }
 
+    private void showErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Lỗi");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
+    // Chỉnh sửa nhân viên
+    @FXML
+    public void handleEditEmployee(Employee employee) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/edit-employee.fxml"));
 
+            // Load FXML
+            Parent root = loader.load();
 
+            // Lấy controller của trang edit-employee
+            EditEmployeeController editController = loader.getController();
+            editController.setEmployee(employee); // Gửi dữ liệu nhân viên vào controller
 
+            Stage stage = new Stage();
+            stage.setTitle("Chỉnh sửa nhân viên");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showErrorAlert("Lỗi khi mở trang chỉnh sửa: " + e.getMessage());
+        }
+    }
 
 }
