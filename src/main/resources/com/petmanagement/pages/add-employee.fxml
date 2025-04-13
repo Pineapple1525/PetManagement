@@ -21,7 +21,7 @@
 
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="621.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Thêm nhân viên mới" />
 
-            <TextField fx:id="txtCode" prefWidth="250" promptText="Mã nhân viên" style="-fx-background-radius: 5;" />
+<!--            <TextField fx:id="txtCode" prefWidth="250" promptText="Mã nhân viên" style="-fx-background-radius: 5;" />-->
             <TextField fx:id="txtFullname" prefWidth="250" promptText="Họ và tên" style="-fx-background-radius: 5;" />
             <ComboBox fx:id="cbGender" prefWidth="250" promptText="Giới tính" style="-fx-background-radius: 5;" />
             <DatePicker fx:id="dpBirthdate" prefWidth="250" promptText="Ngày sinh" style="-fx-background-radius: 5;" />

@@ -1,6 +1,7 @@
 package com.petmanagement.controller;
 
 import com.petmanagement.model.Employee;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -60,6 +61,55 @@ public class EmployeeController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @FXML
+    public void initialize() {
+        // Gán thuộc tính các cột
+        colId.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
+        colCode.setCellValueFactory(new PropertyValueFactory<>("codeEmployee"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("fullname"));
+        colGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        colBirth.setCellValueFactory(new PropertyValueFactory<>("birthdate"));
+        colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
+        colWorkShift.setCellValueFactory(new PropertyValueFactory<>("workShift"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colHiringDate.setCellValueFactory(new PropertyValueFactory<>("hiringDate"));
+
+        // Thiết lập cột "Hành động"
+        colActions.setCellFactory(column -> new TableCell<Employee, Void>() {
+            private final HBox buttons = new HBox();
+
+            {
+                Button editButton = new Button("Sửa");
+                editButton.setOnAction(event -> {
+                    Employee employee = getTableView().getItems().get(getIndex());
+                    handleEditEmployee(employee); // Gọi phương thức với nhân viên đã chọn
+                });
+
+                Button deleteButton = new Button("Xóa");
+                deleteButton.setOnAction(event -> {
+                    Employee employee = getTableView().getItems().get(getIndex());
+                    handleDeleteEmployee(employee);
+                });
+
+                buttons.getChildren().addAll(editButton, deleteButton);
+                buttons.setSpacing(10);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : buttons);
+            }
+        });
+
+        // Load dữ liệu
+        employeeTable.setItems(getAllEmployees());
     }
 
     private ObservableList<Employee> getAllEmployees() {
@@ -131,54 +181,7 @@ public class EmployeeController {
         }
     }
 
-    @FXML
-    public void initialize() {
-        // Gán thuộc tính các cột
-        colId.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
-        colCode.setCellValueFactory(new PropertyValueFactory<>("codeEmployee"));
-        colName.setCellValueFactory(new PropertyValueFactory<>("fullname"));
-        colGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        colBirth.setCellValueFactory(new PropertyValueFactory<>("birthdate"));
-        colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
-        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
-        colWorkShift.setCellValueFactory(new PropertyValueFactory<>("workShift"));
-        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        colHiringDate.setCellValueFactory(new PropertyValueFactory<>("hiringDate"));
 
-        // Thiết lập cột "Hành động"
-        colActions.setCellFactory(column -> new TableCell<Employee, Void>() {
-            private final HBox buttons = new HBox();
-
-            {
-                Button editButton = new Button("Sửa");
-                editButton.setOnAction(event -> {
-                    Employee employee = getTableView().getItems().get(getIndex());
-                    handleEditEmployee(employee); // Gọi phương thức với nhân viên đã chọn
-                });
-
-                Button deleteButton = new Button("Xóa");
-                deleteButton.setOnAction(event -> {
-                    Employee employee = getTableView().getItems().get(getIndex());
-                    handleDeleteEmployee(employee);
-                });
-
-                buttons.getChildren().addAll(editButton, deleteButton);
-                buttons.setSpacing(10);
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : buttons);
-            }
-        });
-
-        // Load dữ liệu
-        employeeTable.setItems(getAllEmployees());
-    }
 
     @FXML
     private void handleAddEmployee(ActionEvent event) {
@@ -186,6 +189,8 @@ public class EmployeeController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/add-employee.fxml"));
 
             Parent root = loader.load();
+            AddEmployeeController addController = loader.getController();
+            addController.setOnUpdateCallback(this::loadData);
             Stage stage = new Stage();
             stage.setTitle("Thêm nhân viên");
             stage.setScene(new Scene(root));
@@ -204,27 +209,41 @@ public class EmployeeController {
         alert.showAndWait();
     }
 
-    // Chỉnh sửa nhân viên
+
     @FXML
     public void handleEditEmployee(Employee employee) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/edit-employee.fxml"));
-
-            // Load FXML
             Parent root = loader.load();
 
-            // Lấy controller của trang edit-employee
             EditEmployeeController editController = loader.getController();
-            editController.setEmployee(employee); // Gửi dữ liệu nhân viên vào controller
+            editController.setEmployee(employee);
+            editController.setOnUpdateCallback(this::loadData);  // Set the callback to reload data
 
+            // Khởi tạo Stage sau khi thiết lập controller
             Stage stage = new Stage();
             stage.setTitle("Chỉnh sửa nhân viên");
             stage.setScene(new Scene(root));
+
+            // Cập nhật lại bảng khi cửa sổ đóng
+            stage.setOnHiding(e -> Platform.runLater(() -> {
+                loadData();  // Gọi lại phương thức loadData để làm mới bảng
+            }));
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
             showErrorAlert("Lỗi khi mở trang chỉnh sửa: " + e.getMessage());
         }
     }
+
+    private void loadData() {
+        System.out.println("Đang tải lại dữ liệu...");
+        employeeTable.setItems(getAllEmployees()); // Làm mới dữ liệu bảng
+        employeeTable.refresh(); // Cập nhật lại giao diện bảng
+    }
+
+
+
 
 }

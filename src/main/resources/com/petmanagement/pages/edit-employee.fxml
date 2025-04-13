@@ -26,9 +26,9 @@
             <ComboBox fx:id="comboGender" prefWidth="250" promptText="Giới tính" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Nam" />
-                        <String fx:value="Nữ" />
-                        <String fx:value="Khác" />
+                        <String fx:value="Male" />
+                        <String fx:value="Female" />
+                        <String fx:value="Other" />
                     </FXCollections>
                 </items>
             </ComboBox>
@@ -40,9 +40,12 @@
             <ComboBox fx:id="txtRole" prefWidth="250" promptText="Vai trò" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Quản lý" />
-                        <String fx:value="Nhân viên" />
-                        <String fx:value="Khách" />
+                        <String fx:value="Manager" />
+                        <String fx:value="Cashier" />
+                        <String fx:value="Pet Care" />
+                        <String fx:value="Veterinarian" />
+                        <String fx:value="Sales" />
+                        <String fx:value="Other" />
                     </FXCollections>
                 </items>
             </ComboBox>
@@ -52,9 +55,11 @@
             <ComboBox fx:id="txtWorkShift" prefWidth="250" promptText="Ca làm" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Sáng" />
-                        <String fx:value="Chiều" />
-                        <String fx:value="Tối" />
+                        <String fx:value="Morning" />
+                        <String fx:value="Afternoon" />
+                        <String fx:value="Night" />
+                        <String fx:value="Full Day" />
+                        <String fx:value="Flexible" />
                     </FXCollections>
                 </items>
             </ComboBox>
@@ -62,8 +67,9 @@
             <ComboBox fx:id="txtStatus" prefWidth="250" promptText="Trạng thái" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Đang làm" />
-                        <String fx:value="Nghỉ việc" />
+                        <String fx:value="Active" />
+                        <String fx:value="Resigned" />
+                        <String fx:value="On Leave" />
                     </FXCollections>
                 </items>
             </ComboBox>

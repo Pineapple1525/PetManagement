@@ -78,19 +78,37 @@ public class AddEmployeeController {
         }
     }
 
+    private String generateEmployeeCode() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(code_employee, 4) AS UNSIGNED)) FROM employees";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                int lastCode = rs.getInt(1);
+                return "EMP" + (lastCode + 1); // Tăng mã nhân viên lên 1
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "EMP1"; // Nếu không tìm thấy mã nào, trả về mã đầu tiên
+    }
+
     @FXML
     private void handleSave() {
         // Kiểm tra các trường bắt buộc
-        if (txtCode.getText().isEmpty() || txtFullname.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Mã nhân viên và Họ tên không được để trống!");
+        if (txtFullname.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Họ tên không được để trống!");
             alert.showAndWait();
             return;
         }
 
         Employee emp = new Employee();
 
-        emp.setCodeEmployee(txtCode.getText() != null ? txtCode.getText() : "");
-        emp.setFullname(txtFullname.getText() != null ? txtFullname.getText() : "");
+        // Tự động tạo mã nhân viên
+        String employeeCode = generateEmployeeCode();
+        emp.setCodeEmployee(employeeCode); // Gán mã nhân viên tự động
+        emp.setFullname(txtFullname.getText());
 
         // Ánh xạ giới tính tiếng Việt sang tiếng Anh
         String genderText = cbGender.getValue();
@@ -101,38 +119,35 @@ public class AddEmployeeController {
                 case "Khác": emp.setGender("Other"); break;
                 default: emp.setGender(null); break;
             }
-        } else {
-            emp.setGender(null);
         }
 
         emp.setBirthdate(dpBirthdate.getValue());
-        emp.setAddress(txtAddress.getText() != null ? txtAddress.getText() : "");
-        emp.setPhone(txtPhone.getText() != null ? txtPhone.getText() : "");
-        emp.setEmail(txtEmail.getText() != null ? txtEmail.getText() : "");
+        emp.setAddress(txtAddress.getText());
+        emp.setPhone(txtPhone.getText());
+        emp.setEmail(txtEmail.getText());
 
         // Ánh xạ vai trò tiếng Việt sang tiếng Anh
         String roleText = cbRole.getValue();
         if (roleText != null) {
             switch (roleText) {
                 case "Quản lý": emp.setRole("Manager"); break;
-                case "Nhân viên": emp.setRole("Sales"); break; // Giả sử "Nhân viên" tương ứng với "Sales"
-                case "Khách": emp.setRole("Other"); break; // Giả sử "Khách" tương ứng với "Other"
+                case "Nhân viên": emp.setRole("Sales"); break;
+                case "Khách": emp.setRole("Other"); break;
                 default: emp.setRole("Other"); break;
             }
-        } else {
-            emp.setRole("Other"); // Giá trị mặc định nếu không chọn
         }
 
-        // Lấy giá trị lương và kiểm tra rỗng
-        if (txtSalary.getText() != null && !txtSalary.getText().isEmpty()) {
-            try {
+        // Kiểm tra lương và chuyển thành BigDecimal
+        try {
+            if (!txtSalary.getText().isEmpty()) {
                 emp.setSalary(new BigDecimal(txtSalary.getText()));
-            } catch (NumberFormatException e) {
-                System.out.println("Lương không hợp lệ: " + txtSalary.getText());
-                emp.setSalary(BigDecimal.ZERO);
+            } else {
+                emp.setSalary(BigDecimal.ZERO); // Nếu không có giá trị, mặc định là 0
             }
-        } else {
-            emp.setSalary(BigDecimal.ZERO);
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Lương không hợp lệ: " + txtSalary.getText());
+            alert.showAndWait();
+            return;
         }
 
         // Ánh xạ ca làm tiếng Việt sang tiếng Anh
@@ -142,10 +157,8 @@ public class AddEmployeeController {
                 case "Sáng": emp.setWorkShift("Morning"); break;
                 case "Chiều": emp.setWorkShift("Afternoon"); break;
                 case "Tối": emp.setWorkShift("Evening"); break;
-                default: emp.setWorkShift("Morning"); break; // Giá trị mặc định
+                default: emp.setWorkShift("Morning"); break;
             }
-        } else {
-            emp.setWorkShift("Morning"); // Giá trị mặc định nếu không chọn
         }
 
         // Ánh xạ trạng thái tiếng Việt sang tiếng Anh
@@ -154,10 +167,8 @@ public class AddEmployeeController {
             switch (statusText) {
                 case "Đang làm": emp.setStatus("Active"); break;
                 case "Nghỉ việc": emp.setStatus("Resigned"); break;
-                default: emp.setStatus("Active"); break; // Giá trị mặc định
+                default: emp.setStatus("Active"); break;
             }
-        } else {
-            emp.setStatus("Active"); // Giá trị mặc định nếu không chọn
         }
 
         // Lấy giá trị ngày vào làm
@@ -168,12 +179,32 @@ public class AddEmployeeController {
         // Gọi phương thức để thêm nhân viên vào MySQL
         insertEmployee(emp);
 
+        // Tự động reload lại danh sách nhân viên
+        if (onUpdateCallback != null) {
+            onUpdateCallback.run();
+        }
+
         // Đóng form sau khi thêm
         ((Stage) txtCode.getScene().getWindow()).close();
     }
+
+
+    private Runnable onUpdateCallback;
+
+    public void setOnUpdateCallback(Runnable onUpdateCallback) {
+        this.onUpdateCallback = onUpdateCallback;
+    }
+
+
+
+
+
+
 
     @FXML
     private void handleCancel() {
         ((Stage) txtCode.getScene().getWindow()).close();
     }
+
+
 }
