@@ -88,9 +88,15 @@ public class EditEmployeeController {
         // Gọi phương thức cập nhật nhân viên vào cơ sở dữ liệu
         updateEmployeeInDatabase(employee);
 
+        // Gọi callback để làm mới danh sách nhân viên trong EmployeeController
+        if (onUpdateCallback != null) {
+            onUpdateCallback.run();
+        }
+
         // Đóng cửa sổ
         ((Stage) txtCode.getScene().getWindow()).close();
     }
+
 
     private void updateEmployeeInDatabase(Employee emp) {
         String sql = "UPDATE employees SET fullname=?, gender=?, birthdate=?, address=?, phone=?, email=?, role=?, salary=?, work_shift=?, status=? WHERE code_employee=?";
@@ -133,8 +139,17 @@ public class EditEmployeeController {
         }
     }
 
+    private Runnable onUpdateCallback;
+
+    public void setOnUpdateCallback(Runnable onUpdateCallback) {
+        this.onUpdateCallback = onUpdateCallback;
+    }
+
+
     @FXML
     private void handleCancel() {
         ((Stage) txtCode.getScene().getWindow()).close();
     }
+
+
 }
