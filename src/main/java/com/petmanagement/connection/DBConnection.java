@@ -7,11 +7,11 @@ import java.sql.SQLException;
 public class DBConnection {
     private static Connection conn;
 
-    public DBConnection() { } // Ngăn chặn khởi tạo đối tượng
+    public DBConnection() { }
 
     public static Connection getConn() {
         try {
-            if (conn == null || conn.isClosed()) {  // Kiểm tra kết nối trước khi sử dụng
+            if (conn == null || conn.isClosed()) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/petshop", "root", "");
                 System.out.println("✅ Kết nối thành công!");
@@ -22,17 +22,27 @@ public class DBConnection {
         return conn;
     }
 
+//    public static void close() {
+//        if (conn != null) {
+//            try {
+//                conn.close();
+//                conn = null;
+//                System.out.println("🔌 Kết nối đã đóng!");
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-    public static void close() {
+    // ✅ Hàm test kết nối CSDL
+    public static void main(String[] args) {
+        Connection conn = DBConnection.getConn();
         if (conn != null) {
-            try {
-                conn.close();
-                conn = null; // Đặt lại null để có thể mở lại sau này
-                System.out.println("🔌 Kết nối đã đóng!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            System.out.println("✅ Đã kết nối đến CSDL thành công!");
+        } else {
+            System.out.println("❌ Kết nối CSDL thất bại!");
         }
+
+//        DBConnection.close();
     }
-    
 }

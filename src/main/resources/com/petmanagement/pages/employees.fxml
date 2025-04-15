@@ -1,14 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import java.lang.String?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.petmanagement.controller.EmployeeController"
+            id="orders-root"
+            stylesheets="@../styles/order.css">
 
-            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
 
+            <Label text="Danh sách nhân viên"
+                   styleClass="header-label"/>
+
+            <!-- Thanh tìm kiếm -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField"
+                           promptText="Tìm theo mã / họ tên..."
+                           prefWidth="300"
+                           id="searchField"/>
+
+                <ComboBox fx:id="genderFilter"
+                          promptText="Giới tính"
+                          prefWidth="120"
+                          styleClass="combo-box">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Nam"/>
+                            <String fx:value="Nữ"/>
+                            <String fx:value="Khác"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+                <ComboBox fx:id="roleFilter"
+                          promptText="Vai trò"
+                          prefWidth="150"
+                          styleClass="combo-box">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Quản lý"/>
+                            <String fx:value="Nhân viên"/>
+                            <String fx:value="Khách"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
+
+            <!-- Bảng danh sách -->
+            <HBox alignment="CENTER">
+                <TableView fx:id="employeeTable"
+                           prefHeight="400"
+                           maxWidth="1100"
+                           styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="colId" text="Mã ID" prefWidth="60"/>
+                        <TableColumn fx:id="colCode" text="Mã nhân viên" prefWidth="100"/>
+                        <TableColumn fx:id="colName" text="Họ tên" prefWidth="150"/>
+                        <TableColumn fx:id="colGender" text="Giới tính" prefWidth="80"/>
+                        <TableColumn fx:id="colBirth" text="Ngày sinh" prefWidth="120"/>
+                        <TableColumn fx:id="colPhone" text="SĐT" prefWidth="120"/>
+                        <TableColumn fx:id="colEmail" text="Email" prefWidth="180"/>
+                        <TableColumn fx:id="colRole" text="Vai trò" prefWidth="100"/>
+                        <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="150"/>
+                        <TableColumn fx:id="colSalary" text="Lương" prefWidth="100"/>
+                        <TableColumn fx:id="colWorkShift" text="Ca làm" prefWidth="100"/>
+                        <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100"/>
+                        <TableColumn fx:id="colHiringDate" text="Ngày vào làm" prefWidth="120"/>
+                        <TableColumn fx:id="colActions" text="Hành động" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </HBox>
+
+            <!-- Các nút -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Thêm"
+                        fx:id="btnAdd"
+                        onAction="#handleAddEmployee"
+                        styleClass="button"/>
+            </HBox>
+        </VBox>
+    </children>
 </AnchorPane>
