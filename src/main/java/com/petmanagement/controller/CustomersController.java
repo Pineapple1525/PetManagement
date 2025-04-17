@@ -1,5 +1,6 @@
 package com.petmanagement.controller;
 
+import com.petmanagement.model.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,8 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import com.petmanagement.model.Customer;
 
 import java.io.IOException;
 import java.sql.*;
@@ -100,55 +101,28 @@ public class CustomersController {
         typeBox.setValue(c.getCustomerType());
     }
 
+    private void clearFields() {
+        codeField.clear();
+        nameField.clear();
+        phoneField.clear();
+        emailField.clear();
+        birthDatePicker.setValue(null);
+        addressField.clear();
+        genderBox.setValue(null);
+        typeBox.setValue(null);
+        customerTable.getSelectionModel().clearSelection();
+    }
+
     @FXML
     private void handleAdd() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            String sql = "INSERT INTO customers (code_customer, name, phone, email, birthdate, address, gender, customer_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            stmt.setString(1, codeField.getText());
-            stmt.setString(2, nameField.getText());
-            stmt.setString(3, phoneField.getText());
-            stmt.setString(4, emailField.getText());
-            stmt.setDate(5, birthDatePicker.getValue() != null ? Date.valueOf(birthDatePicker.getValue()) : null);
-            stmt.setString(6, addressField.getText());
-            stmt.setString(7, genderBox.getValue());
-            stmt.setString(8, typeBox.getValue());
-
-            stmt.executeUpdate();
-            loadCustomers();
-            clearFields();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        showCustomerPopup(null);
     }
 
     @FXML
     private void handleUpdate() {
         Customer selected = customerTable.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            String sql = "UPDATE customers SET code_customer=?, name=?, phone=?, email=?, birthdate=?, address=?, gender=?, customer_type=? WHERE id=?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            stmt.setString(1, codeField.getText());
-            stmt.setString(2, nameField.getText());
-            stmt.setString(3, phoneField.getText());
-            stmt.setString(4, emailField.getText());
-            stmt.setDate(5, birthDatePicker.getValue() != null ? Date.valueOf(birthDatePicker.getValue()) : null);
-            stmt.setString(6, addressField.getText());
-            stmt.setString(7, genderBox.getValue());
-            stmt.setString(8, typeBox.getValue());
-            stmt.setInt(9, selected.getId());
-
-            stmt.executeUpdate();
-            loadCustomers();
-            clearFields();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (selected != null) {
+            showCustomerPopup(selected);
         }
     }
 
@@ -162,10 +136,8 @@ public class CustomersController {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, selected.getId());
             stmt.executeUpdate();
-
             loadCustomers();
             clearFields();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -179,12 +151,7 @@ public class CustomersController {
 
     @FXML
     private void handleSearch() {
-        String keyword = searchField.getText().toLowerCase().trim();
-        if (keyword.isEmpty()) {
-            customerTable.setItems(customers);
-            return;
-        }
-
+        String keyword = searchField.getText().toLowerCase();
         ObservableList<Customer> filtered = FXCollections.observableArrayList();
         for (Customer c : customers) {
             if (c.getName().toLowerCase().contains(keyword)) {
@@ -197,35 +164,75 @@ public class CustomersController {
     @FXML
     private void showDetailPopup() {
         Customer selected = customerTable.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected != null) {
+            showCustomerPopup(selected);
+        }
+    }
 
+    private void showCustomerPopup(Customer customer) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/CustomerDetail.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/customerDetail.fxml"));
             Parent root = loader.load();
 
             CustomerDetailController controller = loader.getController();
-            controller.setCustomer(selected);
+            controller.setCustomer(customer);
 
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Chi tiết khách hàng");
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.showAndWait();
+
+            if (controller.isSaved()) {
+                Customer updated = controller.getUpdatedCustomer();
+                if (customer == null) {
+                    insertCustomer(updated);
+                } else {
+                    updateCustomer(updated);
+                }
+                loadCustomers();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void clearFields() {
-        codeField.clear();
-        nameField.clear();
-        phoneField.clear();
-        emailField.clear();
-        birthDatePicker.setValue(null);
-        addressField.clear();
-        genderBox.setValue(null);
-        typeBox.setValue(null);
-        searchField.clear();
-        customerTable.getSelectionModel().clearSelection();
+    private void insertCustomer(Customer c) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            String sql = "INSERT INTO customers (code_customer, name, phone, email, birthdate, address, gender, customer_type, total_spent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, c.getCodeCustomer());
+            stmt.setString(2, c.getName());
+            stmt.setString(3, c.getPhone());
+            stmt.setString(4, c.getEmail());
+            stmt.setDate(5, c.getBirthdate() != null ? Date.valueOf(c.getBirthdate()) : null);
+            stmt.setString(6, c.getAddress());
+            stmt.setString(7, c.getGender());
+            stmt.setString(8, c.getCustomerType());
+            stmt.setDouble(9, c.getTotalSpent());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateCustomer(Customer c) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            String sql = "UPDATE customers SET code_customer=?, name=?, phone=?, email=?, birthdate=?, address=?, gender=?, customer_type=? WHERE id=?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, c.getCodeCustomer());
+            stmt.setString(2, c.getName());
+            stmt.setString(3, c.getPhone());
+            stmt.setString(4, c.getEmail());
+            stmt.setDate(5, c.getBirthdate() != null ? Date.valueOf(c.getBirthdate()) : null);
+            stmt.setString(6, c.getAddress());
+            stmt.setString(7, c.getGender());
+            stmt.setString(8, c.getCustomerType());
+            stmt.setInt(9, c.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
