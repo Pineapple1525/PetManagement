@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane prefHeight="600.0" prefWidth="900.0"
+           style="-fx-background-radius: 15;"
+           stylesheets="@../styles/main.css"
+           xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.petmanagement.controller.LoginController">
+
+    <HBox spacing="0" style="-fx-background-color: white;" StackPane.alignment="CENTER">
+
+        <!-- Form only -->
+        <VBox alignment="CENTER" prefWidth="900" spacing="15"
+              style="-fx-background-color: white; -fx-padding: 30;"
+              HBox.hgrow="ALWAYS">
+
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Amateur Lotus "/>
+
+            <TextField fx:id="usernameField"
+                       maxWidth="300" prefHeight="30" prefWidth="300"
+                       promptText="Username"/>
+
+            <!-- Password group -->
+            <StackPane maxWidth="300">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <PasswordField fx:id="passwordField"
+                                   maxWidth="300" prefHeight="30" prefWidth="265"
+                                   promptText="Password"/>
+
+                    <TextField fx:id="visiblePasswordField"
+                               managed="false" visible="false"
+                               maxWidth="300" prefHeight="30" prefWidth="265"
+                               promptText="Password"/>
+
+                    <Label fx:id="togglePasswordIcon"
+                           prefHeight="26.0" prefWidth="35.0"
+                           style="-fx-font-size: 16px; -fx-cursor: hand;"
+                           text="👁"/>
+                </HBox>
+            </StackPane>
+
+            <Button fx:id="loginButton"
+                    prefWidth="300"
+                    style="-fx-background-color: #FFCC66; -fx-text-fill: white;"
+                    text="Login"/>
+
+            <Hyperlink fx:id="forgotPasswordLink" text="Forgot password?"/>
+
+            <Label fx:id="errorLabel"
+                   maxWidth="250" textFill="red"
+                   visible="false" wrapText="true"/>
+        </VBox>
+    </HBox>
+</StackPane>
