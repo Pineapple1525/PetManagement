@@ -23,23 +23,22 @@
             <HBox spacing="15">
                 <VBox styleClass="stat-card" prefWidth="300">
                     <Label text="👥 Customer"/>
-                    <Label fx:id="labelCustomerCount" styleClass="value-label" text="120"/>
+                    <Label fx:id="labelCustomerCount" styleClass="value-label" />
                 </VBox>
                 <VBox styleClass="stat-card" prefWidth="300">
                     <Label text="📦 Order"/>
-                    <Label fx:id="labelOrderCount" styleClass="value-label" text="45"/>
+                    <Label fx:id="labelOrderCount" styleClass="value-label" />
                 </VBox>
                 <VBox styleClass="stat-card" prefWidth="300">
                     <Label text="💰Monthly Revenue"/>
-                    <Label fx:id="labelRevenue" styleClass="value-label" text="75,000,000 đ"/>
+                    <Label fx:id="labelRevenue" styleClass="value-label" />
                 </VBox>
                 <VBox styleClass="stat-card" prefWidth="300">
                     <Label text="⚠️Out of stock"/>
-                    <Label fx:id="labelLowStock" styleClass="value-label" text="10"/>
+                    <Label fx:id="labelLowStock" styleClass="value-label"/>
                 </VBox>
             </HBox>
 
-            <!-- Revenue Chart -->
             <TitledPane text="📊Monthly Revenue" expanded="true" styleClass="titled-pane">
                 <LineChart fx:id="lineChartRevenue" title="Revenue in the last 6 months"
                            prefHeight="250" prefWidth="1000">
@@ -55,12 +54,12 @@
             <!-- Bottom: recent orders + top products -->
             <HBox spacing="20">
                 <TitledPane text="🧾 Recent Orders" expanded="true" prefWidth="650" styleClass="titled-pane">
-                    <TableView fx:id="tableRecentOrders">
+                    <TableView  fx:id="tableRecentOrders">
                         <columns>
-                            <TableColumn text="Single code" prefWidth="150"/>
-                            <TableColumn text="Customer" prefWidth="250"/>
-                            <TableColumn text="Day" prefWidth="200"/>
-                            <TableColumn text="Total amount" prefWidth="200"/>
+                            <TableColumn fx:id="colCodeOrder" text="Single code" prefWidth="150"/>
+                            <TableColumn fx:id="colCustomerName" text="Customer" prefWidth="250"/>
+                            <TableColumn fx:id="colOrderDate" text="Day" prefWidth="200"/>
+                            <TableColumn fx:id="colTotalPrice" text="Total amount" prefWidth="200"/>
                         </columns>
                     </TableView>
                 </TitledPane>

@@ -236,4 +236,7 @@ public class LayoutController {
     public void handleLogoClick(MouseEvent mouseEvent) {
         loadView("/com/petmanagement/pages/dashboard.fxml");
     }
+
+    public void showExit(MouseEvent mouseEvent) {
+    }
 }

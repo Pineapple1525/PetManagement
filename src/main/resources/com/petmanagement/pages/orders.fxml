@@ -69,8 +69,10 @@
         <HBox spacing="10" >
             <Button text="Create Order" onAction="#onCreateOrder"/>
             <Button text="View Details" onAction="#onViewDetail"/>
-            <Button text="Update Status" onAction="#onUpdateStatus"/>
+            <Button text="Modify Order" onAction="#onModifyOrder"/>
             <Button text="Delete Order" onAction="#onDeleteOrder"/>
+            <Button text="Print Order" onAction="#onPrintOrder"/>
+
         </HBox>
     </bottom>
 
