@@ -46,8 +46,7 @@
                                     <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPetProducts"/>
                                     <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showOrders"/>
                                     <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showCustomers"/>
-                                    <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPreviousOwners"/>
-                                    <Button text="Exit" style="-fx-text-fill: white; -fx-padding: 10px;"/>
+                                    <Button fx:id="btnExit" text="Exit" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showExit" />
 
                                 </VBox>
                             </content>

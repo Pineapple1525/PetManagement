@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Order {
-
+    private int orderId;
     private String codeOrder;
     private String customerName;
     private LocalDateTime orderDate;
@@ -12,6 +12,21 @@ public class Order {
     private String status;
     private String paymentMethod;
     private String deliveryStatus;
+
+
+
+    public Order(int orderId, String codeOrder, String customerName, LocalDateTime orderDate,
+                 BigDecimal totalPrice, String status, String paymentMethod, String deliveryStatus) {
+        this.orderId = orderId;
+        this.codeOrder = codeOrder;
+        this.customerName = customerName;
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.paymentMethod = paymentMethod;
+        this.deliveryStatus = deliveryStatus;
+    }
+
 
     public Order(String codeOrder, String customerName, LocalDateTime orderDate, BigDecimal totalPrice,
                  String status, String paymentMethod, String deliveryStatus) {
@@ -23,6 +38,19 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.deliveryStatus = deliveryStatus;
     }
+
+    public Order(String type, String name, double price, int quantity, double weight) {
+    }
+
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
 
     public String getCodeOrder() {
         return codeOrder;
@@ -79,4 +107,6 @@ public class Order {
     public void setDeliveryStatus(String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
     }
+
+
 }

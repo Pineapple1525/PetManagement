@@ -1,5 +1,6 @@
 package com.petmanagement.controller;
 
+import com.petmanagement.connection.DBConnection;
 import com.petmanagement.model.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDate;
 
 public class CustomersController {
 
@@ -27,16 +27,11 @@ public class CustomersController {
     @FXML private TableColumn<Customer, String> genderCol;
     @FXML private TableColumn<Customer, String> typeCol;
     @FXML private TableColumn<Customer, Double> spentCol;
+    @FXML private TableColumn<Customer, String> addressCol;
 
-    @FXML private TextField codeField, nameField, phoneField, emailField, addressField, searchField;
-    @FXML private DatePicker birthDatePicker;
-    @FXML private ComboBox<String> genderBox, typeBox;
+    @FXML private TextField searchField;
 
     private final ObservableList<Customer> customers = FXCollections.observableArrayList();
-
-    private final String DB_URL = "jdbc:mysql://localhost:3306/petshop";
-    private final String DB_USER = "root";
-    private final String DB_PASS = "";
 
     @FXML
     private void initialize() {
@@ -48,25 +43,27 @@ public class CustomersController {
         genderCol.setCellValueFactory(new PropertyValueFactory<>("gender"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("customerType"));
         spentCol.setCellValueFactory(new PropertyValueFactory<>("totalSpent"));
-
-        genderBox.setItems(FXCollections.observableArrayList("Male", "Female", "Other"));
-        typeBox.setItems(FXCollections.observableArrayList("Regular", "VIP", "Breeder"));
+        addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
 
         loadCustomers();
 
-        customerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
-            if (newSel != null) {
-                showCustomerDetails(newSel);
-            }
+        customerTable.setRowFactory(tv -> {
+            TableRow<Customer> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    openDetailPopup(row.getItem());
+                }
+            });
+            return row;
         });
     }
 
     private void loadCustomers() {
         customers.clear();
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            String sql = "SELECT * FROM customers";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+        String sql = "SELECT * FROM customers";
+        try (Connection conn = DBConnection.getConn();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 customers.add(new Customer(
@@ -82,62 +79,41 @@ public class CustomersController {
                         rs.getDouble("total_spent")
                 ));
             }
-
             customerTable.setItems(customers);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void showCustomerDetails(Customer c) {
-        codeField.setText(c.getCodeCustomer());
-        nameField.setText(c.getName());
-        phoneField.setText(c.getPhone());
-        emailField.setText(c.getEmail());
-        birthDatePicker.setValue(c.getBirthdate());
-        addressField.setText(c.getAddress());
-        genderBox.setValue(c.getGender());
-        typeBox.setValue(c.getCustomerType());
-    }
-
-    private void clearFields() {
-        codeField.clear();
-        nameField.clear();
-        phoneField.clear();
-        emailField.clear();
-        birthDatePicker.setValue(null);
-        addressField.clear();
-        genderBox.setValue(null);
-        typeBox.setValue(null);
-        customerTable.getSelectionModel().clearSelection();
-    }
-
     @FXML
     private void handleAdd() {
-        showCustomerPopup(null);
+        openDetailPopup(null);
     }
 
     @FXML
     private void handleUpdate() {
         Customer selected = customerTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            showCustomerPopup(selected);
+            openDetailPopup(selected);
+        } else {
+            showAlert("Vui lòng chọn một khách hàng để sửa.");
         }
     }
 
     @FXML
     private void handleDelete() {
         Customer selected = customerTable.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null) {
+            showAlert("Vui lòng chọn một khách hàng để xoá.");
+            return;
+        }
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            String sql = "DELETE FROM customers WHERE id=?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        String sql = "DELETE FROM customers WHERE id=?";
+        try (Connection conn = DBConnection.getConn();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, selected.getId());
             stmt.executeUpdate();
             loadCustomers();
-            clearFields();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -145,7 +121,6 @@ public class CustomersController {
 
     @FXML
     private void handleRefresh() {
-        clearFields();
         loadCustomers();
     }
 
@@ -162,14 +137,16 @@ public class CustomersController {
     }
 
     @FXML
-    private void showDetailPopup() {
+    private void handleViewDetail() {
         Customer selected = customerTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            showCustomerPopup(selected);
+            openDetailPopup(selected);
+        } else {
+            showAlert("Vui lòng chọn một khách hàng để xem chi tiết.");
         }
     }
 
-    private void showCustomerPopup(Customer customer) {
+    private void openDetailPopup(Customer customer) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/customerDetail.fxml"));
             Parent root = loader.load();
@@ -185,6 +162,8 @@ public class CustomersController {
 
             if (controller.isSaved()) {
                 Customer updated = controller.getUpdatedCustomer();
+                if (updated == null) return;
+
                 if (customer == null) {
                     insertCustomer(updated);
                 } else {
@@ -199,9 +178,9 @@ public class CustomersController {
     }
 
     private void insertCustomer(Customer c) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            String sql = "INSERT INTO customers (code_customer, name, phone, email, birthdate, address, gender, customer_type, total_spent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        String sql = "INSERT INTO customers (code_customer, name, phone, email, birthdate, address, gender, customer_type, total_spent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConn();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, c.getCodeCustomer());
             stmt.setString(2, c.getName());
             stmt.setString(3, c.getPhone());
@@ -218,9 +197,9 @@ public class CustomersController {
     }
 
     private void updateCustomer(Customer c) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            String sql = "UPDATE customers SET code_customer=?, name=?, phone=?, email=?, birthdate=?, address=?, gender=?, customer_type=? WHERE id=?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        String sql = "UPDATE customers SET code_customer=?, name=?, phone=?, email=?, birthdate=?, address=?, gender=?, customer_type=?, total_spent=? WHERE id=?";
+        try (Connection conn = DBConnection.getConn();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, c.getCodeCustomer());
             stmt.setString(2, c.getName());
             stmt.setString(3, c.getPhone());
@@ -229,10 +208,19 @@ public class CustomersController {
             stmt.setString(6, c.getAddress());
             stmt.setString(7, c.getGender());
             stmt.setString(8, c.getCustomerType());
-            stmt.setInt(9, c.getId());
+            stmt.setDouble(9, c.getTotalSpent());
+            stmt.setInt(10, c.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

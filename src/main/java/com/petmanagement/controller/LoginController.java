@@ -1,5 +1,6 @@
 package com.petmanagement.controller;
 
+import com.petmanagement.connection.DBConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -23,10 +24,6 @@ public class LoginController {
     @FXML private Label errorLabel;
     @FXML private Button loginButton;
 
-    private final String DB_URL = "jdbc:mysql://localhost:3306/petshop";
-    private final String DB_USER = "root";
-    private final String DB_PASS = "";
-
     @FXML
     private void initialize() {
         loginButton.setOnAction(this::handleLogin);
@@ -48,14 +45,14 @@ public class LoginController {
             visiblePasswordField.setManaged(true);
             passwordField.setVisible(false);
             passwordField.setManaged(false);
-            togglePasswordIcon.setText("🙈"); // ẩn
+            togglePasswordIcon.setText("🙈");
         } else {
             passwordField.setText(visiblePasswordField.getText());
             passwordField.setVisible(true);
             passwordField.setManaged(true);
             visiblePasswordField.setVisible(false);
             visiblePasswordField.setManaged(false);
-            togglePasswordIcon.setText("👁"); // hiện
+            togglePasswordIcon.setText("👁");
         }
     }
 
@@ -69,25 +66,43 @@ public class LoginController {
             return;
         }
 
-        String hashedPassword = hashPassword(passwordInput); // mã hóa SHA-256
+        String hashedPassword = hashPassword(passwordInput);
+        System.out.println("🔐 Hashed password: " + hashedPassword);
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            String sql = "SELECT * FROM users WHERE BINARY username = ? AND BINARY password = ?";
+        try (Connection conn = DBConnection.getConn()) {
+            String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
-            stmt.setString(2, hashedPassword);  // so sánh với password đã mã hóa
+            stmt.setString(2, hashedPassword);
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                errorLabel.setVisible(false);
+                String role = rs.getString("role");
+                System.out.println("✅ Đăng nhập thành công với vai trò: " + role);
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/main.fxml"));
+                FXMLLoader loader;
+                switch (role) {
+                    case "Boss":
+                        loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/boss-dashboard.fxml"));
+                        break;
+                    case "Manager":
+                        loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/manager-dashboard.fxml"));
+                        break;
+                    case "Employee":
+                        loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/employee-dashboard.fxml"));
+                        break;
+                    default:
+                        showAlert("Lỗi", "Vai trò không hợp lệ: " + role, Alert.AlertType.ERROR);
+                        return;
+                }
+
                 Parent root = loader.load();
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
-                stage.setTitle("Trang chính");
+                stage.setTitle("Trang chính - " + role);
                 stage.show();
+
             } else {
                 errorLabel.setText("Tên đăng nhập hoặc mật khẩu không đúng");
                 errorLabel.setVisible(true);
@@ -104,12 +119,10 @@ public class LoginController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/forgot-password.fxml"));
             Parent root = loader.load();
-
             Stage stage = new Stage();
             stage.setTitle("Quên mật khẩu");
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Lỗi", "Không thể mở giao diện quên mật khẩu", Alert.AlertType.ERROR);

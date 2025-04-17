@@ -25,27 +25,35 @@ import java.io.IOException;
 import java.util.*;
 
 public class LayoutController {
-    @FXML
-    public Button btnEmployees;
-    public Button btnUsers;
-    public Button btnPets;
-    public Button btnPetProducts;
-    public Button btnOrders;
-    public Button btnCustomers;
-    public Button btnPreviousOwners;
+
     @FXML
     private VBox sidebar;
 
     @FXML
     private BorderPane borderPane;
     private Button selectedButton = null;
-
+    @FXML
+    private ToggleButton toggleSidebarButton;
     @FXML
     private ScrollPane scrollPane;
 
     @FXML
     private ImageView arrowIcon;
-    @FXML
+//    @FXML
+//    private void toggleSidebar() {
+//        if (toggleSidebarButton.isSelected()) {
+//            scrollPane.setVisible(false);
+//            scrollPane.setManaged(false);
+//
+//            toggleSidebarButton.setText("");
+//        } else {
+//
+//            scrollPane.setVisible(true);
+//            scrollPane.setManaged(true);
+//
+//            toggleSidebarButton.setText("");
+//        }
+//    }
     public void initialize() {
         Font font = Font.loadFont(getClass().getResourceAsStream("/com/petmanagement/styles/font/PatrickHand-Regular.ttf"), 20);
         System.out.println("Loaded font: " + (font != null ? font.getName() : "Font not found"));
@@ -181,17 +189,14 @@ public class LayoutController {
     @FXML
     private void loadView(String file) {
         try {
-            System.out.println("Đang tải view: " + file);
+//           System.out.println("Loading view: " + file); // debug
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
             Parent root = fxmlLoader.load();
             borderPane.setCenter(root);
-            System.out.println("Tải thành công: " + file);
         } catch (IOException e) {
-            System.out.println("Lỗi khi tải: " + file);
             e.printStackTrace();
         }
     }
-
 
     @FXML
     public void showUsers() {
@@ -231,5 +236,8 @@ public class LayoutController {
 
     public void handleLogoClick(MouseEvent mouseEvent) {
         loadView("/com/petmanagement/pages/dashboard.fxml");
+    }
+
+    public void showExit(MouseEvent mouseEvent) {
     }
 }

@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import java.lang.String?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.collections.FXCollections?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.EmployeeController"
-            style="-fx-background-color: #FFF5E1;">
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.petmanagement.controller.EmployeeController"
+            id="orders-root"
+            stylesheets="@../styles/order.css">
+
     <children>
-        <VBox spacing="10" style="-fx-background-color: #FFF5E1;">
+        <VBox spacing="10">
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
 
-            <Label text="Danh sách nhân viên" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #6B3E26;" />
+            <Label text="Danh sách nhân viên"
+                   styleClass="header-label"/>
 
             <!-- Thanh tìm kiếm -->
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <TextField fx:id="searchField" promptText="Tìm theo mã / họ tên..." prefWidth="300"
-                           style="-fx-background-radius: 15; -fx-background-color: #FFF3DA; -fx-border-color: #D1A989; -fx-border-radius: 15;"/>
-                <ComboBox fx:id="genderFilter" promptText="Giới tính" prefWidth="120"
-                          style="-fx-background-color: #FFF3DA; -fx-border-color: #D1A989;">
+                <TextField fx:id="searchField"
+                           promptText="Tìm theo mã / họ tên..."
+                           prefWidth="300"
+                           id="searchField"/>
+
+                <ComboBox fx:id="genderFilter"
+                          promptText="Giới tính"
+                          prefWidth="120"
+                          styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Nam"/>
@@ -30,8 +38,11 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
-                <ComboBox fx:id="roleFilter" promptText="Vai trò" prefWidth="150"
-                          style="-fx-background-color: #FFF3DA; -fx-border-color: #D1A989;">
+
+                <ComboBox fx:id="roleFilter"
+                          promptText="Vai trò"
+                          prefWidth="150"
+                          styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Quản lý"/>
@@ -44,8 +55,10 @@
 
             <!-- Bảng danh sách -->
             <HBox alignment="CENTER">
-                <TableView fx:id="employeeTable" prefHeight="400" maxWidth="1100"
-                           style="-fx-background-color: #FFF8ED; -fx-border-color: #D1A989; -fx-border-radius: 10; -fx-background-radius: 10;">
+                <TableView fx:id="employeeTable"
+                           prefHeight="400"
+                           maxWidth="1100"
+                           styleClass="table-view">
                     <columns>
                         <TableColumn fx:id="colId" text="Mã ID" prefWidth="60"/>
                         <TableColumn fx:id="colCode" text="Mã nhân viên" prefWidth="100"/>
@@ -61,15 +74,16 @@
                         <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100"/>
                         <TableColumn fx:id="colHiringDate" text="Ngày vào làm" prefWidth="120"/>
                         <TableColumn fx:id="colActions" text="Hành động" prefWidth="150"/>
-
                     </columns>
                 </TableView>
             </HBox>
 
             <!-- Các nút -->
             <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button text="Thêm" fx:id="btnAdd" onAction="#handleAddEmployee"
-                        style="-fx-background-color: #E0B188; -fx-background-radius: 20; -fx-font-weight: bold;"/>
+                <Button text="Thêm"
+                        fx:id="btnAdd"
+                        onAction="#handleAddEmployee"
+                        styleClass="button"/>
             </HBox>
         </VBox>
     </children>
