@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.CreateOrderController">
+    <top>
+        <VBox spacing="10">
+            <Label text="Create New Order" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <GridPane hgap="10" vgap="10" >
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="25" />
+                    <ColumnConstraints percentWidth="75" />
+                </columnConstraints>
+
+                <!-- Mã đơn hàng -->
+                <Label text="Order Code:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <TextField fx:id="txtOrderCode" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                <!-- Khách hàng -->
+                <Label text="Customer:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cbCustomer" prefWidth="250" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                <!-- Nhân viên -->
+                <Label text="Employee:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cbEmployee" prefWidth="250" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                <!-- Phương thức thanh toán -->
+                <Label text="Payment Method:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cbPaymentMethod" prefWidth="250" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+                <!-- Giảm giá -->
+                <Label text="Discount:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                <TextField fx:id="txtDiscount" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+
+                <!-- Trạng thái đơn -->
+                <Label text="Order Status:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cbOrderStatus" GridPane.rowIndex="5" GridPane.columnIndex="1">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Pending" />
+                            <String fx:value="Completed" />
+                            <String fx:value="Cancelled" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+                <!-- Trạng thái giao hàng -->
+                <Label text="Delivery Status:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cbDeliveryStatus" GridPane.rowIndex="6" GridPane.columnIndex="1">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Pending" />
+                            <String fx:value="Shipped" />
+                            <String fx:value="Delivered" />
+                            <String fx:value="Cancelled" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+                <!-- Ghi chú -->
+                <Label text="Note:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+                <TextArea fx:id="txtNote" prefRowCount="2" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+            </GridPane>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" >
+            <!-- Phần chọn sản phẩm -->
+            <HBox spacing="10">
+                <Label text="Product Type:" />
+                <ComboBox fx:id="cbProductType" prefWidth="150" />
+                <Label text="Product/Pet:" />
+                <ComboBox fx:id="cbProductItem" prefWidth="250" />
+                <Label text="Quantity:" />
+                <TextField fx:id="txtQuantity" prefWidth="60" />
+                <Button fx:id="btnAddItem" text="Add" onAction="#onAddItem" />
+            </HBox>
+
+            <!-- Bảng chi tiết đơn hàng -->
+            <TableView fx:id="tblOrderItems" prefHeight="200">
+                <columns>
+                    <TableColumn fx:id="colProductType" text="Type" prefWidth="80" />
+                    <TableColumn fx:id="colProductName" text="Product Name" prefWidth="200" />
+                    <TableColumn fx:id="colSalePrice" text="Price" prefWidth="100" />
+                    <TableColumn fx:id="colQuantity" text="Qty" prefWidth="60" />
+                    <TableColumn fx:id="colWeight" text="Weight" prefWidth="80" />
+                    <TableColumn fx:id="colAction" text="Action" prefWidth="100" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" >
+            <Label text="Total:" />
+            <Label fx:id="lblTotal" text="0" style="-fx-font-weight: bold;" />
+            <Button fx:id="btnSave" text="Save Order" onAction="#onSave" />
+            <Button text="Cancel" onAction="#onCancel" />
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -6,9 +6,8 @@
 
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.OrderController"  id="orders-root" stylesheets="@../styles/order.css">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.OrderController" id="orders-root" stylesheets="@../styles/order.css">
 
-    <!-- ===== Top: Thanh tìm kiếm và lọc ===== -->
     <top>
         <HBox spacing="10" >
             <TextField fx:id="searchField" promptText="Search by order code / customer name..." prefWidth="400" prefHeight="40"/>
@@ -18,11 +17,11 @@
                     minWidth="40" minHeight="40"
                     style="-fx-font-size: 14px; -fx-background-radius: 20;"/>
             <VBox spacing="2">
-                <Label text="Trạng thái đơn" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
-                <ComboBox fx:id="statusFilter" promptText="Tất cả" prefWidth="130">
+                <Label text="Order Status" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <ComboBox fx:id="statusFilter" promptText="All" prefWidth="130">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Tất cả"/>
+                            <String fx:value="All"/>
                             <String fx:value="Pending"/>
                             <String fx:value="Completed"/>
                             <String fx:value="Cancelled"/>
@@ -31,13 +30,13 @@
                 </ComboBox>
             </VBox>
 
-            <!-- Label + ComboBox: Trạng thái giao -->
+            <!-- Label + ComboBox: Delivery Status -->
             <VBox spacing="2">
-                <Label text="Trạng thái giao" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
-                <ComboBox fx:id="deliveryFilter" promptText="Tất cả" prefWidth="130">
+                <Label text="Delivery Status" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <ComboBox fx:id="deliveryFilter" promptText="All" prefWidth="130">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Tất cả"/>
+                            <String fx:value="All"/>
                             <String fx:value="Pending"/>
                             <String fx:value="Shipped"/>
                             <String fx:value="Delivered"/>
@@ -49,28 +48,31 @@
         </HBox>
     </top>
 
-    <!-- ===== Center: Bảng danh sách đơn hàng ===== -->
+    <!-- ===== Center: Order List Table ===== -->
     <center>
         <TableView fx:id="orderTable" prefHeight="400">
             <columns>
-                <TableColumn fx:id="colCode" text="Mã Đơn" prefWidth="100"/>
-                <TableColumn fx:id="colCustomer" text="Khách Hàng" prefWidth="150"/>
-                <TableColumn fx:id="colDate" text="Ngày Đặt" prefWidth="130"/>
-                <TableColumn fx:id="colTotal" text="Tổng Tiền" prefWidth="100"/>
-                <TableColumn fx:id="colStatus" text="Trạng Thái" prefWidth="100"/>
-                <TableColumn fx:id="colPayment" text="Thanh Toán" prefWidth="100"/>
-                <TableColumn fx:id="colDelivery" text="Giao Hàng" prefWidth="100"/>
+                <TableColumn fx:id="colID" text="Order ID" prefWidth="100"/>
+                <TableColumn fx:id="colCode" text="Order Code" prefWidth="100"/>
+                <TableColumn fx:id="colCustomer" text="Customer" prefWidth="150"/>
+                <TableColumn fx:id="colDate" text="Order Date" prefWidth="130"/>
+                <TableColumn fx:id="colTotal" text="Total Amount" prefWidth="100"/>
+                <TableColumn fx:id="colStatus" text="Status" prefWidth="100"/>
+                <TableColumn fx:id="colPayment" text="Payment" prefWidth="100"/>
+                <TableColumn fx:id="colDelivery" text="Delivery" prefWidth="100"/>
             </columns>
         </TableView>
     </center>
 
-    <!-- ===== Bottom: Các nút thao tác ===== -->
+    <!-- ===== Bottom: Action Buttons ===== -->
     <bottom>
         <HBox spacing="10" >
-            <Button text="Tạo đơn mới" onAction="#onCreateOrder"/>
-            <Button text="Xem chi tiết" onAction="#onViewDetail"/>
-            <Button text="Cập nhật trạng thái" onAction="#onUpdateStatus"/>
-            <Button text="Xóa đơn" onAction="#onDeleteOrder"/>
+            <Button text="Create Order" onAction="#onCreateOrder"/>
+            <Button text="View Details" onAction="#onViewDetail"/>
+            <Button text="Modify Order" onAction="#onModifyOrder"/>
+            <Button text="Delete Order" onAction="#onDeleteOrder"/>
+            <Button text="Print Order" onAction="#onPrintOrder"/>
+
         </HBox>
     </bottom>
 
