@@ -152,7 +152,15 @@ public class CustomersController {
             Parent root = loader.load();
 
             CustomerDetailController controller = loader.getController();
-            controller.setCustomer(customer);
+
+            // Nếu là thêm mới khách hàng, thì tự sinh mã code_customer
+            if (customer == null) {
+                Customer newCustomer = new Customer();
+                newCustomer.setCodeCustomer(generateCustomerCode()); // Gán mã tự động
+                controller.setCustomer(newCustomer);
+            } else {
+                controller.setCustomer(customer);
+            }
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -176,6 +184,31 @@ public class CustomersController {
             e.printStackTrace();
         }
     }
+    private String generateCustomerCode() {
+        String prefix = "C";
+        int maxNumber = 0;
+
+        String sql = "SELECT code_customer FROM customers";
+        try (Connection conn = DBConnection.getConn();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                String code = rs.getString("code_customer");
+                if (code != null && code.matches("C\\d+")) {
+                    int num = Integer.parseInt(code.substring(1));
+                    if (num > maxNumber) maxNumber = num;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return prefix + String.format("%03d", maxNumber + 1); // ví dụ: C001, C002,...
+    }
+
+
 
     private void insertCustomer(Customer c) {
         String sql = "INSERT INTO customers (code_customer, name, phone, email, birthdate, address, gender, customer_type, total_spent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -215,6 +248,7 @@ public class CustomersController {
             e.printStackTrace();
         }
     }
+
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
