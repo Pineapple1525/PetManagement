@@ -50,6 +50,9 @@ public class EmployeeController {
     private TableColumn<Employee, LocalDateTime> colHiringDate;
     @FXML
     private TableColumn<Employee, Void> colActions;
+    @FXML
+    private TextField searchField;
+
 
     private Connection getConnection() {
         try {
@@ -79,6 +82,8 @@ public class EmployeeController {
         colWorkShift.setCellValueFactory(new PropertyValueFactory<>("workShift"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colHiringDate.setCellValueFactory(new PropertyValueFactory<>("hiringDate"));
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
+
 
         // Thiết lập cột "Hành động"
         colActions.setCellFactory(column -> new TableCell<Employee, Void>() {
@@ -244,6 +249,21 @@ public class EmployeeController {
     }
 
 
+    @FXML
+    public void handleSearch() {
+        String keyword = searchField.getText().trim().toLowerCase();
+
+        ObservableList<Employee> filteredList = FXCollections.observableArrayList();
+
+        for (Employee emp : getAllEmployees()) {
+            if (emp.getCodeEmployee().toLowerCase().contains(keyword) ||
+                    emp.getFullname().toLowerCase().contains(keyword)) {
+                filteredList.add(emp);
+            }
+        }
+
+        employeeTable.setItems(filteredList);
+    }
 
 
 }
