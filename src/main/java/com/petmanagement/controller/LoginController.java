@@ -81,6 +81,8 @@ public class LoginController {
 
             if (rs.next()) {
                 errorLabel.setVisible(false);
+                String role = getUserRole(username);
+                System.out.println("Role người dùng: " + role);
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/main.fxml"));
                 Parent root = loader.load();
@@ -138,4 +140,29 @@ public class LoginController {
             return null;
         }
     }
+
+    private String getUserRole(String username) {
+        String role = null;
+        String sql = "SELECT role FROM users WHERE BINARY username = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                role = rs.getString("role");
+                System.out.println("→ Vai trò của người dùng '" + username + "' là: " + role);
+            } else {
+                System.out.println("→ Không tìm thấy vai trò cho người dùng '" + username + "'");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("→ Lỗi khi truy vấn role:");
+            e.printStackTrace();
+        }
+        return role;
+    }
+
+
 }
