@@ -82,6 +82,7 @@ public class LoginController {
             if (rs.next()) {
                 errorLabel.setVisible(false);
                 String role = getUserRole(username);
+                Session.set(username, role);
                 System.out.println("Role người dùng: " + role);
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/main.fxml"));
