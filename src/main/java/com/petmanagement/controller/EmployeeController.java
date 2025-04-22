@@ -89,7 +89,7 @@ public class EmployeeController {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Truy cập bị từ chối");
             alert.setHeaderText(null);
-            alert.setContentText("Bạn không có quyền truy cập trang này!");
+            alert.setContentText("Bạn không đủ đẳng cấp để xem trang này");
             alert.showAndWait();
 
             // Ẩn bảng và các điều khiển khác
@@ -282,7 +282,7 @@ public class EmployeeController {
         employeeTable.refresh(); // Cập nhật lại giao diện bảng
     }
 
-
+ 
     @FXML
     public void handleSearch() {
         String keyword = searchField.getText().trim().toLowerCase();
