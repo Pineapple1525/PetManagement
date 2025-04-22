@@ -1,200 +1,130 @@
 package com.petmanagement.controller;
 
-import com.petmanagement.connection.DBConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.event.ActionEvent;
 import javafx.stage.Stage;
-import javafx.util.Pair;
-import javafx.scene.layout.GridPane;
 
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.security.*;
+import java.nio.charset.StandardCharsets;
 
 public class LoginController {
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+    @FXML private Label errorLabel;
+    @FXML private Hyperlink forgotPasswordLink;
+
+    // Kết nối đến MySQL
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/petshop", "root", "");
+    }
+
+    // Xử lý đăng nhập
+    @FXML
+    private void handleLogin(ActionEvent event) {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        String hashedPassword = hashSHA1(password);
+
+        try (Connection conn = getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT * FROM users WHERE username = ? AND password = ?"
+            );
+            stmt.setString(1, username);
+            stmt.setString(2, hashedPassword);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String role = rs.getString("role");
+                errorLabel.setText("Login thành công với quyền: " + role);
+
+                // Load giao diện main.fxml
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/main.fxml"));
+                Parent root = loader.load();
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Trang chính");
+                stage.show();
+            } else {
+                errorLabel.setText("Sai tài khoản hoặc mật khẩu!");
+            }
+
+        } catch (Exception e) {
+            errorLabel.setText("Lỗi: " + e.getMessage());
+        }
+    }
+
+    // Mã hóa SHA-1
+    public static String hashSHA1(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] bytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : bytes) sb.append(String.format("%02x", b));
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-1 không được hỗ trợ");
+        }
+    }
+
     @FXML private TextField visiblePasswordField;
     @FXML private Label togglePasswordIcon;
-    @FXML private Hyperlink forgotPasswordLink;
-    @FXML private Label errorLabel;
-    @FXML private Button loginButton;
+
+    private boolean passwordVisible = false;
 
     @FXML
     private void initialize() {
         visiblePasswordField.setVisible(false);
         visiblePasswordField.setManaged(false);
 
+        // Đồng bộ hóa dữ liệu giữa 2 ô nhập
         passwordField.textProperty().addListener((obs, oldVal, newVal) -> visiblePasswordField.setText(newVal));
         visiblePasswordField.textProperty().addListener((obs, oldVal, newVal) -> passwordField.setText(newVal));
 
-        togglePasswordIcon.setOnMouseClicked(this::togglePasswordVisibility);
-        forgotPasswordLink.setOnAction(e -> handleForgotPassword());
-        loginButton.setOnAction(e -> handleLogin());
+        togglePasswordIcon.setOnMouseClicked(e -> togglePasswordVisibility());
     }
 
-    private void togglePasswordVisibility(MouseEvent event) {
-        boolean isVisible = visiblePasswordField.isVisible();
-        visiblePasswordField.setVisible(!isVisible);
-        visiblePasswordField.setManaged(!isVisible);
-        passwordField.setVisible(isVisible);
-        passwordField.setManaged(isVisible);
-    }
-
-    private void handleLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            errorLabel.setText("Please enter username and password.");
-            return;
-        }
-
-        try (Connection conn = DBConnection.getConn()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT password FROM users WHERE username=?");
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                String storedHashedPassword = rs.getString("password");
-                String enteredHashedPassword = hashPassword(password);
-
-                if (storedHashedPassword.equals(enteredHashedPassword)) {
-                    // Login thành công
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/main.fxml"));
-                        Parent root = loader.load();
-                        Stage stage = new Stage();
-                        stage.setTitle("Main Page");
-                        stage.setScene(new Scene(root));
-                        stage.show();
-
-                        Stage currentStage = (Stage) loginButton.getScene().getWindow();
-                        currentStage.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        errorLabel.setText("Cannot open main page.");
-                    }
-                } else {
-                    errorLabel.setText("Incorrect password.");
-                }
-            } else {
-                errorLabel.setText("Username not found.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            errorLabel.setText("Error during login.");
+    private void togglePasswordVisibility() {
+        passwordVisible = !passwordVisible;
+        if (passwordVisible) {
+            visiblePasswordField.setVisible(true);
+            visiblePasswordField.setManaged(true);
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+            togglePasswordIcon.setText("🙈");
+        } else {
+            visiblePasswordField.setVisible(false);
+            visiblePasswordField.setManaged(false);
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+            togglePasswordIcon.setText("👁");
         }
     }
 
-    private void handleForgotPassword() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Forgot Password");
-        dialog.setHeaderText("Reset your password");
-        dialog.setContentText("Enter your email:");
-
-        dialog.showAndWait().ifPresent(email -> {
-            if (email.isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Email cannot be empty.");
-            } else {
-                if (!emailExists(email)) {
-                    showAlert(Alert.AlertType.ERROR, "Email not found in system.");
-                    return;
-                }
-
-                Dialog<Pair<String, String>> passwordDialog = new Dialog<>();
-                passwordDialog.setTitle("Set New Password");
-                passwordDialog.setHeaderText("Enter new password");
-
-                ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
-                passwordDialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
-
-                PasswordField newPassword = new PasswordField();
-                newPassword.setPromptText("New Password");
-                PasswordField confirmPassword = new PasswordField();
-                confirmPassword.setPromptText("Confirm Password");
-
-                GridPane grid = new GridPane();
-                grid.setHgap(10);
-                grid.setVgap(10);
-                grid.add(new Label("New Password:"), 0, 0);
-                grid.add(newPassword, 1, 0);
-                grid.add(new Label("Confirm Password:"), 0, 1);
-                grid.add(confirmPassword, 1, 1);
-
-                passwordDialog.getDialogPane().setContent(grid);
-
-                passwordDialog.setResultConverter(dialogButton -> {
-                    if (dialogButton == confirmButtonType) {
-                        return new Pair<>(newPassword.getText(), confirmPassword.getText());
-                    }
-                    return null;
-                });
-
-                passwordDialog.showAndWait().ifPresent(result -> {
-                    String pass1 = result.getKey();
-                    String pass2 = result.getValue();
-                    if (!pass1.equals(pass2)) {
-                        showAlert(Alert.AlertType.ERROR, "Passwords do not match.");
-                    } else {
-                        updatePassword(email, pass1);
-                        showAlert(Alert.AlertType.INFORMATION, "Password updated successfully.");
-                    }
-                });
-            }
-        });
-    }
-
-    private boolean emailExists(String email) {
-        try (Connection conn = DBConnection.getConn()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE email = ?");
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private void updatePassword(String email, String newPassword) {
-        try (Connection conn = DBConnection.getConn()) {
-            String hashedPassword = hashPassword(newPassword);
-            PreparedStatement stmt = conn.prepareStatement("UPDATE users SET password = ? WHERE email = ?");
-            stmt.setString(1, hashedPassword);
-            stmt.setString(2, email);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String hashPassword(String password) {
+    // Xử lý quên mật khẩu
+    @FXML
+    private void handleForgotPassword(ActionEvent event) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(password.getBytes());
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            // Load giao diện forgot_password.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/forgot_password.fxml"));
+            Parent root = loader.load();
+
+            // Tạo một Stage mới để hiển thị
+            Stage stage = new Stage();
+            stage.setTitle("Quên mật khẩu");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            errorLabel.setText("Không thể mở giao diện quên mật khẩu.");
+            e.printStackTrace();
         }
     }
 
-    private void showAlert(Alert.AlertType type, String message) {
-        Alert alert = new Alert(type);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

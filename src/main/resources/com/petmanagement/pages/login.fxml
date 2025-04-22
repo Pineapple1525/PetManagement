@@ -2,55 +2,50 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
 
-<StackPane prefHeight="600.0" prefWidth="900.0"
-           style="-fx-background-radius: 15;"
-           stylesheets="@../styles/main.css"
-           xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.petmanagement.controller.LoginController">
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.petmanagement.controller.LoginController"
+           style="-fx-background-color: #ffffff;"
+           prefWidth="500" prefHeight="400">
 
-    <HBox spacing="0" style="-fx-background-color: white;" StackPane.alignment="CENTER">
+    <VBox alignment="CENTER" spacing="20">
+        <!-- Tiêu đề -->
+        <Label text="Log In" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
 
-        <!-- Form only -->
-        <VBox alignment="CENTER" prefWidth="900" spacing="15"
-              style="-fx-background-color: white; -fx-padding: 30;"
-              HBox.hgrow="ALWAYS">
+        <!-- Ô nhập và biểu tượng -->
+        <VBox spacing="10" alignment="CENTER">
+            <TextField fx:id="usernameField" promptText="Enter your email"
+                       style="-fx-background-radius: 8px; -fx-border-radius: 8px; -fx-padding: 10; -fx-background-color: #f2f2f2;"
+                       prefWidth="260" maxWidth="260"/>
 
-            <Label style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Amateur Lotus "/>
+                <StackPane  prefWidth="260" maxWidth="260">
+                <PasswordField fx:id="passwordField" promptText="Password"
+                               style="-fx-background-radius: 8px; -fx-border-radius: 8px; -fx-padding: 10; -fx-background-color: #f2f2f2;"
+                               prefWidth="260" maxWidth="260" />
+                <TextField fx:id="visiblePasswordField" promptText="Password"
+                           style="-fx-background-radius: 8px; -fx-border-radius: 8px; -fx-padding: 10; -fx-background-color: #f2f2f2;"
+                           />
+                </StackPane>
+                <!-- Biểu tượng hiện/ẩn -->
+                <Label fx:id="togglePasswordIcon"
+                       text="👁"
+                       style="-fx-cursor: hand; -fx-translate-x: 120;" />
 
-            <TextField fx:id="usernameField"
-                       maxWidth="300" prefHeight="30" prefWidth="300"
-                       promptText="Username"/>
 
-            <!-- Password group -->
-            <StackPane maxWidth="300">
-                <HBox alignment="CENTER_LEFT" spacing="5">
-                    <PasswordField fx:id="passwordField"
-                                   maxWidth="300" prefHeight="30" prefWidth="265"
-                                   promptText="Password"/>
-
-                    <TextField fx:id="visiblePasswordField"
-                               managed="false" visible="false"
-                               maxWidth="300" prefHeight="30" prefWidth="265"
-                               promptText="Password"/>
-
-                    <Label fx:id="togglePasswordIcon"
-                           prefHeight="26.0" prefWidth="35.0"
-                           style="-fx-font-size: 16px; -fx-cursor: hand;"
-                           text="👁"/>
-                </HBox>
-            </StackPane>
-
-            <Button fx:id="loginButton"
-                    prefWidth="300"
-                    style="-fx-background-color: #FFCC66; -fx-text-fill: white;"
-                    text="Login"/>
-
-            <Hyperlink fx:id="forgotPasswordLink" text="Forgot password?"/>
-
-            <Label fx:id="errorLabel"
-                   maxWidth="250" textFill="red"
-                   visible="false" wrapText="true"/>
+            <Hyperlink fx:id="forgotPasswordLink"
+                       text="Forgot password"
+                       onAction="#handleForgotPassword"
+                       style="-fx-font-size: 12px;" />
         </VBox>
-    </HBox>
+
+        <!-- Nút đăng nhập -->
+        <Button text="Log In"
+                onAction="#handleLogin"
+                style="-fx-background-color: #ff884d; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 40px;" />
+
+        <!-- Thông báo lỗi -->
+        <Label fx:id="errorLabel" textFill="red" style="-fx-font-style: italic;" />
+    </VBox>
 </StackPane>
