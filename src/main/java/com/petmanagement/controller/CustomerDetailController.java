@@ -40,6 +40,7 @@ public class CustomerDetailController {
 
         if (customer != null) {
             codeField.setText(customer.getCodeCustomer());
+            codeField.setDisable(true); // Ngăn người dùng sửa mã khách hàng
             nameField.setText(customer.getName());
             phoneField.setText(customer.getPhone());
             emailField.setText(customer.getEmail());
@@ -48,8 +49,11 @@ public class CustomerDetailController {
             spentField.setText(String.valueOf(customer.getTotalSpent()));
             genderBox.setValue(customer.getGender());
             typeBox.setValue(customer.getCustomerType());
+        } else {
+            codeField.setDisable(false); // Nếu tạo mới, cho phép nhập mã khách hàng
         }
     }
+
 
     public boolean isSaved() {
         return isSaved;

@@ -13,16 +13,15 @@
             id="orders-root"
             stylesheets="@../styles/order.css">
 
-    <!-- Bảng hiển thị danh sách khách hàng -->
+    <!-- Table displaying customer list -->
     <top>
         <HBox alignment="CENTER" spacing="10" BorderPane.alignment="CENTER">
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
 
-            <Label text="Tìm kiếm theo tên:" />
-            <TextField fx:id="searchField" promptText="Nhập tên khách hàng..." />
-            <Button onAction="#handleSearch" text="Tìm"  maxWidth="100"/>
+            <Label text="Search by name:" />
+            <TextField fx:id="searchField" promptText="Enter customer name..." />
         </HBox>
     </top>
 
@@ -30,31 +29,30 @@
         <TableView fx:id="customerTable" prefHeight="400">
             <columns>
                 <TableColumn fx:id="idCol" prefWidth="50" text="ID" />
-                <TableColumn fx:id="codeCol" prefWidth="100" text="Mã KH" />
-                <TableColumn fx:id="nameCol" prefWidth="150" text="Tên" />
-                <TableColumn fx:id="phoneCol" prefWidth="120" text="SĐT" />
-                <TableColumn fx:id="emailCol" prefWidth="147.99996948242188" text="Email" />
-                <TableColumn fx:id="genderCol" prefWidth="82.4000244140625" text="Giới tính" />
-                <TableColumn fx:id="typeCol" prefWidth="80" text="Loại KH" />
-                <TableColumn fx:id="spentCol" prefWidth="100" text="Đã chi" />
-                <TableColumn fx:id="addressCol" prefWidth="200" text="Địa chỉ" />
+                <TableColumn fx:id="codeCol" prefWidth="100" text="Code" />
+                <TableColumn fx:id="nameCol" prefWidth="150" text="Name" />
+                <TableColumn fx:id="phoneCol" prefWidth="120" text="Phone" />
+                <TableColumn fx:id="emailCol" prefWidth="148" text="Email" />
+                <TableColumn fx:id="genderCol" prefWidth="82.4" text="Gender" />
+                <TableColumn fx:id="typeCol" prefWidth="80" text="Type" />
+                <TableColumn fx:id="spentCol" prefWidth="100" text="Spent" />
+                <TableColumn fx:id="addressCol" prefWidth="200" text="Address" />
             </columns>
         </TableView>
     </center>
 
-    <!-- Nút thao tác -->
+    <!-- Action buttons -->
     <bottom>
         <HBox alignment="TOP_LEFT" prefHeight="46.0" prefWidth="738.0" spacing="10" BorderPane.alignment="CENTER">
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
-            <Button onAction="#handleAdd" text="Thêm" maxWidth="100"/>
-            <Button onAction="#handleUpdate" text="Sửa"  maxWidth="100"/>
-            <Button onAction="#handleDelete" text="Xóa"  maxWidth="100"/>
-            <Button onAction="#handleRefresh" text="Làm mới" maxWidth="130"/>
-            <Button onAction="#handleViewDetail" text="Xem chi tiết" maxWidth="150" />
+            <Button onAction="#handleAdd" text="Add" maxWidth="100"/>
+            <Button onAction="#handleUpdate" text="Edit" maxWidth="100"/>
+            <Button onAction="#handleDelete" text="Delete" maxWidth="100"/>
+            <Button onAction="#handleRefresh" text="Refresh" maxWidth="130"/>
+            <Button onAction="#handleViewDetail" text="View Details" maxWidth="150" />
         </HBox>
     </bottom>
-
 
 </BorderPane>

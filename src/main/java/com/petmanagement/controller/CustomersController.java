@@ -56,6 +56,9 @@ public class CustomersController {
             });
             return row;
         });
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            handleSearchRealTime(newValue);
+        });
     }
 
     private void loadCustomers() {
@@ -84,6 +87,24 @@ public class CustomersController {
             e.printStackTrace();
         }
     }
+    private void handleSearchRealTime(String keyword) {
+        if (keyword.trim().isEmpty()) {
+            customerTable.setItems(customers);
+            return;
+        }
+
+        ObservableList<Customer> filtered = FXCollections.observableArrayList();
+        for (Customer c : customers) {
+            // 🔴 Dùng equals để so khớp chính xác tên
+            if (c.getName().equals(keyword)) {
+                filtered.add(c);
+            }
+        }
+
+        customerTable.setItems(filtered);
+    }
+
+
 
     @FXML
     private void handleAdd() {
