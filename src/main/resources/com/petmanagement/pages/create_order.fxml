@@ -73,10 +73,8 @@
         <VBox spacing="10" >
             <!-- Phần chọn sản phẩm -->
             <HBox spacing="10">
-                <Label text="Product Type:" />
-                <ComboBox fx:id="cbProductType" prefWidth="150" />
-                <Label text="Product/Pet:" />
-                <ComboBox fx:id="cbProductItem" prefWidth="250" />
+                <TextField fx:id="searchProduct" promptText="Search by order product..." />
+                <Button text="🔍" onAction="#onSearchProduct"/>
                 <Label text="Quantity:" />
                 <TextField fx:id="txtQuantity" prefWidth="60" />
                 <Button fx:id="btnAddItem" text="Add" onAction="#onAddItem" />
