@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.PasswordField?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.petmanagement.controller.AddEmployeeController">
     <children>
         <VBox alignment="TOP_LEFT" prefHeight="538.0" prefWidth="654.0" spacing="10" style="-fx-background-color: #FFF5E1; -fx-border-color: #D1A989; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 1;">
@@ -65,7 +66,11 @@
                 </items>
             </ComboBox>
 
+
             <DatePicker fx:id="dpHiringDate" prefWidth="250" promptText="Ngày vào làm" style="-fx-background-radius: 5;" />
+
+            <TextField fx:id="txtUsername" promptText="Username" />
+            <PasswordField fx:id="txtPassword" promptText="Password" />
 
             <HBox alignment="CENTER_RIGHT" spacing="10">
                 <Button onAction="#handleSave" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Lưu" />
