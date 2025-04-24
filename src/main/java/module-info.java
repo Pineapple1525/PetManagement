@@ -11,7 +11,8 @@ module com.petmanagement {
     requires java.desktop;
     requires mysql.connector.j;
     requires com.google.protobuf;
-    requires jakarta.mail; // ✅ THÊM DÒNG NÀY ĐỂ FIX LỖI
+    requires java.mail; // 👈 cần thêm dòng này
+    requires jbcrypt; // ✅ THÊM DÒNG NÀY ĐỂ FIX LỖI
 
     opens com.petmanagement to javafx.fxml;
     opens com.petmanagement.model to javafx.base;

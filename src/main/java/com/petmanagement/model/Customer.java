@@ -1,4 +1,5 @@
 package com.petmanagement.model;
+
 import java.time.LocalDate;
 
 public class Customer {
@@ -13,6 +14,7 @@ public class Customer {
     private String customerType;
     private double totalSpent;
 
+    // Constructor đầy đủ tham số
     public Customer(int id, String codeCustomer, String name, String phone, String email,
                     LocalDate birthdate, String address, String gender,
                     String customerType, double totalSpent) {
@@ -28,6 +30,11 @@ public class Customer {
         this.totalSpent = totalSpent;
     }
 
+    // Constructor rỗng (bắt buộc để thêm mới)
+    public Customer() {
+    }
+
+    // Getters
     public int getId() {
         return id;
     }
@@ -66,5 +73,46 @@ public class Customer {
 
     public double getTotalSpent() {
         return totalSpent;
+    }
+
+    // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCodeCustomer(String codeCustomer) {
+        this.codeCustomer = codeCustomer;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setCustomerType(String customerType) {
+        this.customerType = customerType;
+    }
+
+    public void setTotalSpent(double totalSpent) {
+        this.totalSpent = totalSpent;
     }
 }
