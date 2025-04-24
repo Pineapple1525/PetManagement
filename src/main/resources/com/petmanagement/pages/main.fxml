@@ -12,19 +12,20 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.ScrollPane?>
 
+<?import javafx.scene.control.Label?>
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.petmanagement.controller.LayoutController"
-            prefWidth="2000.0" prefHeight="800.0">
+            prefWidth="2000.0" >
 
     <children>
-        <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="800.0" stylesheets="@../styles/main.css" >
+        <BorderPane fx:id="borderPane" stylesheets="@../styles/main.css">
+            <!-- Sidebar -->
             <left>
-                <!-- Sidebar StackPane container -->
-                <StackPane fx:id="sidebarContainer" prefWidth="250.0" prefHeight="600.0">
+                <StackPane fx:id="sidebarContainer" prefWidth="250.0">
                     <!-- Sidebar Content (HBox chứa ScrollPane và VBox) -->
                     <HBox>
-                        <ScrollPane fx:id="scrollPane" fitToWidth="true" pannable="true" vbarPolicy="AS_NEEDED" prefHeight="600.0">
+                        <ScrollPane fx:id="scrollPane" fitToWidth="true" pannable="true" vbarPolicy="AS_NEEDED">
                             <content>
                                 <VBox fx:id="sidebar" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #d2b48c;">
                                     <!-- Logo -->
@@ -46,25 +47,23 @@
                                     <Button fx:id="btnPetProducts" text="Pet Products" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPetProducts"/>
                                     <Button fx:id="btnOrders" text="Orders" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showOrders"/>
                                     <Button fx:id="btnCustomers" text="Customers" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showCustomers"/>
-                                    <Button fx:id="btnExit" text="Exit" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showExit" />
-
+                                    <Button fx:id="btnPreviousOwners" text="Previous Owners" style="-fx-text-fill: white; -fx-padding: 10px;" onMouseClicked="#showPreviousOwners"/>
+                                    <Button text="Exit" style="-fx-text-fill: white; -fx-padding: 10px;"/>
                                 </VBox>
                             </content>
                         </ScrollPane>
                     </HBox>
-
-                    <!-- Toggle Button to hide/show sidebar -->
-<!--                    <ToggleButton fx:id="toggleSidebarButton" style="-fx-background-color: #d2b48c; -fx-text-fill: white; -fx-padding: 10px; -fx-font-size: 18;" onAction="#toggleSidebar">-->
-<!--                        <graphic>-->
-<!--                            <ImageView fx:id="arrowIcon" fitWidth="20" fitHeight="20">-->
-<!--                                <image>-->
-<!--                                    <Image url="@../images/arrow-icon.png" />-->
-<!--                                </image>-->
-<!--                            </ImageView>-->
-<!--                        </graphic>-->
-<!--                    </ToggleButton>-->
                 </StackPane>
             </left>
+
+            <!-- Center: Main content (Pet Products) -->
+            <center>
+                <!-- Adjust the content here for pet-products -->
+                <StackPane>
+                    <Label text="Pet Products Content Here" style="-fx-font-size: 24px;"/>
+                </StackPane>
+            </center>
+
         </BorderPane>
     </children>
 </AnchorPane>

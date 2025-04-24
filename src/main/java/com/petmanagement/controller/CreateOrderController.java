@@ -13,4 +13,7 @@ public class CreateOrderController {
 
     public void onCancel(ActionEvent actionEvent) {
     }
+
+    public void onSearchProduct(ActionEvent actionEvent) {
+    }
 }

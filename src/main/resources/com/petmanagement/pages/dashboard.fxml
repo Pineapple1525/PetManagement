@@ -7,7 +7,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.petmanagement.controller.DashboardController"
-            prefWidth="2000" prefHeight="800"
+            prefWidth="2000"
             id="dashboard-root">
 
     <!-- ScrollPane cho phép cuộn cả 2 chiều -->
@@ -41,7 +41,7 @@
 
             <TitledPane text="📊Monthly Revenue" expanded="true" styleClass="titled-pane">
                 <LineChart fx:id="lineChartRevenue" title="Revenue in the last 6 months"
-                           prefHeight="250" prefWidth="1000">
+                            prefWidth="1000">
                     <xAxis>
                         <CategoryAxis label="Month"/>
                     </xAxis>
@@ -65,7 +65,7 @@
                 </TitledPane>
 
                 <TitledPane text="🏆Best selling products" expanded="true" prefWidth="400" styleClass="titled-pane">
-                    <PieChart fx:id="pieChartTopProducts" prefHeight="200"/>
+                    <PieChart fx:id="pieChartTopProducts" />
                 </TitledPane>
             </HBox>
         </VBox>
