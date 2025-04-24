@@ -1,5 +1,6 @@
 package com.petmanagement.controller;
 
+import com.petmanagement.connection.DBConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -20,11 +21,8 @@ public class LoginController {
     @FXML private Label errorLabel;
     @FXML private Hyperlink forgotPasswordLink;
 
-    // Kết nối đến MySQL
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/petshop", "root", "");
-    }
 
+    // Xử lý đăng nhập
     // Xử lý đăng nhập
     @FXML
     private void handleLogin(ActionEvent event) {
@@ -32,7 +30,7 @@ public class LoginController {
         String password = passwordField.getText();
         String hashedPassword = hashSHA1(password);
 
-        try (Connection conn = getConnection()) {
+        try (Connection conn = DBConnection.getConn()) {
             PreparedStatement stmt = conn.prepareStatement(
                     "SELECT * FROM users WHERE username = ? AND password = ?"
             );
@@ -41,10 +39,8 @@ public class LoginController {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                errorLabel.setVisible(false);
-                String role = getUserRole(username);
-                Session.set(username, role);
-                System.out.println("Role người dùng: " + role);
+                String role = rs.getString("role");
+                errorLabel.setText("Login thành công với quyền: " + role);
 
                 // Load giao diện main.fxml
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/main.fxml"));
@@ -128,29 +124,5 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
-    private String getUserRole(String username) {
-        String role = null;
-        String sql = "SELECT role FROM users WHERE BINARY username = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                role = rs.getString("role");
-                System.out.println("→ Vai trò của người dùng '" + username + "' là: " + role);
-            } else {
-                System.out.println("→ Không tìm thấy vai trò cho người dùng '" + username + "'");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("→ Lỗi khi truy vấn role:");
-            e.printStackTrace();
-        }
-        return role;
-    }
-
 
 }
