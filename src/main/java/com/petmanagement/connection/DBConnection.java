@@ -13,7 +13,7 @@ public class DBConnection {
         try {
             if (conn == null || conn.isClosed()) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/petshop", "root", "");
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/petshop", "root", "duy2692005");
                 System.out.println("✅ Kết nối thành công!");
             }
         } catch (ClassNotFoundException | SQLException e) {
