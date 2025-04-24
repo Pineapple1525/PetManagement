@@ -41,9 +41,9 @@
         </VBox>
 
         <!-- Nút đăng nhập -->
-        <Button text="Log In"
-                onAction="#handleLogin"
-                style="-fx-background-color: #ff884d; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 40px;" />
+        <Button fx:id="loginButton" text="Đăng nhập" onAction="#handleLogin" style="-fx-background-color: #ff884d; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 40px;" />
+
+
 
         <!-- Thông báo lỗi -->
         <Label fx:id="errorLabel" textFill="red" style="-fx-font-style: italic;" />

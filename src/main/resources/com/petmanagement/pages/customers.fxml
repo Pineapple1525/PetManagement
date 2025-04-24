@@ -51,7 +51,7 @@
             <Button onAction="#handleUpdate" text="Edit" maxWidth="100"/>
             <Button onAction="#handleDelete" text="Delete" maxWidth="100"/>
             <Button onAction="#handleRefresh" text="Refresh" maxWidth="130"/>
-            <Button onAction="#handleViewDetail" text="View Details" maxWidth="150" />
+<!--            <Button onAction="#handleViewDetail" text="View Details" maxWidth="150" />-->
         </HBox>
     </bottom>
 

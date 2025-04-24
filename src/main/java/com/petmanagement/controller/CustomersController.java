@@ -93,17 +93,22 @@ public class CustomersController {
             return;
         }
 
+        String lowerKeyword = keyword.toLowerCase();
         ObservableList<Customer> filtered = FXCollections.observableArrayList();
+
         for (Customer c : customers) {
-            // 🔴 Dùng equals để so khớp chính xác tên
-            if (c.getName().equals(keyword)) {
+            if (
+                    (c.getName() != null && c.getName().toLowerCase().contains(lowerKeyword)) ||
+                            (c.getPhone() != null && c.getPhone().toLowerCase().contains(lowerKeyword)) ||
+                            (c.getEmail() != null && c.getEmail().toLowerCase().contains(lowerKeyword)) ||
+                            (c.getCodeCustomer() != null && c.getCodeCustomer().toLowerCase().contains(lowerKeyword))
+            ) {
                 filtered.add(c);
             }
         }
 
         customerTable.setItems(filtered);
     }
-
 
 
     @FXML
