@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -238,6 +239,9 @@ public class LayoutController {
         loadView("/com/petmanagement/pages/dashboard.fxml");
     }
 
+    @FXML
     public void showExit(MouseEvent mouseEvent) {
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        ExitController.showExitDialog(stage);
     }
 }

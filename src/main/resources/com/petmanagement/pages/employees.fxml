@@ -26,6 +26,12 @@
                            prefWidth="300"
                            id="searchField"/>
 
+<!--                <Button text="🔍" onAction="#handleSearch"-->
+<!--                        prefWidth="40" prefHeight="40"-->
+<!--                        maxWidth="40" maxHeight="40"-->
+<!--                        minWidth="40" minHeight="40"-->
+<!--                        style="-fx-font-size: 14px; -fx-background-radius: 20;"/>-->
+
                 <ComboBox fx:id="genderFilter"
                           promptText="Giới tính"
                           prefWidth="120"

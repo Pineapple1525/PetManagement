@@ -18,6 +18,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
+
 public class EmployeeController {
 
     @FXML
@@ -50,6 +52,17 @@ public class EmployeeController {
     private TableColumn<Employee, LocalDateTime> colHiringDate;
     @FXML
     private TableColumn<Employee, Void> colActions;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private ComboBox<String> genderFilter;
+    @FXML
+    private ComboBox<String> roleFilter;
+    @FXML
+    private Button  btnAdd;
+
+
+
 
     private Connection getConnection() {
         try {
@@ -65,6 +78,30 @@ public class EmployeeController {
 
     @FXML
     public void initialize() {
+
+        String role = Session.getRole();
+        System.out.println("Role người dùng: " + role);
+
+
+// Kiểm tra quyền truy cập
+        if (!"Manager".equalsIgnoreCase(role)) {
+            // Nếu không có quyền, hiển thị cảnh báo và ẩn bảng
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Truy cập bị từ chối");
+            alert.setHeaderText(null);
+            alert.setContentText("Bạn không đủ đẳng cấp để xem trang này");
+            alert.showAndWait();
+
+            // Ẩn bảng và các điều khiển khác
+            employeeTable.setVisible(false);    // Ẩn bảng nhân viên
+            searchField.setVisible(false);      // Ẩn trường tìm kiếm
+            genderFilter.setVisible(false);     // Ẩn bộ lọc giới tính
+            roleFilter.setVisible(false);       // Ẩn bộ lọc vai trò
+            btnAdd.setVisible(false);           // Ẩn nút thêm nhân viên (nếu cần)
+            return; // Không load dữ liệu
+        }
+
+
         // Gán thuộc tính các cột
         colId.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
         colCode.setCellValueFactory(new PropertyValueFactory<>("codeEmployee"));
@@ -79,6 +116,8 @@ public class EmployeeController {
         colWorkShift.setCellValueFactory(new PropertyValueFactory<>("workShift"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colHiringDate.setCellValueFactory(new PropertyValueFactory<>("hiringDate"));
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
+
 
         // Thiết lập cột "Hành động"
         colActions.setCellFactory(column -> new TableCell<Employee, Void>() {
@@ -243,7 +282,22 @@ public class EmployeeController {
         employeeTable.refresh(); // Cập nhật lại giao diện bảng
     }
 
+ 
+    @FXML
+    public void handleSearch() {
+        String keyword = searchField.getText().trim().toLowerCase();
 
+        ObservableList<Employee> filteredList = FXCollections.observableArrayList();
+
+        for (Employee emp : getAllEmployees()) {
+            if (emp.getCodeEmployee().toLowerCase().contains(keyword) ||
+                    emp.getFullname().toLowerCase().contains(keyword)) {
+                filteredList.add(emp);
+            }
+        }
+
+        employeeTable.setItems(filteredList);
+    }
 
 
 }
