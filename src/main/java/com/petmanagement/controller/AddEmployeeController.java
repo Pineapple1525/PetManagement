@@ -1,5 +1,6 @@
 package com.petmanagement.controller;
 
+import com.petmanagement.connection.DBConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -25,16 +26,9 @@ public class AddEmployeeController {
 
 
     private Connection getConnection() {
-        try {
-            String url = "jdbc:mysql://localhost:3306/petshop";
-            String user = "root";
-            String password = "";
-            return DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return DBConnection.getConn();
     }
+
 
     private void insertEmployee(Employee emp) {
         String sql = "INSERT INTO employees (code_employee, fullname, gender, birthdate, address, phone, email, role, salary, work_shift, status, hiring_date) " +
