@@ -1,10 +1,16 @@
 package com.petmanagement.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
 import java.sql.*;
 import java.security.*;
 import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 
 public class ForgotPasswordController {
 
@@ -32,7 +38,7 @@ public class ForgotPasswordController {
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                // Email tồn tại, thực hiện cập nhật
+                // Email tồn tại → Cập nhật mật khẩu
                 String hashedPassword = hashSHA1(newPassword);
                 PreparedStatement updateStmt = conn.prepareStatement("UPDATE users SET password = ? WHERE email = ?");
                 updateStmt.setString(1, hashedPassword);
@@ -40,7 +46,17 @@ public class ForgotPasswordController {
 
                 int rowsAffected = updateStmt.executeUpdate();
                 if (rowsAffected > 0) {
-                    statusLabel.setText("Đặt lại mật khẩu thành công!");
+                    statusLabel.setText("Bạn đã đổi mật khẩu thành công! Đang chuyển hướng...");
+
+                    // Delay nhỏ để người dùng thấy thông báo
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(1500); // đợi 1.5 giây
+                            javafx.application.Platform.runLater(this::returnToLogin);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 } else {
                     statusLabel.setText("Không thể cập nhật mật khẩu.");
                 }
@@ -50,6 +66,21 @@ public class ForgotPasswordController {
             }
         } catch (SQLException e) {
             statusLabel.setText("Lỗi CSDL: " + e.getMessage());
+        }
+    }
+
+    private void returnToLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/login.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) emailField.getScene().getWindow(); // lấy Stage hiện tại
+            stage.setScene(new Scene(root));
+            stage.setTitle("Đăng nhập");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            statusLabel.setText("Không thể quay lại trang đăng nhập.");
         }
     }
 

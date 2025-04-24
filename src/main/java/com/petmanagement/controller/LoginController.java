@@ -103,7 +103,7 @@ public class LoginController {
     @FXML
     private void handleForgotPassword(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/forgot-password.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/forgot_password.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
