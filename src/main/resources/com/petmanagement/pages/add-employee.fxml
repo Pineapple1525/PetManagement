@@ -55,7 +55,6 @@
                 </items>
             </ComboBox>
 
-            <!-- Thay txtStatus thành ComboBox -->
             <ComboBox fx:id="cbStatus" prefWidth="250" promptText="Trạng thái" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">

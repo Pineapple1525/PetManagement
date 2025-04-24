@@ -100,51 +100,121 @@ public class AddEmployeeController {
 
     @FXML
     private void handleSave() {
-        if (txtFullname.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Full name is required!");
-            alert.showAndWait();
+        String fullname = txtFullname.getText().trim();
+        String gender = cbGender.getValue();
+        String address = txtAddress.getText().trim();
+        String phone = txtPhone.getText().trim();
+        String email = txtEmail.getText().trim();
+        String role = cbRole.getValue();
+        String salaryStr = txtSalary.getText().trim();
+        String workShift = cbWorkShift.getValue();
+        String status = cbStatus.getValue();
+
+        // Validate họ tên
+        if (fullname.isEmpty()) {
+            showAlert("Vui lòng nhập họ tên!");
             return;
         }
 
-        Employee emp = new Employee();
+        // Validate giới tính
+        if (gender == null) {
+            showAlert("Vui lòng chọn giới tính!");
+            return;
+        }
 
-        emp.setCodeEmployee(generateEmployeeCode());
-        emp.setFullname(txtFullname.getText());
-        emp.setGender(cbGender.getValue());
-        emp.setBirthdate(dpBirthdate.getValue());
-        emp.setAddress(txtAddress.getText());
-        emp.setPhone(txtPhone.getText());
-        emp.setEmail(txtEmail.getText());
+        // Validate ngày sinh
+        if (dpBirthdate.getValue() == null) {
+            showAlert("Vui lòng chọn ngày sinh!");
+            return;
+        }
 
-        emp.setRole(cbRole.getValue());
+        // Validate địa chỉ
+        if (address.isEmpty()) {
+            showAlert("Vui lòng nhập địa chỉ!");
+            return;
+        }
 
+        // Validate số điện thoại
+        if (!phone.matches("\\d{10,11}")) {
+            showAlert("Số điện thoại không hợp lệ (chỉ 10-11 chữ số)!");
+            return;
+        }
+
+        // Validate email
+        if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            showAlert("Email không hợp lệ!");
+            return;
+        }
+
+        // Validate vai trò
+        if (role == null) {
+            showAlert("Vui lòng chọn vai trò!");
+            return;
+        }
+
+        // Validate lương
+        BigDecimal salary;
         try {
-            if (!txtSalary.getText().isEmpty()) {
-                emp.setSalary(new BigDecimal(txtSalary.getText()));
-            } else {
-                emp.setSalary(BigDecimal.ZERO);
+            salary = salaryStr.isEmpty() ? BigDecimal.ZERO : new BigDecimal(salaryStr);
+            if (salary.compareTo(BigDecimal.ZERO) < 0) {
+                showAlert("Lương không được âm!");
+                return;
             }
         } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid salary: " + txtSalary.getText());
-            alert.showAndWait();
+            showAlert("Lương không hợp lệ!");
             return;
         }
 
-        emp.setWorkShift(cbWorkShift.getValue());
-        emp.setStatus(cbStatus.getValue());
-
-        if (dpHiringDate.getValue() != null) {
-            emp.setHiringDate(dpHiringDate.getValue().atStartOfDay());
+        // Validate ca làm việc
+        if (workShift == null) {
+            showAlert("Vui lòng chọn ca làm việc!");
+            return;
         }
 
+        // Validate trạng thái
+        if (status == null) {
+            showAlert("Vui lòng chọn trạng thái!");
+            return;
+        }
+
+        // Validate ngày vào làm
+        if (dpHiringDate.getValue() == null) {
+            showAlert("Vui lòng chọn ngày vào làm!");
+            return;
+        }
+
+        // Gán dữ liệu vào đối tượng Employee
+        Employee emp = new Employee();
+        emp.setCodeEmployee(generateEmployeeCode());
+        emp.setFullname(fullname);
+        emp.setGender(gender);
+        emp.setBirthdate(dpBirthdate.getValue());
+        emp.setAddress(address);
+        emp.setPhone(phone);
+        emp.setEmail(email);
+        emp.setRole(role);
+        emp.setSalary(salary);
+        emp.setWorkShift(workShift);
+        emp.setStatus(status);
+        emp.setHiringDate(dpHiringDate.getValue().atStartOfDay());
+
+        // Thêm nhân viên vào cơ sở dữ liệu
         insertEmployee(emp);
 
+        // Gọi callback nếu có
         if (onUpdateCallback != null) {
             onUpdateCallback.run();
         }
 
+        // Đóng cửa sổ
         ((Stage) txtFullname.getScene().getWindow()).close();
     }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.showAndWait();
+    }
+
 
 
 
