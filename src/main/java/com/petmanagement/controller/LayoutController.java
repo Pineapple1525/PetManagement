@@ -193,6 +193,8 @@ public class LayoutController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
             Parent root = fxmlLoader.load();
             borderPane.setCenter(root);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -233,7 +235,32 @@ public class LayoutController {
         loadView("/com/petmanagement/pages/pre-owners.fxml");
     }
 
-    public void handleLogoClick(MouseEvent mouseEvent) {
+    @FXML
+    private void handleLogoClick(MouseEvent event) {
+        if (selectedButton != null) {
+            // Reset style class liên quan
+            selectedButton.getStyleClass().removeAll("button-hovered", "button-selected", "active");
+
+            // Reset scale (nếu có zoom hoặc effect)
+            selectedButton.setScaleX(1.0);
+            selectedButton.setScaleY(1.0);
+
+            // Tìm StackPane chứa selectedButton để ẩn paw icon
+            if (selectedButton.getParent() instanceof StackPane stackPane) {
+                for (Node child : stackPane.getChildren()) {
+                    if (child instanceof ImageView paw) {
+                        paw.setVisible(false);
+                        paw.setScaleX(1.0);
+                        paw.setScaleY(1.0);
+                    }
+                }
+            }
+
+            selectedButton = null;
+        }
+
         loadView("/com/petmanagement/pages/dashboard.fxml");
+
     }
+
 }

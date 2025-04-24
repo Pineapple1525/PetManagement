@@ -1,7 +1,7 @@
 module com.petmanagement {
     requires javafx.controls;
     requires javafx.fxml;
-
+    requires javafx.base;
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
@@ -13,4 +13,5 @@ module com.petmanagement {
     opens com.petmanagement to javafx.fxml;
     exports com.petmanagement;
     opens com.petmanagement.controller to javafx.fxml;
+    opens com.petmanagement.model to javafx.base;
 }
