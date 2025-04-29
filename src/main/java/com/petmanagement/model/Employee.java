@@ -18,13 +18,17 @@ public class Employee {
     private String workShift;
     private String status;
     private LocalDateTime hiringDate;
+    private String username;
+    private String password;
+
 
     public Employee() {
     }
 
     public Employee(int employeeId, String codeEmployee, String fullname, String gender,
                     LocalDate birthdate, String address, String phone, String email,
-                    String role, BigDecimal salary, String workShift, String status, LocalDateTime hiringDate) {
+                    String role, BigDecimal salary, String workShift, String status,
+                    LocalDateTime hiringDate, String username, String password) {
         this.employeeId = employeeId;
         this.codeEmployee = codeEmployee;
         this.fullname = fullname;
@@ -38,7 +42,10 @@ public class Employee {
         this.workShift = workShift;
         this.status = status;
         this.hiringDate = hiringDate;
+        this.username = username;
+        this.password = password;
     }
+
 
     // Getters and Setters
 
@@ -145,4 +152,21 @@ public class Employee {
     public void setHiringDate(LocalDateTime hiringDate) {
         this.hiringDate = hiringDate;
     }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
 }

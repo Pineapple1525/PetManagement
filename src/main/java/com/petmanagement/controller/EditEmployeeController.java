@@ -1,16 +1,14 @@
 package com.petmanagement.controller;
 
+import com.petmanagement.connection.DBConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import com.petmanagement.model.Employee;
-
 import java.math.BigDecimal;
 import java.sql.*;
-import java.time.LocalDate;
 
 public class EditEmployeeController {
-
     @FXML private TextField txtCode;
     @FXML private TextField txtFullName;
     @FXML private ComboBox<String> comboGender;
@@ -30,6 +28,10 @@ public class EditEmployeeController {
         loadEmployeeData();
     }
 
+    private Connection getConnection() {
+        return DBConnection.getConn();
+    }
+
     private void loadEmployeeData() {
         txtCode.setText(employee.getCodeEmployee());
         txtFullName.setText(employee.getFullname());
@@ -46,7 +48,6 @@ public class EditEmployeeController {
 
     @FXML
     private void handleSave() {
-        // Kiểm tra các trường bắt buộc
         if (txtFullName.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Họ tên không được để trống!");
             alert.showAndWait();
@@ -62,8 +63,6 @@ public class EditEmployeeController {
             alert.showAndWait();
             return;
         }
-
-        // Cập nhật thông tin nhân viên từ các trường nhập
         employee.setFullname(txtFullName.getText());
         employee.setGender(comboGender.getValue());
         employee.setBirthdate(dateBirth.getValue());
@@ -72,7 +71,8 @@ public class EditEmployeeController {
         employee.setRole(txtRole.getValue());
         employee.setAddress(txtAddress.getText());
 
-        // Lấy và kiểm tra lương
+
+
         try {
             employee.setSalary(new BigDecimal(txtSalary.getText()));
         } catch (NumberFormatException e) {
@@ -85,15 +85,13 @@ public class EditEmployeeController {
         employee.setWorkShift(txtWorkShift.getValue());
         employee.setStatus(txtStatus.getValue());
 
-        // Gọi phương thức cập nhật nhân viên vào cơ sở dữ liệu
+
+
         updateEmployeeInDatabase(employee);
 
-        // Gọi callback để làm mới danh sách nhân viên trong EmployeeController
         if (onUpdateCallback != null) {
             onUpdateCallback.run();
         }
-
-        // Đóng cửa sổ
         ((Stage) txtCode.getScene().getWindow()).close();
     }
 
@@ -115,27 +113,12 @@ public class EditEmployeeController {
 
             stmt.executeUpdate();
             System.out.println("Cập nhật nhân viên thành công!");
-
-            // Hiển thị thông báo thành công
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Cập nhật nhân viên thành công!");
             alert.showAndWait();
         } catch (SQLException e) {
             e.printStackTrace();
-            // Hiển thị thông báo lỗi
             Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi cập nhật nhân viên: " + e.getMessage());
             alert.showAndWait();
-        }
-    }
-
-    private Connection getConnection() {
-        try {
-            String url = "jdbc:mysql://localhost:3306/petshop";
-            String user = "root";
-            String password = "";
-            return DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 

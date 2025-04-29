@@ -1,5 +1,6 @@
 package com.petmanagement.controller;
 
+import com.petmanagement.connection.DBConnection;
 import com.petmanagement.model.Employee;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -62,47 +63,32 @@ public class EmployeeController {
     private Button  btnAdd;
 
 
-
-
     private Connection getConnection() {
-        try {
-            String url = "jdbc:mysql://localhost:3306/petshop";
-            String user = "root";
-            String password = "";
-            return DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return DBConnection.getConn();
     }
+
 
     @FXML
     public void initialize() {
-
         String role = Session.getRole();
         System.out.println("Role người dùng: " + role);
 
-
-// Kiểm tra quyền truy cập
         if (!"Manager".equalsIgnoreCase(role)) {
-            // Nếu không có quyền, hiển thị cảnh báo và ẩn bảng
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Truy cập bị từ chối");
             alert.setHeaderText(null);
             alert.setContentText("Bạn không đủ đẳng cấp để xem trang này");
             alert.showAndWait();
 
-            // Ẩn bảng và các điều khiển khác
-            employeeTable.setVisible(false);    // Ẩn bảng nhân viên
-            searchField.setVisible(false);      // Ẩn trường tìm kiếm
-            genderFilter.setVisible(false);     // Ẩn bộ lọc giới tính
-            roleFilter.setVisible(false);       // Ẩn bộ lọc vai trò
-            btnAdd.setVisible(false);           // Ẩn nút thêm nhân viên (nếu cần)
-            return; // Không load dữ liệu
+
+            employeeTable.setVisible(false);
+            searchField.setVisible(false);
+            genderFilter.setVisible(false);
+            roleFilter.setVisible(false);
+            btnAdd.setVisible(false);
+            return;
         }
 
-
-        // Gán thuộc tính các cột
         colId.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
         colCode.setCellValueFactory(new PropertyValueFactory<>("codeEmployee"));
         colName.setCellValueFactory(new PropertyValueFactory<>("fullname"));
@@ -118,16 +104,13 @@ public class EmployeeController {
         colHiringDate.setCellValueFactory(new PropertyValueFactory<>("hiringDate"));
         searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
 
-
-        // Thiết lập cột "Hành động"
         colActions.setCellFactory(column -> new TableCell<Employee, Void>() {
             private final HBox buttons = new HBox();
-
             {
                 Button editButton = new Button("Sửa");
                 editButton.setOnAction(event -> {
                     Employee employee = getTableView().getItems().get(getIndex());
-                    handleEditEmployee(employee); // Gọi phương thức với nhân viên đã chọn
+                    handleEditEmployee(employee);
                 });
 
                 Button deleteButton = new Button("Xóa");
@@ -257,16 +240,14 @@ public class EmployeeController {
 
             EditEmployeeController editController = loader.getController();
             editController.setEmployee(employee);
-            editController.setOnUpdateCallback(this::loadData);  // Set the callback to reload data
+            editController.setOnUpdateCallback(this::loadData);
 
-            // Khởi tạo Stage sau khi thiết lập controller
             Stage stage = new Stage();
             stage.setTitle("Chỉnh sửa nhân viên");
             stage.setScene(new Scene(root));
 
-            // Cập nhật lại bảng khi cửa sổ đóng
             stage.setOnHiding(e -> Platform.runLater(() -> {
-                loadData();  // Gọi lại phương thức loadData để làm mới bảng
+                loadData();
             }));
 
             stage.show();
@@ -278,8 +259,8 @@ public class EmployeeController {
 
     private void loadData() {
         System.out.println("Đang tải lại dữ liệu...");
-        employeeTable.setItems(getAllEmployees()); // Làm mới dữ liệu bảng
-        employeeTable.refresh(); // Cập nhật lại giao diện bảng
+        employeeTable.setItems(getAllEmployees());
+        employeeTable.refresh();
     }
 
  
@@ -298,6 +279,4 @@ public class EmployeeController {
 
         employeeTable.setItems(filteredList);
     }
-
-
 }
