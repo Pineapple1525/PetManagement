@@ -56,6 +56,9 @@ public class CustomersController {
             });
             return row;
         });
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            handleSearchRealTime(newValue);
+        });
     }
 
     private void loadCustomers() {
@@ -84,6 +87,29 @@ public class CustomersController {
             e.printStackTrace();
         }
     }
+    private void handleSearchRealTime(String keyword) {
+        if (keyword.trim().isEmpty()) {
+            customerTable.setItems(customers);
+            return;
+        }
+
+        String lowerKeyword = keyword.toLowerCase();
+        ObservableList<Customer> filtered = FXCollections.observableArrayList();
+
+        for (Customer c : customers) {
+            if (
+                    (c.getName() != null && c.getName().toLowerCase().contains(lowerKeyword)) ||
+                            (c.getPhone() != null && c.getPhone().toLowerCase().contains(lowerKeyword)) ||
+                            (c.getEmail() != null && c.getEmail().toLowerCase().contains(lowerKeyword)) ||
+                            (c.getCodeCustomer() != null && c.getCodeCustomer().toLowerCase().contains(lowerKeyword))
+            ) {
+                filtered.add(c);
+            }
+        }
+
+        customerTable.setItems(filtered);
+    }
+
 
     @FXML
     private void handleAdd() {
