@@ -29,7 +29,7 @@
                             <content>
                                 <VBox fx:id="sidebar" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #d2b48c;">
                                     <!-- Logo -->
-                                    <StackPane fx:id="logoContainer" prefHeight="175.0" prefWidth="175.0" styleClass="logo-container">
+                                    <StackPane fx:id="logoContainer" prefHeight="200.0" prefWidth="175.0" styleClass="logo-container">
                                         <ImageView fx:id="logoImageView"
                                                    fitWidth="175.0" fitHeight="175.0"
                                                    pickOnBounds="true" preserveRatio="true"

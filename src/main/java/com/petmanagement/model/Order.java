@@ -12,11 +12,10 @@ public class Order {
     private String status;
     private String paymentMethod;
     private String deliveryStatus;
-
-
+    private String note;
 
     public Order(int orderId, String codeOrder, String customerName, LocalDateTime orderDate,
-                 BigDecimal totalPrice, String status, String paymentMethod, String deliveryStatus) {
+                 BigDecimal totalPrice, String status, String paymentMethod, String deliveryStatus, String note) {
         this.orderId = orderId;
         this.codeOrder = codeOrder;
         this.customerName = customerName;
@@ -25,11 +24,12 @@ public class Order {
         this.status = status;
         this.paymentMethod = paymentMethod;
         this.deliveryStatus = deliveryStatus;
+        this.note = note;
     }
 
-
     public Order(String codeOrder, String customerName, LocalDateTime orderDate, BigDecimal totalPrice,
-                 String status, String paymentMethod, String deliveryStatus) {
+                 String status, String paymentMethod, String deliveryStatus, String note) {
+        this.orderId = 0; // Default for new orders
         this.codeOrder = codeOrder;
         this.customerName = customerName;
         this.orderDate = orderDate;
@@ -37,11 +37,8 @@ public class Order {
         this.status = status;
         this.paymentMethod = paymentMethod;
         this.deliveryStatus = deliveryStatus;
+        this.note = note;
     }
-
-    public Order(String type, String name, double price, int quantity, double weight) {
-    }
-
 
     public int getOrderId() {
         return orderId;
@@ -50,7 +47,6 @@ public class Order {
     public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
-
 
     public String getCodeOrder() {
         return codeOrder;
@@ -108,5 +104,11 @@ public class Order {
         this.deliveryStatus = deliveryStatus;
     }
 
+    public String getNote() {
+        return note;
+    }
 
+    public void setNote(String note) {
+        this.note = note;
+    }
 }

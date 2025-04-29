@@ -1,21 +1,23 @@
 package com.petmanagement.model;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OrderDetail {
     private int orderDetailId;
-    private String orderId; // Mã đơn hàng
-    private String productType; // Loại sản phẩm (Pet, Accessory, Food)
-    private String codeProduct; // Mã sản phẩm
-    private String codePet; // Mã pet
-    private String productName; // Tên sản phẩm
-    private BigDecimal salePrice; // Giá bán
-    private int quantity; // Số lượng
-    private BigDecimal weight; // Trọng lượng
+    private String orderId;
+    private String productType;
+    private String codeProduct; // Will hold food_id for Food items
+    private String codePet;
+    private String productName;
+    private BigDecimal salePrice;
+    private int quantity;
+    private BigDecimal weight;
+    private Map<String, Object> additionalData; // To hold additional attributes like breed
 
-    // Constructor
     public OrderDetail(int orderDetailId, String orderId, String productType, String codeProduct, String codePet,
-                       String productName, BigDecimal salePrice, int quantity, BigDecimal weight) {
+                       String productName, BigDecimal salePrice, int quantity, double weight) {
         this.orderDetailId = orderDetailId;
         this.orderId = orderId;
         this.productType = productType;
@@ -24,109 +26,48 @@ public class OrderDetail {
         this.productName = productName;
         this.salePrice = salePrice;
         this.quantity = quantity;
-        this.weight = weight;
+        this.weight = BigDecimal.valueOf(weight);
+        this.additionalData = new HashMap<>(); // Initialize the map
     }
 
-    public OrderDetail(int orderDetailId, String name, double price, int quantity, double weight, String type) {
-    }
+    // Getters and setters
+    public int getOrderDetailId() { return orderDetailId; }
+    public void setOrderDetailId(int orderDetailId) { this.orderDetailId = orderDetailId; }
 
-    public OrderDetail(String productType, String productItem, int i) {
-    }
+    public String getOrderId() { return orderId; }
+    public void setOrderId(String orderId) { this.orderId = orderId; }
 
-    // Getter and Setter methods
-    public int getOrderDetailId() {
-        return orderDetailId;
-    }
+    public String getProductType() { return productType; }
+    public void setProductType(String productType) { this.productType = productType; }
 
-    public void setOrderDetailId(int orderDetailId) {
-        this.orderDetailId = orderDetailId;
-    }
+    public String getCodeProduct() { return codeProduct; }
+    public void setCodeProduct(String codeProduct) { this.codeProduct = codeProduct; }
 
-    public String getOrderId() {
-        return orderId;
-    }
+    public String getCodePet() { return codePet; }
+    public void setCodePet(String codePet) { this.codePet = codePet; }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
 
-    public String getProductType() {
-        return productType;
-    }
+    public BigDecimal getSalePrice() { return salePrice; }
+    public void setSalePrice(BigDecimal salePrice) { this.salePrice = salePrice; }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public String getCodeProduct() {
-        return codeProduct;
-    }
+    public BigDecimal getWeight() { return weight; }
+    public void setWeight(double weight) { this.weight = BigDecimal.valueOf(weight); }
 
-    public void setCodeProduct(String codeProduct) {
-        this.codeProduct = codeProduct;
-    }
-
-    public String getCodePet() {
-        return codePet;
-    }
-
-    public void setCodePet(String codePet) {
-        this.codePet = codePet;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public BigDecimal getSalePrice() {
-        return salePrice;
-    }
-
-    public void setSalePrice(BigDecimal salePrice) {
-        this.salePrice = salePrice;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getWeight() {
-        return weight;
-    }
-
-    public void setWeight(BigDecimal weight) {
-        this.weight = weight;
-    }
-
-    // Calculate total price for this order detail
     public BigDecimal calculateTotalPrice() {
-        return salePrice.multiply(new BigDecimal(quantity));
+        return salePrice.multiply(BigDecimal.valueOf(quantity));
     }
 
-    // Override toString() method for better display of OrderDetail
-    @Override
-    public String toString() {
-        return "OrderDetail{" +
-                "orderDetailId=" + orderDetailId +
-                ", orderId='" + orderId + '\'' +
-                ", productType='" + productType + '\'' +
-                ", codeProduct='" + codeProduct + '\'' +
-                ", codePet='" + codePet + '\'' +
-                ", productName='" + productName + '\'' +
-                ", salePrice=" + salePrice +
-                ", quantity=" + quantity +
-                ", weight=" + weight +
-                '}';
+    // Methods to handle additional data
+    public void addAdditionalData(String key, Object value) {
+        additionalData.put(key, value);
     }
 
-
+    public Object getAdditionalData(String key) {
+        return additionalData.get(key);
+    }
 }
-

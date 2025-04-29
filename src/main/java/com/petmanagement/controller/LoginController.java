@@ -82,7 +82,6 @@ public class LoginController {
         visiblePasswordField.setVisible(false);
         visiblePasswordField.setManaged(false);
 
-        // Đồng bộ hóa dữ liệu giữa 2 ô nhập
         passwordField.textProperty().addListener((obs, oldVal, newVal) -> visiblePasswordField.setText(newVal));
         visiblePasswordField.textProperty().addListener((obs, oldVal, newVal) -> passwordField.setText(newVal));
 
@@ -110,11 +109,9 @@ public class LoginController {
     @FXML
     private void handleForgotPassword(ActionEvent event) {
         try {
-            // Load giao diện forgot_password.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/forgot_password.fxml"));
             Parent root = loader.load();
 
-            // Tạo một Stage mới để hiển thị
             Stage stage = new Stage();
             stage.setTitle("Quên mật khẩu");
             stage.setScene(new Scene(root));
