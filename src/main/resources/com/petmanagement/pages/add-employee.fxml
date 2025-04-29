@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.PasswordField?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.petmanagement.controller.AddEmployeeController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.petmanagement.controller.AddEmployeeController" stylesheets="@../styles/order.css">
     <children>
         <VBox alignment="TOP_LEFT" prefHeight="538.0" prefWidth="654.0" spacing="10" style="-fx-background-color: #FFF5E1; -fx-border-color: #D1A989; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 1;">
             <padding>

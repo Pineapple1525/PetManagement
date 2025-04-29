@@ -8,6 +8,7 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.petmanagement.controller.EmployeeController"
             id="orders-root"
+            prefHeight="800" prefWidth="1300"
             stylesheets="@../styles/order.css">
 
     <children>

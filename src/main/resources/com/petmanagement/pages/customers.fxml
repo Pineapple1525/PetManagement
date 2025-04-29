@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="600" prefWidth="900" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.petmanagement.controller.CustomersController"
+<BorderPane  xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.petmanagement.controller.CustomersController"
             id="orders-root"
-            stylesheets="@../styles/order.css">
+            stylesheets="@../styles/order.css" prefHeight="800" prefWidth="1300">
 
     <!-- Table displaying customer list -->
     <top>
@@ -26,7 +26,7 @@
     </top>
 
     <center>
-        <TableView fx:id="customerTable" prefHeight="400">
+        <TableView fx:id="customerTable"  >
             <columns>
                 <TableColumn fx:id="idCol" prefWidth="50" text="ID" />
                 <TableColumn fx:id="codeCol" prefWidth="100" text="Code" />
@@ -43,7 +43,7 @@
 
     <!-- Action buttons -->
     <bottom>
-        <HBox alignment="TOP_LEFT" prefHeight="46.0" prefWidth="738.0" spacing="10" BorderPane.alignment="CENTER">
+        <HBox alignment="TOP_LEFT"  spacing="10" BorderPane.alignment="CENTER">
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10" />
             </padding>

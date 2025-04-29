@@ -58,13 +58,6 @@ public class DashboardController {
                 if (rs3.next()) labelRevenue.setText(String.format("%,.0f đ", rs3.getDouble(1)));
             }
 
-            // Low Stock (include both pet_products and pet_food)
-            try (ResultSet rs4 = conn.createStatement().executeQuery(
-                    "SELECT (SELECT COUNT(*) FROM pet_products WHERE stock_quantity <= 5) + " +
-                            "(SELECT COUNT(*) FROM pet_food WHERE stock_quantity <= 5) AS total_low_stock"
-            )) {
-                if (rs4.next()) labelLowStock.setText(rs4.getInt("total_low_stock") + "");
-            }
         } catch (SQLException e) {
             showAlert("Error", "Error loading counts: " + e.getMessage());
         }

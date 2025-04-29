@@ -73,7 +73,7 @@ public class EmployeeController {
         String role = Session.getRole();
         System.out.println("Role người dùng: " + role);
 
-        if (!"Manager".equalsIgnoreCase(role)) {
+        if (!"Manager".equalsIgnoreCase(role) && !"Boss".equalsIgnoreCase(role)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Truy cập bị từ chối");
             alert.setHeaderText(null);

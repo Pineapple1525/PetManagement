@@ -7,7 +7,9 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.petmanagement.controller.CustomerDetailController"
-            prefWidth="400" prefHeight="550" style="-fx-background-color: #FFF5E1; -fx-border-color: #D1A989; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 1;">
+            style="-fx-background-color: #FFF5E1; -fx-border-color: #D1A989; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 1;"
+            stylesheets="@../styles/font_input.css"
+>
 
     <top>
         <VBox spacing="10" alignment="CENTER" BorderPane.alignment="CENTER">

@@ -7,7 +7,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.petmanagement.controller.DashboardController"
-            prefWidth="2000"
+            prefHeight="800" prefWidth="1300"
             id="dashboard-root">
 
     <!-- ScrollPane cho phép cuộn cả 2 chiều -->
@@ -33,10 +33,7 @@
                     <Label text="💰Monthly Revenue"/>
                     <Label fx:id="labelRevenue" styleClass="value-label" />
                 </VBox>
-                <VBox styleClass="stat-card" prefWidth="300">
-                    <Label text="⚠️Out of stock"/>
-                    <Label fx:id="labelLowStock" styleClass="value-label"/>
-                </VBox>
+
             </HBox>
 
             <TitledPane text="📊Monthly Revenue" expanded="true" styleClass="titled-pane">

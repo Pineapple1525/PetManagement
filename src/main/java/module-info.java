@@ -21,5 +21,4 @@ module com.petmanagement {
     exports com.petmanagement;
     exports com.petmanagement.controller;
     opens com.petmanagement.controller to javafx.fxml;
-    opens com.petmanagement.model to javafx.base;
 }
