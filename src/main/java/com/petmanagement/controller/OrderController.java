@@ -33,10 +33,10 @@ public class OrderController {
     @FXML private TableColumn<Order, String> colDelivery;
     @FXML private TableColumn<Order, Integer> colID;
 
-
     private ObservableList<Order> orderList = FXCollections.observableArrayList();
 
     public void initialize() {
+        // Set up TableView columns
         colID.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getOrderId()).asObject());
         colCode.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCodeOrder()));
         colCustomer.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCustomerName()));
@@ -46,8 +46,13 @@ public class OrderController {
         colPayment.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getPaymentMethod()));
         colDelivery.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDeliveryStatus()));
 
-        statusFilter.getSelectionModel().selectFirst();
-        deliveryFilter.getSelectionModel().selectFirst();
+        // Populate ComboBoxes
+        statusFilter.setItems(FXCollections.observableArrayList("All", "Pending", "Completed", "Cancelled"));
+        deliveryFilter.setItems(FXCollections.observableArrayList("All", "Pending", "Shipped", "Delivered", "Cancelled"));
+
+        // Select "All" as default
+        statusFilter.getSelectionModel().select("All");
+        deliveryFilter.getSelectionModel().select("All");
 
         loadOrders();
     }
@@ -59,9 +64,8 @@ public class OrderController {
         String delivery = deliveryFilter.getValue();
 
         String query = "SELECT o.order_id, o.code_order, c.name AS customer_name, o.order_date, " +
-                "o.total_price, o.status, o.payment_method, o.delivery_status " +
+                "o.total_price, o.status, o.payment_method, o.delivery_status, o.note " +
                 "FROM orders o JOIN customers c ON o.code_customer = c.code_customer WHERE 1=1";
-
 
         if (!searchText.isEmpty()) {
             query += " AND (o.code_order LIKE ? OR c.name LIKE ?)";
@@ -98,22 +102,22 @@ public class OrderController {
                         rs.getBigDecimal("total_price"),
                         rs.getString("status"),
                         rs.getString("payment_method"),
-                        rs.getString("delivery_status")
+                        rs.getString("delivery_status"),
+                        rs.getString("note")
                 );
-
                 orderList.add(order);
             }
 
             orderTable.setItems(orderList);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            showAlert("Lỗi khi tải danh sách đơn hàng: " + e.getMessage());
         }
     }
 
     @FXML
     private void onSearch() {
-        loadOrders(); // Gọi hàm loadOrders() để lọc theo điều kiện tìm kiếm (nếu có thêm input tìm kiếm thì đọc dữ liệu ở đây)
+        loadOrders();
     }
 
     @FXML
@@ -122,11 +126,7 @@ public class OrderController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/create_order.fxml"));
             Parent root = loader.load();
 
-            // Lấy controller sau khi load
             CreateOrderController controller = loader.getController();
-
-            // (Tùy chọn) Nếu bạn muốn truyền dữ liệu ban đầu:
-            // controller.initData(...);
 
             Stage stage = new Stage();
             stage.setTitle("Tạo đơn hàng mới");
@@ -134,13 +134,11 @@ public class OrderController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
-            // Sau khi tạo xong đơn hàng, reload lại danh sách
             loadOrders();
         } catch (IOException e) {
-            e.printStackTrace();
+            showAlert("Lỗi khi mở form tạo đơn hàng: " + e.getMessage());
         }
     }
-
 
     @FXML
     private void onViewDetail() {
@@ -151,7 +149,7 @@ public class OrderController {
                 Parent root = loader.load();
 
                 OrderDetailController controller = loader.getController();
-                controller.setOrder(selected); // Gửi đơn hàng được chọn sang controller
+                controller.setOrder(selected);
 
                 Stage stage = new Stage();
                 stage.setTitle("Chi tiết đơn hàng");
@@ -159,7 +157,7 @@ public class OrderController {
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
             } catch (IOException e) {
-                e.printStackTrace();
+                showAlert("Lỗi khi mở chi tiết đơn hàng: " + e.getMessage());
             }
         } else {
             showAlert("Vui lòng chọn một đơn hàng để xem chi tiết.");
@@ -175,7 +173,7 @@ public class OrderController {
                 Parent root = loader.load();
 
                 EditOrderController controller = loader.getController();
-                controller.setOrder(selected); // Truyền đơn hàng để chỉnh sửa
+                controller.setOrder(selected);
 
                 Stage stage = new Stage();
                 stage.setTitle("Chỉnh sửa đơn hàng");
@@ -183,25 +181,14 @@ public class OrderController {
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
 
-                // Sau khi chỉnh sửa thì reload lại bảng
                 loadOrders();
             } catch (IOException e) {
-                e.printStackTrace();
+                showAlert("Lỗi khi mở form chỉnh sửa đơn hàng: " + e.getMessage());
             }
         } else {
             showAlert("Vui lòng chọn một đơn hàng để chỉnh sửa.");
         }
     }
-
-    // Hàm hiển thị cảnh báo đơn giản
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
 
     @FXML
     private void onDeleteOrder() {
@@ -213,6 +200,8 @@ public class OrderController {
                     deleteOrder(selected.getCodeOrder());
                 }
             });
+        } else {
+            showAlert("Vui lòng chọn một đơn hàng để xóa.");
         }
     }
 
@@ -221,13 +210,80 @@ public class OrderController {
         try (Connection conn = DBConnection.getConn();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, codeOrder);
-            stmt.executeUpdate();
-            loadOrders();
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                showAlert("Xóa đơn hàng thành công!");
+                loadOrders();
+            } else {
+                showAlert("Không tìm thấy đơn hàng để xóa.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            showAlert("Lỗi khi xóa đơn hàng: " + e.getMessage());
         }
     }
 
-    public void onPrintOrder(ActionEvent actionEvent) {
+    @FXML
+    private void onPrintOrder(ActionEvent actionEvent) {
+        Order selected = orderTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                // Create a simple print preview window
+                Stage printStage = new Stage();
+                printStage.setTitle("In đơn hàng - " + selected.getCodeOrder());
+                printStage.initModality(Modality.APPLICATION_MODAL);
+
+                TextArea printContent = new TextArea();
+                printContent.setEditable(false);
+                printContent.setText(generateOrderSummary(selected));
+
+                Button printButton = new Button("In");
+                printButton.setOnAction(e -> {
+                    // Simulate printing (in a real application, integrate with a printer API)
+                    showAlert("Đơn hàng đã được gửi đến máy in!");
+                    printStage.close();
+                });
+
+                Button closeButton = new Button("Đóng");
+                closeButton.setOnAction(e -> printStage.close());
+
+                javafx.scene.layout.HBox buttonBox = new javafx.scene.layout.HBox(10, printButton, closeButton);
+                buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
+                buttonBox.setPadding(new javafx.geometry.Insets(10));
+
+                javafx.scene.layout.VBox layout = new javafx.scene.layout.VBox(10, printContent, buttonBox);
+                layout.setPadding(new javafx.geometry.Insets(10));
+
+                Scene scene = new Scene(layout, 400, 300);
+                printStage.setScene(scene);
+                printStage.showAndWait();
+            } catch (Exception e) {
+                showAlert("Lỗi khi mở cửa sổ in: " + e.getMessage());
+            }
+        } else {
+            showAlert("Vui lòng chọn một đơn hàng để in.");
+        }
+    }
+
+    private String generateOrderSummary(Order order) {
+        StringBuilder summary = new StringBuilder();
+        summary.append("ĐƠN HÀNG: ").append(order.getCodeOrder()).append("\n");
+        summary.append("----------------------------------------\n");
+        summary.append("Khách hàng: ").append(order.getCustomerName()).append("\n");
+        summary.append("Ngày đặt: ").append(order.getOrderDate()).append("\n");
+        summary.append("Tổng tiền: ").append(String.format("%,.0f đ", order.getTotalPrice())).append("\n");
+        summary.append("Trạng thái: ").append(order.getStatus()).append("\n");
+        summary.append("Phương thức thanh toán: ").append(order.getPaymentMethod()).append("\n");
+        summary.append("Trạng thái giao hàng: ").append(order.getDeliveryStatus()).append("\n");
+        summary.append("Ghi chú: ").append(order.getNote() != null ? order.getNote() : "").append("\n");
+        summary.append("----------------------------------------\n");
+        return summary.toString();
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

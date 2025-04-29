@@ -21,14 +21,14 @@
         <BorderPane fx:id="borderPane" prefWidth="2000.0" prefHeight="800.0" stylesheets="@../styles/main.css" >
             <left>
                 <!-- Sidebar StackPane container -->
-                <StackPane fx:id="sidebarContainer" prefWidth="250.0" prefHeight="600.0">
+                <StackPane fx:id="sidebarContainer" prefWidth="250.0" prefHeight="800.0">
                     <!-- Sidebar Content (HBox chứa ScrollPane và VBox) -->
                     <HBox>
                         <ScrollPane fx:id="scrollPane" fitToWidth="true" pannable="true" vbarPolicy="AS_NEEDED" prefHeight="600.0">
                             <content>
                                 <VBox fx:id="sidebar" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #d2b48c;">
                                     <!-- Logo -->
-                                    <StackPane fx:id="logoContainer" prefHeight="175.0" prefWidth="175.0" styleClass="logo-container">
+                                    <StackPane fx:id="logoContainer" prefHeight="200.0" prefWidth="175.0" styleClass="logo-container">
                                         <ImageView fx:id="logoImageView"
                                                    fitWidth="175.0" fitHeight="175.0"
                                                    pickOnBounds="true" preserveRatio="true"

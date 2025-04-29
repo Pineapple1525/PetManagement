@@ -3,56 +3,82 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.DatePicker?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.EditOrderController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.EditOrderController" stylesheets="@../styles/font_input.css">
 
     <top>
         <Label text="Chỉnh sửa đơn hàng"
-               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10;"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 5;"
                BorderPane.alignment="CENTER" />
     </top>
 
     <center>
-        <GridPane hgap="10" vgap="10" >
-            <columnConstraints>
-                <ColumnConstraints percentWidth="30"/>
-                <ColumnConstraints percentWidth="70"/>
-            </columnConstraints>
+        <VBox spacing="5" style="-fx-padding: 5;">
+            <!-- Order Information -->
+            <GridPane hgap="5" vgap="5">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="30"/>
+                    <ColumnConstraints percentWidth="70"/>
+                </columnConstraints>
 
-            <!-- Order Code (read-only) -->
-            <Label text="Mã đơn hàng:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-            <Label fx:id="lblOrderId" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                <!-- Order Code (read-only) -->
+                <Label text="Mã đơn hàng:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <Label fx:id="lblOrderId" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-            <!-- Customer -->
-            <Label text="Khách hàng:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-            <ComboBox fx:id="cbCustomer" prefWidth="250" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                <!-- Customer -->
+                <Label text="Khách hàng:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <Label fx:id="lblCustomer" prefWidth="200" wrapText="true" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
-            <!-- Employee -->
-            <Label text="Nhân viên:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-            <ComboBox fx:id="cbEmployee" prefWidth="250" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                <!-- Employee -->
+                <Label text="Nhân viên:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cbEmployee" prefWidth="200" editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1" />
 
-            <!-- Order Date -->
-            <Label text="Ngày đặt hàng:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-            <DatePicker fx:id="dpOrderDate" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                <!-- Order Date -->
+                <Label text="Ngày đặt hàng:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                <DatePicker fx:id="dpOrderDate" GridPane.rowIndex="3" GridPane.columnIndex="1" />
 
-            <!-- Status -->
-            <Label text="Trạng thái:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-            <ComboBox fx:id="cbStatus" prefWidth="250" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                <!-- Status -->
+                <Label text="Trạng thái:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cbStatus" prefWidth="200" GridPane.rowIndex="4" GridPane.columnIndex="1" />
 
-            <!-- Payment Method -->
-            <Label text="Phương thức thanh toán:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-            <ComboBox fx:id="cbPaymentMethod" prefWidth="250" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+                <!-- Payment Method -->
+                <Label text="Phương thức thanh toán:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cbPaymentMethod" prefWidth="200" GridPane.rowIndex="5" GridPane.columnIndex="1" />
 
-            <!-- Notes -->
-            <Label text="Ghi chú:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
-            <TextArea fx:id="txtNote" prefRowCount="3" wrapText="true"
-                      GridPane.rowIndex="6" GridPane.columnIndex="1" />
-        </GridPane>
+                <!-- Notes -->
+                <Label text="Ghi chú:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                <TextArea fx:id="txtNote" prefRowCount="2" wrapText="true"
+                          GridPane.rowIndex="6" GridPane.columnIndex="1" />
+            </GridPane>
+
+            <!-- Search Product -->
+            <HBox spacing="5">
+                <Label text="Tìm kiếm sản phẩm:" />
+                <TextField fx:id="searchProduct" prefWidth="250" promptText="Tìm kiếm theo tên, mã, hoặc loài..." />
+            </HBox>
+
+            <!-- Order Items Table -->
+            <TableView fx:id="tblOrderItems" prefHeight="150">
+                <columns>
+                    <TableColumn fx:id="colProductType" text="Loại" prefWidth="80" />
+                    <TableColumn fx:id="colProductName" text="Tên sản phẩm" prefWidth="150" />
+                    <TableColumn fx:id="colSalePrice" text="Giá" prefWidth="80" />
+                    <TableColumn fx:id="colQuantity" text="Số lượng" prefWidth="60" />
+                    <TableColumn fx:id="colWeight" text="Cân nặng" prefWidth="60" />
+                    <TableColumn fx:id="colAction" text="Hành động" prefWidth="120" />
+                </columns>
+            </TableView>
+
+            <!-- Total Price -->
+            <HBox spacing="5" alignment="CENTER_RIGHT">
+                <Label text="Tổng tiền:" />
+                <Label fx:id="lblTotal" text="0" />
+            </HBox>
+        </VBox>
     </center>
 
     <bottom>
-        <HBox spacing="10" alignment="CENTER_RIGHT" >
+        <HBox spacing="5" alignment="CENTER_RIGHT" style="-fx-padding: 5;">
             <Button text="Lưu" onAction="#onSave" />
             <Button text="Hủy" onAction="#onCancel" />
         </HBox>

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.OrderDetailController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.OrderDetailController" stylesheets="@../styles/font_input.css">
 
     <top>
         <VBox spacing="10" >
@@ -45,13 +45,13 @@
         <VBox spacing="10" >
             <Label text="Danh Sách Sản Phẩm / Thú Cưng" style="-fx-font-weight: bold;" />
 
-            <TableView fx:id="tblOrderDetails" prefHeight="250">
+            <TableView fx:id="tblOrderDetails">
                 <columns>
-                    <TableColumn fx:id="colProductType" text="Loại" prefWidth="100"/>
-                    <TableColumn fx:id="colProductName" text="Tên sản phẩm" prefWidth="200"/>
-                    <TableColumn fx:id="colSalePrice" text="Giá bán" prefWidth="100"/>
-                    <TableColumn fx:id="colQuantity" text="Số lượng" prefWidth="80"/>
-                    <TableColumn fx:id="colWeight" text="Khối lượng" prefWidth="100"/>
+                    <TableColumn fx:id="colProductType" text="Product Type"/>
+                    <TableColumn fx:id="colProductName" text="Product Name"/>
+                    <TableColumn fx:id="colSalePrice" text="Sale Price"/>
+                    <TableColumn fx:id="colQuantity" text="Quantity"/>
+                    <TableColumn fx:id="colWeight" text="Weight"/>
                 </columns>
             </TableView>
         </VBox>
