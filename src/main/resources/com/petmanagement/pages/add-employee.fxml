@@ -29,15 +29,12 @@
             <TextField fx:id="txtEmail" prefWidth="250" promptText="Email" style="-fx-background-radius: 5;" />
 
             <!-- Thay txtRole thành ComboBox -->
-            <ComboBox fx:id="cbRole" prefWidth="250" promptText="Vai trò" style="-fx-background-radius: 5;">
+            <ComboBox fx:id="cbRole" prefWidth="250" promptText="Role" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Manager" />
-                        <String fx:value="Cashier" />
-                        <String fx:value="Pet Care" />
-                        <String fx:value="Veterinarian" />
-                        <String fx:value="Sales" />
-                        <String fx:value="Other" />
+                        <String fx:value="Boss" />
+                        <String fx:value="Employee" />
                     </FXCollections>
                 </items>
             </ComboBox>

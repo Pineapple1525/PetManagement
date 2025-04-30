@@ -34,7 +34,6 @@ public class AddEmployeeController {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Thêm thông tin vào bảng users và lấy user_id
             String userSql = "INSERT INTO users (username,password,email) VALUES (?,?,?)";
             try (PreparedStatement userStmt = conn.prepareStatement(userSql, Statement.RETURN_GENERATED_KEYS)) {
                 userStmt.setString(1, emp.getUsername());
@@ -42,14 +41,13 @@ public class AddEmployeeController {
                 userStmt.setString(3, emp.getEmail());
                 userStmt.executeUpdate();
 
-                // Lấy user_id từ bảng users
+
                 ResultSet rs = userStmt.getGeneratedKeys();
                 int userId = -1;
                 if (rs.next()) {
-                    userId = rs.getInt(1);  // Lấy ID của người dùng vừa được thêm
+                    userId = rs.getInt(1);
                 }
 
-                // Tiến hành thêm nhân viên vào bảng employees
                 stmt.setString(1, emp.getCodeEmployee());
                 stmt.setString(2, emp.getFullname());
                 stmt.setString(3, emp.getGender());
@@ -67,7 +65,6 @@ public class AddEmployeeController {
                     email = "default@email.com";
                 }
                 stmt.setString(7, email);
-//                stmt.setString(7, emp.getEmail());
                 stmt.setString(8, emp.getRole());
                 stmt.setBigDecimal(9, emp.getSalary());
                 stmt.setString(10, emp.getWorkShift());
@@ -78,7 +75,7 @@ public class AddEmployeeController {
                 } else {
                     stmt.setNull(12, Types.TIMESTAMP);
                 }
-                stmt.setInt(13, userId);  // Thêm user_id vào bảng employees
+                stmt.setInt(13, userId);
 
                 stmt.executeUpdate();
                 System.out.println("Thêm nhân viên thành công!");

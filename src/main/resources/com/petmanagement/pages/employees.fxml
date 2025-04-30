@@ -38,22 +38,22 @@
                           styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Nam"/>
-                            <String fx:value="Nữ"/>
-                            <String fx:value="Khác"/>
+                            <String fx:value="Male"/>
+                            <String fx:value="Female"/>
+                            <String fx:value="Other"/>
                         </FXCollections>
                     </items>
                 </ComboBox>
 
                 <ComboBox fx:id="roleFilter"
-                          promptText="Vai trò"
+                          promptText="Role"
                           prefWidth="150"
                           styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Quản lý"/>
-                            <String fx:value="Nhân viên"/>
-                            <String fx:value="Khách"/>
+                            <String fx:value="Manager"/>
+                            <String fx:value="Employee"/>
+                            <String fx:value="Boss"/>
                         </FXCollections>
                     </items>
                 </ComboBox>

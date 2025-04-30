@@ -19,8 +19,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-
-
 public class EmployeeController {
 
     @FXML
@@ -60,13 +58,11 @@ public class EmployeeController {
     @FXML
     private ComboBox<String> roleFilter;
     @FXML
-    private Button  btnAdd;
-
+    private Button btnAdd;
 
     private Connection getConnection() {
         return DBConnection.getConn();
     }
-
 
     @FXML
     public void initialize() {
@@ -79,7 +75,6 @@ public class EmployeeController {
             alert.setHeaderText(null);
             alert.setContentText("Bạn không đủ đẳng cấp để xem trang này");
             alert.showAndWait();
-
 
             employeeTable.setVisible(false);
             searchField.setVisible(false);
@@ -102,8 +97,6 @@ public class EmployeeController {
         colWorkShift.setCellValueFactory(new PropertyValueFactory<>("workShift"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colHiringDate.setCellValueFactory(new PropertyValueFactory<>("hiringDate"));
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
-
         colActions.setCellFactory(column -> new TableCell<Employee, Void>() {
             private final HBox buttons = new HBox();
             {
@@ -130,7 +123,16 @@ public class EmployeeController {
             }
         });
 
-        // Load dữ liệu
+        // Lọc theo giới tính và vai trò
+        genderFilter.getItems().addAll();
+        genderFilter.setOnAction(event -> handleFilter());
+
+        roleFilter.getItems().addAll();
+        roleFilter.setOnAction(event -> handleFilter());
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
+
+        // Load dữ liệu ban đầu
         employeeTable.setItems(getAllEmployees());
     }
 
@@ -203,8 +205,6 @@ public class EmployeeController {
         }
     }
 
-
-
     @FXML
     private void handleAddEmployee(ActionEvent event) {
         try {
@@ -230,7 +230,6 @@ public class EmployeeController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 
     @FXML
     public void handleEditEmployee(Employee employee) {
@@ -263,16 +262,43 @@ public class EmployeeController {
         employeeTable.refresh();
     }
 
- 
     @FXML
-    public void handleSearch() {
+    private void handleFilter() {
+        String gender = genderFilter.getValue();
+        String role = roleFilter.getValue();
         String keyword = searchField.getText().trim().toLowerCase();
 
         ObservableList<Employee> filteredList = FXCollections.observableArrayList();
 
         for (Employee emp : getAllEmployees()) {
-            if (emp.getCodeEmployee().toLowerCase().contains(keyword) ||
-                    emp.getFullname().toLowerCase().contains(keyword)) {
+            boolean matchesGender = (gender == null || emp.getGender().equalsIgnoreCase(gender));
+            boolean matchesRole = (role == null || emp.getRole().equalsIgnoreCase(role));
+            boolean matchesSearch = (emp.getCodeEmployee().toLowerCase().contains(keyword) ||
+                    emp.getFullname().toLowerCase().contains(keyword));
+
+            if (matchesGender && matchesRole && matchesSearch) {
+                filteredList.add(emp);
+            }
+        }
+
+        employeeTable.setItems(filteredList);
+    }
+
+    @FXML
+    public void handleSearch() {
+        String keyword = searchField.getText().trim().toLowerCase();
+        String gender = genderFilter.getValue();
+        String role = roleFilter.getValue();
+
+        ObservableList<Employee> filteredList = FXCollections.observableArrayList();
+
+        for (Employee emp : getAllEmployees()) {
+            boolean matchesGender = (gender == null || emp.getGender().equalsIgnoreCase(gender));
+            boolean matchesRole = (role == null || emp.getRole().equalsIgnoreCase(role));
+            boolean matchesSearch = (emp.getCodeEmployee().toLowerCase().contains(keyword) ||
+                    emp.getFullname().toLowerCase().contains(keyword));
+
+            if (matchesGender && matchesRole && matchesSearch) {
                 filteredList.add(emp);
             }
         }
