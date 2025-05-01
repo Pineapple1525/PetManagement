@@ -14,6 +14,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -63,46 +65,66 @@ public class ProductController {
         importDateColumn.setCellValueFactory(data -> new SimpleStringProperty(
                 data.getValue().getImportDate() != null ? data.getValue().getImportDate().toLocalDateTime().toString() : ""
         ));
+        imageColumn.setCellFactory(col -> new TableCell<PetProduct, String>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    try {
+                        Image image = new Image(item);
+                        imageView.setImage(image);
+                        imageView.setFitHeight(50);
+                        imageView.setFitWidth(50);
+                        setGraphic(imageView);
+                    } catch (Exception e) {
+                        setGraphic(null);
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        setupActionColumn();
         productTable.setItems(productList);
         loadProductsFromDatabase();
         searchField.setOnKeyReleased(event -> searchProducts());
+
     }
-
-    private void loadProductsFromDatabase() {
+    private void setupActionColumn() {
         actionColumn.setCellFactory(col -> new TableCell<PetProduct, Void>() {
-            private final Button btnEdit = new Button("Sửa");
-            private final Button btnDelete = new Button("Xóa");
-            private final HBox pane = new HBox(10, btnEdit, btnDelete);
-
-            {
-                pane.setAlignment(Pos.CENTER);
-                pane.setPadding(new Insets(5));
-
-                btnEdit.setOnAction(event -> {
-                    PetProduct product = getTableView().getItems().get(getIndex());
-                    openProductDialog(product); // Hiển thị dialog sửa
-                });
-
-                btnDelete.setOnAction(event -> {
-                    PetProduct product = getTableView().getItems().get(getIndex());
-                    deleteProduct(product); // Gọi hàm xóa (bạn tự định nghĩa)
-                });
-
-                // Doodle-style CSS (giả sử bạn có .doodle-button trong CSS)
-                btnEdit.getStyleClass().add("doodle-button");
-                btnDelete.getStyleClass().add("doodle-button");
-            }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+
                 if (empty) {
                     setGraphic(null);
                 } else {
+                    Button btnEdit = new Button("Sửa");
+                    Button btnDelete = new Button("Xóa");
+                    HBox pane = new HBox(10, btnEdit, btnDelete);
+                    pane.setAlignment(Pos.CENTER);
+                    pane.setPadding(new Insets(5));
+
+                    btnEdit.getStyleClass().add("doodle-button");
+                    btnDelete.getStyleClass().add("doodle-button");
+
+                    PetProduct product = getTableView().getItems().get(getIndex());
+
+                    btnEdit.setOnAction(event -> openProductDialog(product));
+                    btnDelete.setOnAction(event -> deleteProduct(product));
+
                     setGraphic(pane);
                 }
             }
         });
+    }
+
+    private void loadProductsFromDatabase() {
+
 
         productList.clear();
         try (Connection conn = new DBConnection().getConn()) {
@@ -326,21 +348,28 @@ public class ProductController {
     private void searchProducts() {
         String keyword = searchField.getText().toLowerCase().trim();
         if (keyword.isEmpty()) {
-            productTable.setItems(productList); // Hiển thị tất cả nếu ô tìm kiếm rỗng
+            productTable.setItems(productList);
             return;
         }
 
         ObservableList<PetProduct> filteredList = FXCollections.observableArrayList();
         for (PetProduct product : productList) {
-            if (product.getName().toLowerCase().contains(keyword) ||
+            if (
                     product.getCodeProduct().toLowerCase().contains(keyword) ||
-                    product.getCategory().toString().toLowerCase().contains(keyword)) {
+                            product.getName().toLowerCase().contains(keyword) ||
+                            product.getCategory().toString().toLowerCase().contains(keyword) ||
+                            product.getBrand().toLowerCase().contains(keyword) ||
+                            product.getDescription().toLowerCase().contains(keyword) ||
+                            product.getSupplierName().toLowerCase().contains(keyword)
+            ) {
                 filteredList.add(product);
             }
         }
-
         productTable.setItems(filteredList);
+        setupActionColumn();
+
     }
+
 
 
 }
