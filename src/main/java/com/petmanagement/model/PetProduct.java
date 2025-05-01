@@ -1,5 +1,7 @@
 package com.petmanagement.model;
 
+import javafx.scene.image.ImageView;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ public class PetProduct {
     private String imageUrl;
     private String supplierName;
     private Timestamp importDate;
+    private ImageView image;
 
 
 
@@ -40,6 +43,7 @@ public class PetProduct {
         this.importDate = importDate;
         this.imageUrl = imageUrl;
         this.supplierName = supplierName;
+
     }
     public PetProduct() {
     }

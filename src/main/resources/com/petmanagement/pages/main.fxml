@@ -56,13 +56,6 @@
                 </StackPane>
             </left>
 
-            <!-- Center: Main content (Pet Products) -->
-            <center>
-                <!-- Adjust the content here for pet-products -->
-                <StackPane>
-                    <Label text="Pet Products Content Here" style="-fx-font-size: 24px;"/>
-                </StackPane>
-            </center>
 
         </BorderPane>
     </children>

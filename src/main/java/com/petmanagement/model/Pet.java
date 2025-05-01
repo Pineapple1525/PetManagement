@@ -13,23 +13,23 @@ public class Pet {
     private String gender; // Enum: Male, Female, Other
     private LocalDate birthdate;
     private String color;
-    private BigDecimal weight;
+    private Double weight;
     private String healthStatus;
     private String imageUrl;
     private String sourceType; // Enum: Previous Owner, Breeding Farm
     private Integer previousOwnerId; // Can be null
-    private String breederName;
+    private Integer employeeId;
     private LocalDateTime importDate;
     private String adoptionStatus; // Enum: Available, Adopted, Reserved
-    private BigDecimal price;
+    private Double price;
 
     // Constructors
     public Pet() {}
 
     public Pet(int petId, String name, String petCode, String species, String breed, String gender,
-               LocalDate birthdate, String color, BigDecimal weight, String healthStatus,
-               String imageUrl, String sourceType, Integer previousOwnerId, String breederName,
-               LocalDateTime importDate, String adoptionStatus, BigDecimal price) {
+               LocalDate birthdate, String color, Double weight, String healthStatus,
+               String imageUrl, String sourceType, Integer previousOwnerId, Integer employeeId,
+               LocalDateTime importDate, String adoptionStatus, Double price) {
         this.petId = petId;
         this.name = name;
         this.petCode = petCode;
@@ -43,7 +43,7 @@ public class Pet {
         this.imageUrl = imageUrl;
         this.sourceType = sourceType;
         this.previousOwnerId = previousOwnerId;
-        this.breederName = breederName;
+        this.employeeId = employeeId;
         this.importDate = importDate;
         this.adoptionStatus = adoptionStatus;
         this.price = price;
@@ -114,11 +114,11 @@ public class Pet {
         this.color = color;
     }
 
-    public BigDecimal getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(BigDecimal weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
@@ -154,12 +154,12 @@ public class Pet {
         this.previousOwnerId = previousOwnerId;
     }
 
-    public String getBreederName() {
-        return breederName;
+    public Integer getEmployeeId() {
+        return employeeId;
     }
 
-    public void setBreederName(String breederName) {
-        this.breederName = breederName;
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
     }
 
     public LocalDateTime getImportDate() {
@@ -178,11 +178,34 @@ public class Pet {
         this.adoptionStatus = adoptionStatus;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "petId=" + petId +
+                ", name='" + name + '\'' +
+                ", petCode='" + petCode + '\'' +
+                ", species='" + species + '\'' +
+                ", breed='" + breed + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthdate=" + birthdate +
+                ", color='" + color + '\'' +
+                ", weight=" + weight +
+                ", healthStatus='" + healthStatus + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", sourceType='" + sourceType + '\'' +
+                ", previousOwnerId=" + previousOwnerId +
+                ", employeeId='" + employeeId + '\'' +
+                ", importDate=" + importDate +
+                ", adoptionStatus='" + adoptionStatus + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

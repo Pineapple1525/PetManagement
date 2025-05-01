@@ -16,28 +16,40 @@
         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10;">
             <Label text="Pet Products" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
             <Region HBox.hgrow="ALWAYS"/>
-            <TextField fx:id="searchField" promptText="Search products..." prefWidth="300"/>
-            <Button text="Search" />
-            <Button fx:id="addProductBtn" text="Add Product" style="-fx-background-color: #A67B5B; -fx-text-fill: white;" onAction="#openAddProductDialog"/>
+            <TextField fx:id="searchField" promptText="Search products..." prefWidth="300" prefHeight="45"/>
+            <Button text="Search" style="-fx-pref-width: 100px;">
+
+            </Button>
+
+            <Button fx:id="addProductBtn" text="Add Product"
+                    style="-fx-background-color: #A67B5B; -fx-text-fill: white; -fx-pref-width: 100px;"
+                    onAction="#openAddProductDialog">
+                <HBox.margin>
+                    <Insets right="250"/>
+                </HBox.margin>
+            </Button>
+
+
+
         </HBox>
     </top>
 
     <!-- Center: Product Table -->
     <center>
         <AnchorPane>
-            <TableView fx:id="productTable" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" style="-fx-padding: 30 50 50 50;">
+            <TableView fx:id="productTable" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" style="-fx-padding: 30 50 100 50;">
                 <columns>
-                    <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
-                    <TableColumn fx:id="codeColumn" text="Mã SP" prefWidth="100"/>
-                    <TableColumn fx:id="nameColumn" text="Tên SP" prefWidth="150"/>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="codeColumn" text="Mã SP" prefWidth="90"/>
+                    <TableColumn fx:id="nameColumn" text="Tên SP" prefWidth="90"/>
                     <TableColumn fx:id="categoryColumn" text="Danh mục" prefWidth="100"/>
                     <TableColumn fx:id="brandColumn" text="Thương hiệu" prefWidth="100"/>
-                    <TableColumn fx:id="descriptionColumn" text="Mô tả" prefWidth="200"/>
+                    <TableColumn fx:id="descriptionColumn" text="Mô tả" prefWidth="150"/>
                     <TableColumn fx:id="priceColumn" text="Giá" prefWidth="100"/>
                     <TableColumn fx:id="stockColumn" text="Kho" prefWidth="60"/>
                     <TableColumn fx:id="imageColumn" text="Ảnh" prefWidth="100"/>
-                    <TableColumn fx:id="supplierColumn" text="Nhà cung cấp" prefWidth="120"/>
-                    <TableColumn fx:id="importDateColumn" text="Ngày nhập" prefWidth="130"/>
+                    <TableColumn fx:id="supplierColumn" text="Nhà cung cấp" prefWidth="100"/>
+                    <TableColumn fx:id="importDateColumn" text="Ngày nhập" prefWidth="100"/>
                     <TableColumn fx:id="actionColumn" text="Hành động" prefWidth="150"/>
 
                 </columns>
