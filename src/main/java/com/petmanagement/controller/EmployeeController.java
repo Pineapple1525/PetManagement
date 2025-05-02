@@ -59,6 +59,19 @@ public class EmployeeController {
     private ComboBox<String> roleFilter;
     @FXML
     private Button btnAdd;
+    @FXML
+    private final int rowsPerPage = 7;
+    @FXML
+    private int currentPage = 1;
+    @FXML
+    private Button btnPrev;
+    @FXML
+    private Button btnNext;
+    @FXML
+    private Label lblPageInfo;
+    @FXML
+    private ObservableList<Employee> fullEmployeeList = FXCollections.observableArrayList();
+
 
     private Connection getConnection() {
         return DBConnection.getConn();
@@ -68,22 +81,14 @@ public class EmployeeController {
     public void initialize() {
         String role = Session.getRole();
         System.out.println("Role người dùng: " + role);
-
-        if (!"Manager".equalsIgnoreCase(role)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Truy cập bị từ chối");
-            alert.setHeaderText(null);
-            alert.setContentText("Bạn không đủ đẳng cấp để xem trang này");
-            alert.showAndWait();
-
-            employeeTable.setVisible(false);
-            searchField.setVisible(false);
-            genderFilter.setVisible(false);
-            roleFilter.setVisible(false);
+        if (!"Manager".equalsIgnoreCase(role) && !"Boss".equalsIgnoreCase(role)) {
             btnAdd.setVisible(false);
-            return;
+            for (TableColumn<Employee, ?> col : employeeTable.getColumns()) {
+                if (col.getText().equals("Actions")) {
+                    col.setVisible(false);
+                }
+            }
         }
-
         colId.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
         colCode.setCellValueFactory(new PropertyValueFactory<>("codeEmployee"));
         colName.setCellValueFactory(new PropertyValueFactory<>("fullname"));
@@ -122,18 +127,12 @@ public class EmployeeController {
                 setGraphic(empty ? null : buttons);
             }
         });
-
-        // Lọc theo giới tính và vai trò
         genderFilter.getItems().addAll();
         genderFilter.setOnAction(event -> handleFilter());
-
         roleFilter.getItems().addAll();
         roleFilter.setOnAction(event -> handleFilter());
-
         searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
-
-        // Load dữ liệu ban đầu
-        employeeTable.setItems(getAllEmployees());
+        loadData();
     }
 
     private ObservableList<Employee> getAllEmployees() {
@@ -257,9 +256,11 @@ public class EmployeeController {
     }
 
     private void loadData() {
-        System.out.println("Đang tải lại dữ liệu...");
-        employeeTable.setItems(getAllEmployees());
+        fullEmployeeList = getAllEmployees();
+        currentPage = 1;
+        updateTable();
         employeeTable.refresh();
+
     }
 
     @FXML
@@ -270,11 +271,11 @@ public class EmployeeController {
 
         ObservableList<Employee> filteredList = FXCollections.observableArrayList();
 
-        for (Employee emp : getAllEmployees()) {
-            boolean matchesGender = (gender == null || emp.getGender().equalsIgnoreCase(gender));
-            boolean matchesRole = (role == null || emp.getRole().equalsIgnoreCase(role));
-            boolean matchesSearch = (emp.getCodeEmployee().toLowerCase().contains(keyword) ||
-                    emp.getFullname().toLowerCase().contains(keyword));
+        for (Employee emp : fullEmployeeList) {
+            boolean matchesGender = (gender == null || gender.isEmpty() || emp.getGender().equalsIgnoreCase(gender));
+            boolean matchesRole = (role == null || role.isEmpty() || emp.getRole().equalsIgnoreCase(role));
+            boolean matchesSearch = emp.getCodeEmployee().toLowerCase().contains(keyword)
+                    || emp.getFullname().toLowerCase().contains(keyword);
 
             if (matchesGender && matchesRole && matchesSearch) {
                 filteredList.add(emp);
@@ -282,27 +283,51 @@ public class EmployeeController {
         }
 
         employeeTable.setItems(filteredList);
+        lblPageInfo.setText("Kết quả lọc: " + filteredList.size() + " nhân viên");
+        btnPrev.setDisable(true);
+        btnNext.setDisable(true);
+    }
+    @FXML
+    public void handleSearch() {
+        handleFilter();
+    }
+
+
+    private void updateTable() {
+        int fromIndex = (currentPage - 1) * rowsPerPage;
+        int toIndex = Math.min(fromIndex + rowsPerPage, fullEmployeeList.size());
+
+        if (fromIndex <= toIndex) {
+            employeeTable.setItems(FXCollections.observableArrayList(fullEmployeeList.subList(fromIndex, toIndex)));
+        }
+
+        int totalPages = (int) Math.ceil((double) fullEmployeeList.size() / rowsPerPage);
+        lblPageInfo.setText("Trang " + currentPage + " / " + totalPages);
+
+        btnPrev.setDisable(currentPage == 1);
+        btnNext.setDisable(currentPage == totalPages || totalPages == 0);
+    }
+
+
+    private int getTotalPages() {
+        return (int) Math.ceil((double) fullEmployeeList.size() / rowsPerPage);
+    }
+    @FXML
+    private void handlePrevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updateTable(); // <- dùng hàm này để cập nhật cả dữ liệu + trạng thái nút + label
+        }
     }
 
     @FXML
-    public void handleSearch() {
-        String keyword = searchField.getText().trim().toLowerCase();
-        String gender = genderFilter.getValue();
-        String role = roleFilter.getValue();
-
-        ObservableList<Employee> filteredList = FXCollections.observableArrayList();
-
-        for (Employee emp : getAllEmployees()) {
-            boolean matchesGender = (gender == null || emp.getGender().equalsIgnoreCase(gender));
-            boolean matchesRole = (role == null || emp.getRole().equalsIgnoreCase(role));
-            boolean matchesSearch = (emp.getCodeEmployee().toLowerCase().contains(keyword) ||
-                    emp.getFullname().toLowerCase().contains(keyword));
-
-            if (matchesGender && matchesRole && matchesSearch) {
-                filteredList.add(emp);
-            }
+    private void handleNextPage() {
+        if (currentPage < getTotalPages()) {
+            currentPage++;
+            updateTable(); // <- dùng hàm này luôn
         }
-
-        employeeTable.setItems(filteredList);
     }
+
+
+
 }

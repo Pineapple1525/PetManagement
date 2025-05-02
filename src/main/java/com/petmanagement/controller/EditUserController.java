@@ -5,6 +5,7 @@ import com.petmanagement.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.sql.Connection;
@@ -18,7 +19,7 @@ public class EditUserController {
     @FXML
     private TextField emailField;
     @FXML
-    private TextField roleField;
+    private ComboBox<String> roleField;
     @FXML
     private TextField passwordField;
 
@@ -29,14 +30,15 @@ public class EditUserController {
         usernameField.setText(user.getUsername());
         emailField.setText(user.getEmail());
         passwordField.setText(user.getPassword());
-        roleField.setText(user.getRole());
+        roleField.getItems().setAll("Boss", "Manager", "Employee");
+        roleField.setValue(user.getRole());
     }
 
     @FXML
     private void handleUpdateUser() {
         String username = usernameField.getText().trim();
         String email = emailField.getText().trim();
-        String role = roleField.getText().trim();
+        String role = roleField.getValue().trim();
         String password = passwordField.getText().trim();
 
         if (username.isEmpty() || email.isEmpty() || role.isEmpty() || password.isEmpty()) {
@@ -58,8 +60,6 @@ public class EditUserController {
             int rows = stmt.executeUpdate();
             if (rows > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Cập nhật người dùng thành công.");
-
-                // Đóng cửa sổ
                 javafx.stage.Stage stage = (javafx.stage.Stage) usernameField.getScene().getWindow();
                 stage.close();
             } else {
@@ -70,8 +70,6 @@ public class EditUserController {
             showAlert(Alert.AlertType.ERROR, "Lỗi khi cập nhật: " + e.getMessage());
         }
     }
-
-
 
     private void showAlert(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType);

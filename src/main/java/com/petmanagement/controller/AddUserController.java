@@ -30,7 +30,7 @@ public class AddUserController {
 
     @FXML
     public void initialize() {
-        roleComboBox.getItems().addAll("Boss","Manager","Employee");
+        roleComboBox.getItems().addAll();
     }
 
     @FXML
@@ -44,12 +44,8 @@ public class AddUserController {
             showAlert(Alert.AlertType.ERROR, "Vui lòng điền đầy đủ thông tin.");
             return;
         }
-
-        // Mã hóa mật khẩu trước khi lưu
         String hashedPassword = hashPassword(password);
-
         String sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
-
         try (Connection conn = DBConnection.getConn();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -70,16 +66,13 @@ public class AddUserController {
     // Phương thức băm mật khẩu bằng SHA-1
     private String hashPassword(String password) {
         try {
-            // Tạo đối tượng MessageDigest cho SHA-1
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            // Băm mật khẩu và chuyển thành mảng byte
             byte[] messageDigest = md.digest(password.getBytes());
-            // Chuyển mảng byte thành chuỗi hex
             BigInteger no = new BigInteger(1, messageDigest);
-            return no.toString(16);  // Trả về mật khẩu đã băm dạng hex
+            return no.toString(16);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return null; // Trả về null nếu có lỗi
+            return null;
         }
     }
 

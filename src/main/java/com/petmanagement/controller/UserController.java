@@ -1,6 +1,7 @@
 package com.petmanagement.controller;
 
 import com.petmanagement.connection.DBConnection;
+import com.petmanagement.model.Employee;
 import com.petmanagement.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,22 +41,36 @@ public class UserController {
 
     @FXML
     public void initialize() {
+
+
+        String role = Session.getRole();
+        System.out.println("Role người dùng: " + role);
+        if (!"Manager".equalsIgnoreCase(role) && !"Boss".equalsIgnoreCase(role)) {
+            btnAdd.setVisible(false);
+            for (TableColumn<User, ?> col : userTable.getColumns()) {
+                if (col.getText().equals("Action")) {
+                    col.setVisible(false);
+                }
+            }
+        }
         // Định nghĩa các cột trong bảng
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
 
+
+
         colAction.setCellFactory(column -> new TableCell<User, Void>() {
             private final HBox buttons = new HBox();
             {
-                Button editButton = new Button("Sửa");
+                Button editButton = new Button("Edit");
                 editButton.setOnAction(event -> {
                     User user = getTableView().getItems().get(getIndex());
-                    handleEditUser(user);  // Gọi hàm sửa người dùng
+                    handleEditUser(user);
                 });
 
-                buttons.getChildren().addAll(editButton);  // Chỉ giữ nút sửa
+                buttons.getChildren().addAll(editButton);
                 buttons.setSpacing(10);
             }
 
@@ -66,10 +81,7 @@ public class UserController {
             }
         });
 
-        // Tải dữ liệu người dùng
         userTable.setItems(getAllUsers());
-
-        // Thêm sự kiện tìm kiếm
         searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
     }
 
@@ -113,7 +125,7 @@ public class UserController {
         return list;
     }
 
-    // Hàm tìm kiếm theo thời gian thực
+
     @FXML
     private void handleSearch() {
         String keyword = searchField.getText().trim().toLowerCase();
@@ -130,14 +142,12 @@ public class UserController {
         userTable.setItems(filteredList);
     }
 
-    // Hàm sửa người dùng
+
     private void handleEditUser(User user) {
         try {
-            // Giả sử bạn có một trang chỉnh sửa người dùng
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/edit-user.fxml"));
             Parent root = loader.load();
 
-            // Truyền user vào trang chỉnh sửa
             EditUserController controller = loader.getController();
             controller.setUser(user);
 
@@ -151,7 +161,6 @@ public class UserController {
         }
     }
 
-    // Hàm mở trang thêm người dùng
     @FXML
     private void handleAddUser(ActionEvent event) {
         try {
@@ -167,7 +176,6 @@ public class UserController {
         }
     }
 
-    // Hàm hiển thị lỗi
     private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Lỗi");

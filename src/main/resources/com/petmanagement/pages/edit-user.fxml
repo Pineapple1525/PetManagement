@@ -5,6 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.petmanagement.controller.EditUserController"
@@ -14,7 +16,7 @@
         <VBox alignment="CENTER" spacing="15.0" AnchorPane.topAnchor="30.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
             <children>
 
-                <Label text="Chỉnh sửa thông tin người dùng">
+                <Label text="Edit User Information">
                     <font>
                         <Font size="20.0"/>
                     </font>
@@ -31,21 +33,29 @@
                     </padding>
 
                     <children>
-                        <Label text="Tên người dùng:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <Label text="User Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                         <TextField fx:id="usernameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
                         <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                         <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                        <Label text="Mật khẩu:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <Label text="Password:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                         <TextField fx:id="passwordField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                        <Label text="Vai trò:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                        <TextField fx:id="roleField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                        <Label text="Role:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="roleField" GridPane.rowIndex="3" GridPane.columnIndex="1">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Boss"/>
+                                    <String fx:value="Manager"/>
+                                    <String fx:value="Employee"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
                     </children>
                 </GridPane>
 
-                <Button text="Lưu thay đổi" fx:id="saveButton" onAction="#handleUpdateUser" maxWidth="150"/>
+                <Button text="Save Change" fx:id="saveButton" onAction="#handleUpdateUser" maxWidth="150"/>
             </children>
         </VBox>
     </children>
