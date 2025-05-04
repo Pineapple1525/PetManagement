@@ -40,6 +40,17 @@ public class UserController {
     private Button btnAdd;
 
     @FXML
+    private Label lblPageInfo;
+
+    @FXML
+    private Button btnPrev, btnNext;
+
+    private final int rowsPerPage = 7;
+    private int currentPage = 1;
+    private ObservableList<User> fullUserList = FXCollections.observableArrayList();
+
+
+    @FXML
     public void initialize() {
 
 
@@ -81,19 +92,16 @@ public class UserController {
             }
         });
 
-        userTable.setItems(getAllUsers());
+
+        loadData();
         searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
     }
+    private void loadData() {
+        fullUserList = getAllUsers();
+        currentPage = 1;
+        updateTable();
+        userTable.refresh();
 
-
-    private Connection getConnection() {
-        Connection conn = DBConnection.getConn();
-        if (conn != null) {
-            System.out.println("Kết nối cơ sở dữ liệu thành công.");
-        } else {
-            System.out.println("Kết nối cơ sở dữ liệu thất bại.");
-        }
-        return conn;
     }
 
     private ObservableList<User> getAllUsers() {
@@ -125,22 +133,46 @@ public class UserController {
         return list;
     }
 
-
     @FXML
     private void handleSearch() {
         String keyword = searchField.getText().trim().toLowerCase();
 
-        ObservableList<User> filteredList = FXCollections.observableArrayList();
+        fullUserList = getAllUsers(); // luôn lấy lại danh sách gốc từ DB (nếu cần)
 
-        for (User user : getAllUsers()) {
-            if (user.getUsername().toLowerCase().contains(keyword) ||
-                    user.getEmail().toLowerCase().contains(keyword)) {
-                filteredList.add(user);
+        if (!keyword.isEmpty()) {
+            ObservableList<User> filtered = FXCollections.observableArrayList();
+            for (User user : getAllUsers()) {
+                if (user.getUsername().toLowerCase().contains(keyword) ||
+                        user.getEmail().toLowerCase().contains(keyword)) {
+                    filtered.add(user);
+                }
             }
+            fullUserList = filtered;
         }
 
-        userTable.setItems(filteredList);
+        currentPage = 1;
+        updateTable();
     }
+
+
+
+    private void updateTable() {
+        int total = fullUserList.size();
+        int fromIndex = (currentPage - 1) * rowsPerPage;
+        int toIndex = Math.min(fromIndex + rowsPerPage, total);
+
+        if (fromIndex >= total || fromIndex < 0) {
+            userTable.setItems(FXCollections.observableArrayList());
+        } else {
+            userTable.setItems(FXCollections.observableArrayList(fullUserList.subList(fromIndex, toIndex)));
+        }
+
+        int totalPages = getTotalPages();
+        lblPageInfo.setText("Trang " + currentPage + " / " + totalPages);
+        btnPrev.setDisable(currentPage <= 1);
+        btnNext.setDisable(currentPage >= totalPages);
+    }
+
 
 
     private void handleEditUser(User user) {
@@ -183,4 +215,28 @@ public class UserController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @FXML
+    private void handlePrevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            fullUserList = getAllUsers();
+            updateTable();
+        }
+    }
+
+    @FXML
+    private void handleNextPage() {
+        if (currentPage < getTotalPages()) {
+            currentPage++;
+            fullUserList = getAllUsers();
+            updateTable();
+        }
+    }
+
+    private int getTotalPages() {
+        return (int) Math.ceil((double) fullUserList.size() / rowsPerPage);
+    }
+
+
 }

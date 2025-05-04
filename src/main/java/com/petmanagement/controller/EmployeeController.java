@@ -264,7 +264,7 @@ public class EmployeeController {
     }
 
     @FXML
-    private void handleFilter() {
+    private void handleSearch() {
         String gender = genderFilter.getValue();
         String role = roleFilter.getValue();
         String keyword = searchField.getText().trim().toLowerCase();
@@ -288,8 +288,8 @@ public class EmployeeController {
         btnNext.setDisable(true);
     }
     @FXML
-    public void handleSearch() {
-        handleFilter();
+    public void handleFilter() {
+        handleSearch();
     }
 
 
@@ -316,7 +316,7 @@ public class EmployeeController {
     private void handlePrevPage() {
         if (currentPage > 1) {
             currentPage--;
-            updateTable(); // <- dùng hàm này để cập nhật cả dữ liệu + trạng thái nút + label
+            updateTable();
         }
     }
 
@@ -324,7 +324,7 @@ public class EmployeeController {
     private void handleNextPage() {
         if (currentPage < getTotalPages()) {
             currentPage++;
-            updateTable(); // <- dùng hàm này luôn
+            updateTable();
         }
     }
 

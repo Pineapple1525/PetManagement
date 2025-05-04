@@ -1,39 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Pos?>
-<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.petmanagement.controller.UserController"
-            id="orders-root"
-            stylesheets="@../styles/order.css">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="orders-root" stylesheets="@../styles/order.css"
+            xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            fx:controller="com.petmanagement.controller.UserController">
 
     <VBox spacing="10">
         <padding>
-            <Insets top="15" right="15" bottom="15" left="15"/>
+            <Insets bottom="15" left="15" right="15" top="15" />
         </padding>
 
-        <Label text="User" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2d2d2d;" />
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextField fx:id="searchField" promptText="Search User..." style="-fx-padding: 5px; -fx-font-size: 14px;" prefWidth="300" />
+        <!-- Tiêu đề -->
+        <Label text="User"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2d2d2d;" />
+
+        <!-- Thanh tìm kiếm -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <TextField fx:id="searchField"
+                       prefWidth="300"
+                       promptText="Search User..."
+                       style="-fx-padding: 5px; -fx-font-size: 14px;" />
         </HBox>
-        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10px 0;">
-            <Button text="Add User" onAction="#handleAddUser" styleClass="button" fx:id="btnAdd" />
+
+        <!-- Nút thêm -->
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 10px 0;">
+            <Button fx:id="btnAdd"
+                    onAction="#handleAddUser"
+                    styleClass="button"
+                    text="Add User" />
         </HBox>
+
+        <!-- Bảng dữ liệu người dùng -->
         <HBox alignment="CENTER" spacing="10">
             <TableView fx:id="userTable"
                        prefHeight="400"
-                       maxWidth="1100"
+                       prefWidth="1100"
                        styleClass="table-view">
                 <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="80"/>
-                    <TableColumn fx:id="colUsername" text="User Name" prefWidth="180"/>
-                    <TableColumn fx:id="colEmail" text="Email" prefWidth="250"/>
-                    <TableColumn fx:id="colRole" text="Role" prefWidth="120"/>
-                    <TableColumn fx:id="colAction" text="Action" prefWidth="150"/>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="150" />
+                    <TableColumn fx:id="colUsername" text="User Name" prefWidth="250" />
+                    <TableColumn fx:id="colEmail" text="Email" prefWidth="300" />
+                    <TableColumn fx:id="colRole" text="Role" prefWidth="150" />
+                    <TableColumn fx:id="colAction" text="Action" prefWidth="150" />
                 </columns>
             </TableView>
+
+
+        </HBox>
+        <HBox alignment="CENTER" spacing="10">
+            <Button fx:id="btnPrev" text="« Trước" onAction="#handlePrevPage"/>
+            <Label fx:id="lblPageInfo" text="Trang 1 / 1"/>
+            <Button fx:id="btnNext" text="Sau »" onAction="#handleNextPage"/>
         </HBox>
     </VBox>
 </AnchorPane>
