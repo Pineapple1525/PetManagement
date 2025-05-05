@@ -48,7 +48,7 @@ public class OrderController {
     private ObservableList<Order> orderList = FXCollections.observableArrayList();
 
     public void initialize() {
-        // Set up TableView columns
+
         colID.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getOrderId()).asObject());
         colCode.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCodeOrder()));
         colCustomer.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCustomerName()));
@@ -58,11 +58,11 @@ public class OrderController {
         colPayment.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getPaymentMethod()));
         colDelivery.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDeliveryStatus()));
 
-        // Populate ComboBoxes
+
         statusFilter.setItems(FXCollections.observableArrayList("All", "Pending", "Completed", "Cancelled"));
         deliveryFilter.setItems(FXCollections.observableArrayList("All", "Pending", "Shipped", "Delivered", "Cancelled"));
 
-        // Select "All" as default
+
         statusFilter.getSelectionModel().select("All");
         deliveryFilter.getSelectionModel().select("All");
 
@@ -128,7 +128,7 @@ public class OrderController {
             orderTable.setItems(orderList);
 
         } catch (SQLException e) {
-            showAlert("Lỗi khi tải danh sách đơn hàng: " + e.getMessage());
+            showAlert("Error loading order list: " + e.getMessage());
         }
     }
 
@@ -146,14 +146,14 @@ public class OrderController {
             CreateOrderController controller = loader.getController();
 
             Stage stage = new Stage();
-            stage.setTitle("Tạo đơn hàng mới");
+            stage.setTitle("Create new order");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
             loadOrders();
         } catch (IOException e) {
-            showAlert("Lỗi khi mở form tạo đơn hàng: " + e.getMessage());
+            showAlert("Error when opening order creation form: " + e.getMessage());
         }
     }
 
@@ -169,15 +169,15 @@ public class OrderController {
                 controller.setOrder(selected);
 
                 Stage stage = new Stage();
-                stage.setTitle("Chi tiết đơn hàng");
+                stage.setTitle("Order details");
                 stage.setScene(new Scene(root));
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
             } catch (IOException e) {
-                showAlert("Lỗi khi mở chi tiết đơn hàng: " + e.getMessage());
+                showAlert("Error opening order details: " + e.getMessage());
             }
         } else {
-            showAlert("Vui lòng chọn một đơn hàng để xem chi tiết.");
+            showAlert("Please select an order to view details.");
         }
     }
 
@@ -193,17 +193,17 @@ public class OrderController {
                 controller.setOrder(selected);
 
                 Stage stage = new Stage();
-                stage.setTitle("Chỉnh sửa đơn hàng");
+                stage.setTitle("Edit order");
                 stage.setScene(new Scene(root));
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
 
                 loadOrders();
             } catch (IOException e) {
-                showAlert("Lỗi khi mở form chỉnh sửa đơn hàng: " + e.getMessage());
+                showAlert("Error when opening order editing form: " + e.getMessage());
             }
         } else {
-            showAlert("Vui lòng chọn một đơn hàng để chỉnh sửa.");
+            showAlert("Please select an order to edit.");
         }
     }
 
@@ -218,7 +218,7 @@ public class OrderController {
                 }
             });
         } else {
-            showAlert("Vui lòng chọn một đơn hàng để xóa.");
+            showAlert("Please select an order to delete.");
         }
     }
 
@@ -229,13 +229,13 @@ public class OrderController {
             stmt.setString(1, codeOrder);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
-                showAlert("Xóa đơn hàng thành công!");
+                showAlert("Order deleted successfully!");
                 loadOrders();
             } else {
-                showAlert("Không tìm thấy đơn hàng để xóa.");
+                showAlert("No orders found to delete.");
             }
         } catch (SQLException e) {
-            showAlert("Lỗi khi xóa đơn hàng: " + e.getMessage());
+            showAlert("Error when deleting order: " + e.getMessage());
         }
     }
 
@@ -245,20 +245,20 @@ public class OrderController {
         if (selected != null) {
             try {
                 Stage printStage = new Stage();
-                printStage.setTitle("In đơn hàng - " + selected.getCodeOrder());
+                printStage.setTitle("Print order - " + selected.getCodeOrder());
                 printStage.initModality(Modality.APPLICATION_MODAL);
 
                 TextArea printContent = new TextArea();
                 printContent.setEditable(false);
                 printContent.setText(generateOrderSummary(selected));
 
-                Button printButton = new Button("In");
+                Button printButton = new Button("Print");
                 printButton.setOnAction(e -> {
                     exportOrderToPDF(selected);
                     printStage.close();
                 });
 
-                Button closeButton = new Button("Đóng");
+                Button closeButton = new Button("Close");
                 closeButton.setOnAction(e -> printStage.close());
 
                 HBox buttonBox = new HBox(10, printButton, closeButton);
@@ -273,30 +273,28 @@ public class OrderController {
                 printStage.showAndWait();
             } catch (Exception e) {
                 e.printStackTrace();
-                showAlert("Lỗi khi mở cửa sổ in: " + e.getMessage());
+                showAlert("Error opening print window: " + e.getMessage());
             }
         } else {
-            showAlert("Vui lòng chọn một đơn hàng để in.");
+            showAlert("Please select an order to print.");
         }
     }
 
     private String generateOrderSummary(Order order) {
         StringBuilder summary = new StringBuilder();
-        summary.append("ĐƠN HÀNG: ").append(order.getCodeOrder()).append("\n");
+        summary.append("ORDER: ").append(order.getCodeOrder()).append("\n");
         summary.append("----------------------------------------\n");
-        summary.append("Khách hàng: ").append(order.getCustomerName()).append("\n");
-        summary.append("Ngày đặt: ").append(order.getOrderDate()).append("\n");
-        // Fix total price formatting to display correctly with thousands separator
-        summary.append("Tổng tiền: ").append(String.format("%,.2f đ", order.getTotalPrice().setScale(0, BigDecimal.ROUND_HALF_UP))).append("\n");
-        summary.append("Trạng thái: ").append(order.getStatus()).append("\n");
-        summary.append("Phương thức thanh toán: ").append(order.getPaymentMethod()).append("\n");
-        summary.append("Trạng thái giao hàng: ").append(order.getDeliveryStatus()).append("\n");
-        summary.append("Ghi chú: ").append(order.getNote() != null ? order.getNote() : "").append("\n");
+        summary.append("Customer: ").append(order.getCustomerName()).append("\n");
+        summary.append("Order date: ").append(order.getOrderDate()).append("\n");
+        summary.append("Total price: ").append(String.format("%,.2f price", order.getTotalPrice().setScale(0, BigDecimal.ROUND_HALF_UP))).append("\n");
+        summary.append("Status: ").append(order.getStatus()).append("\n");
+        summary.append("Payment Method: ").append(order.getPaymentMethod()).append("\n");
+        summary.append("Delivery Status: ").append(order.getDeliveryStatus()).append("\n");
+        summary.append("Note: ").append(order.getNote() != null ? order.getNote() : "").append("\n");
         summary.append("----------------------------------------\n");
 
-        summary.append("Sản phẩm đã mua:\n");
-        summary.append(String.format("%-25s %-10s %-15s\n", "Tên sản phẩm", "Số lượng", "Đơn giá"));
-
+        summary.append("Products purchased:\n");
+        summary.append(String.format("%-25s %-10s %-15s\n", "Product Name", "Quantity", " Price"));
         try (Connection conn = DBConnection.getConn()) {
             String query = "SELECT od.product_type, od.product_name, od.sale_price, od.quantity, " +
                     "od.code_product, od.code_pet " +
@@ -318,11 +316,11 @@ public class OrderController {
                     summary.append(String.format("%-25s %-10d %,15.2f đ\n", productName, quantity, salePrice.setScale(0, BigDecimal.ROUND_HALF_UP)));
                 }
                 if (!hasProducts) {
-                    summary.append("Không có sản phẩm nào trong đơn hàng này.\n");
+                    summary.append("There are no products in this order.\n");
                 }
             }
         } catch (SQLException e) {
-            summary.append("Lỗi khi lấy chi tiết sản phẩm: ").append(e.getMessage()).append("\n");
+            summary.append("Error getting product details: ").append(e.getMessage()).append("\n");
         }
 
         return summary.toString();
@@ -336,7 +334,7 @@ public class OrderController {
             PdfWriter.getInstance(document, new java.io.FileOutputStream(outputPath));
             document.open();
 
-            // Add Unicode font to support Vietnamese characters
+
             InputStream fontStream = getClass().getResourceAsStream("/com/petmanagement/styles/font/Roboto-VariableFont_wdth,wght.ttf");
             BaseFont baseFont = BaseFont.createFont("DellaRespira-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true,
                     fontStream.readAllBytes(), null);
@@ -345,27 +343,26 @@ public class OrderController {
             Font boldFont = new Font(baseFont, 12, Font.BOLD);
 
             // Add title
-            document.add(new Paragraph("Hóa đơn - " + order.getCodeOrder(), boldFont));
-            document.add(new Paragraph(" ", font)); // Spacer
+            document.add(new Paragraph("Invoice - " + order.getCodeOrder(), boldFont));
+            document.add(new Paragraph(" ", font));
 
-            // Add order details
-            document.add(new Paragraph("Khách hàng: " + order.getCustomerName(), font));
-            document.add(new Paragraph("Ngày đặt: " + order.getOrderDate(), font));
-            // Fix total price formatting to display correctly with thousands separator
-            document.add(new Paragraph("Tổng tiền: " + String.format("%,.2f đ", order.getTotalPrice().setScale(0, BigDecimal.ROUND_HALF_UP)), font));
-            document.add(new Paragraph("Trạng thái: " + order.getStatus(), font));
-            document.add(new Paragraph("Phương thức thanh toán: " + order.getPaymentMethod(), font));
-            document.add(new Paragraph("Trạng thái giao hàng: " + order.getDeliveryStatus(), font));
-            document.add(new Paragraph("Ghi chú: " + (order.getNote() != null ? order.getNote() : ""), font));
+
+            document.add(new Paragraph("Customer: " + order.getCustomerName(), font));
+            document.add(new Paragraph("Order date: " + order.getOrderDate(), font));
+
+            document.add(new Paragraph("Total price: " + String.format("%,.2f cost", order.getTotalPrice().setScale(0, BigDecimal.ROUND_HALF_UP)), font));
+            document.add(new Paragraph("Status: " + order.getStatus(), font));
+            document.add(new Paragraph("Payment method: " + order.getPaymentMethod(), font));
+            document.add(new Paragraph("Delivery status: " + order.getDeliveryStatus(), font));
+            document.add(new Paragraph("Note: " + (order.getNote() != null ? order.getNote() : ""), font));
             document.add(new Paragraph("----------------------------------------", font));
 
-            // Add product table
+
             PdfPTable table = new PdfPTable(3);
             table.setWidths(new float[]{4, 1, 2});
-            table.addCell(new com.itextpdf.text.Phrase("Tên sản phẩm", boldFont));
-            table.addCell(new com.itextpdf.text.Phrase("Số lượng", boldFont));
-            table.addCell(new com.itextpdf.text.Phrase("Đơn giá", boldFont));
-
+            table.addCell(new com.itextpdf.text.Phrase("Product Name", boldFont));
+            table.addCell(new com.itextpdf.text.Phrase("Quantity", boldFont));
+            table.addCell(new com.itextpdf.text.Phrase("Unit price", boldFont));
             boolean hasProducts = false;
             try (Connection conn = DBConnection.getConn()) {
                 String query = "SELECT od.product_type, od.product_name, od.sale_price, od.quantity, " +
@@ -383,31 +380,31 @@ public class OrderController {
                         }
                         table.addCell(new com.itextpdf.text.Phrase(productName, font));
                         table.addCell(new com.itextpdf.text.Phrase(String.valueOf(rs.getInt("quantity")), font));
-                        // Fix sale price formatting to display correctly with thousands separator
+
                         table.addCell(new com.itextpdf.text.Phrase(String.format("%,.2f đ", rs.getBigDecimal("sale_price").setScale(0, BigDecimal.ROUND_HALF_UP)), font));
                     }
                 }
             } catch (SQLException e) {
 
-                document.add(new Paragraph("Lỗi khi lấy chi tiết sản phẩm: " + e.getMessage(), font));
+                document.add(new Paragraph("Error getting product details:" + e.getMessage(), font));
             }
 
             if (!hasProducts) {
-                document.add(new Paragraph("Không có sản phẩm nào trong đơn hàng này.", font));
+                document.add(new Paragraph("There are no products in this order.", font));
             } else {
                 document.add(table);
             }
 
             document.close();
-            showAlert("Đã xuất hóa đơn PDF tại: " + outputPath);
+            showAlert("PDF invoice exported at: " + outputPath);
         } catch (DocumentException | IOException e) {
-            showAlert("Lỗi khi xuất PDF: " + e.getMessage());
+            showAlert("Error exporting PDF: " + e.getMessage());
         }
     }
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Thông báo");
+        alert.setTitle("Notification");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

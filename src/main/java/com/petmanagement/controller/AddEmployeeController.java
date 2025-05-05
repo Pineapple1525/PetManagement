@@ -34,7 +34,7 @@ public class AddEmployeeController {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Thêm thông tin vào bảng users và lấy user_id
+            // Insert information into users table and get user_id
             String userSql = "INSERT INTO users (username,password,email) VALUES (?,?,?)";
             try (PreparedStatement userStmt = conn.prepareStatement(userSql, Statement.RETURN_GENERATED_KEYS)) {
                 userStmt.setString(1, emp.getUsername());
@@ -42,14 +42,14 @@ public class AddEmployeeController {
                 userStmt.setString(3, emp.getEmail());
                 userStmt.executeUpdate();
 
-                // Lấy user_id từ bảng users
+                // Get user_id from users table
                 ResultSet rs = userStmt.getGeneratedKeys();
                 int userId = -1;
                 if (rs.next()) {
-                    userId = rs.getInt(1);  // Lấy ID của người dùng vừa được thêm
+                    userId = rs.getInt(1);  // Get ID of the newly added user
                 }
 
-                // Tiến hành thêm nhân viên vào bảng employees
+                // Proceed to add employee into employees table
                 stmt.setString(1, emp.getCodeEmployee());
                 stmt.setString(2, emp.getFullname());
                 stmt.setString(3, emp.getGender());
@@ -78,21 +78,20 @@ public class AddEmployeeController {
                 } else {
                     stmt.setNull(12, Types.TIMESTAMP);
                 }
-                stmt.setInt(13, userId);  // Thêm user_id vào bảng employees
+                stmt.setInt(13, userId);  // Add user_id to employees table
 
                 stmt.executeUpdate();
-                System.out.println("Thêm nhân viên thành công!");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm nhân viên thành công!");
+                System.out.println("Successfully added employee!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Employee added successfully!");
                 alert.showAndWait();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi thêm nhân viên: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error when adding employee: " + e.getMessage());
             alert.showAndWait();
         }
     }
-
 
     private String generateEmployeeCode() {
         String sql = "SELECT MAX(CAST(SUBSTRING(code_employee, 4) AS UNSIGNED)) FROM employees";
@@ -112,7 +111,7 @@ public class AddEmployeeController {
 
     @FXML
     private void handleSave() {
-        // Lấy thông tin từ giao diện
+        // Get data from UI
         String fullname = txtFullname.getText().trim();
         String gender = cbGender.getValue();
         String address = txtAddress.getText().trim();
@@ -122,71 +121,71 @@ public class AddEmployeeController {
         String salaryStr = txtSalary.getText().trim();
         String workShift = cbWorkShift.getValue();
         String status = cbStatus.getValue();
-        String username = txtUsername.getText().trim(); // Lấy username
-        String password = txtPassword.getText().trim(); // Lấy password
+        String username = txtUsername.getText().trim(); // Get username
+        String password = txtPassword.getText().trim(); // Get password
 
-        // Kiểm tra thông tin
+        // Check data validity
         if (fullname.isEmpty()) {
-            showAlert("Vui lòng nhập họ tên!");
+            showAlert("Please enter full name!");
             return;
         }
         if (gender == null) {
-            showAlert("Vui lòng chọn giới tính!");
+            showAlert("Please select gender!");
             return;
         }
         if (dpBirthdate.getValue() == null) {
-            showAlert("Vui lòng chọn ngày sinh!");
+            showAlert("Please select birthdate!");
             return;
         }
         if (address.isEmpty()) {
-            showAlert("Vui lòng nhập địa chỉ!");
+            showAlert("Please enter address!");
             return;
         }
         if (!phone.matches("\\d{10,11}")) {
-            showAlert("Số điện thoại không hợp lệ (chỉ 10-11 chữ số)! ");
+            showAlert("Invalid phone number (must be 10-11 digits)!");
             return;
         }
         if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            showAlert("Email không hợp lệ!");
+            showAlert("Invalid email!");
             return;
         }
         if (role == null) {
-            showAlert("Vui lòng chọn vai trò!");
+            showAlert("Please select role!");
             return;
         }
         BigDecimal salary;
         try {
             salary = salaryStr.isEmpty() ? BigDecimal.ZERO : new BigDecimal(salaryStr);
             if (salary.compareTo(BigDecimal.ZERO) < 0) {
-                showAlert("Lương không được âm!");
+                showAlert("Salary cannot be negative!");
                 return;
             }
         } catch (NumberFormatException e) {
-            showAlert("Lương không hợp lệ!");
+            showAlert("Invalid salary!");
             return;
         }
         if (workShift == null) {
-            showAlert("Vui lòng chọn ca làm việc!");
+            showAlert("Please select work shift!");
             return;
         }
         if (status == null) {
-            showAlert("Vui lòng chọn trạng thái!");
+            showAlert("Please select status!");
             return;
         }
         if (dpHiringDate.getValue() == null) {
-            showAlert("Vui lòng chọn ngày vào làm!");
+            showAlert("Please select hiring date!");
             return;
         }
         if (username.isEmpty()) {
-            showAlert("Vui lòng nhập tài khoản!");
+            showAlert("Please enter username!");
             return;
         }
         if (password.isEmpty()) {
-            showAlert("Vui lòng nhập mật khẩu!");
+            showAlert("Please enter password!");
             return;
         }
 
-        // Gán dữ liệu vào đối tượng Employee
+        // Assign data to Employee object
         Employee emp = new Employee();
         emp.setCodeEmployee(generateEmployeeCode());
         emp.setFullname(fullname);
@@ -200,18 +199,18 @@ public class AddEmployeeController {
         emp.setWorkShift(workShift);
         emp.setStatus(status);
         emp.setHiringDate(dpHiringDate.getValue().atStartOfDay());
-        emp.setUsername(username);  // Gán username
-        emp.setPassword(password);  // Gán password
+        emp.setUsername(username);  // Set username
+        emp.setPassword(password);  // Set password
 
-        // Thêm nhân viên vào cơ sở dữ liệu
+        // Add employee to database
         insertEmployee(emp);
 
-        // Gọi callback nếu có
+        // Trigger callback if exists
         if (onUpdateCallback != null) {
             onUpdateCallback.run();
         }
 
-        // Đóng cửa sổ
+        // Close window
         ((Stage) txtFullname.getScene().getWindow()).close();
     }
 

@@ -8,13 +8,13 @@ public class OrderDetail {
     private int orderDetailId;
     private String orderId;
     private String productType;
-    private String codeProduct; // Will hold food_id for Food items
+    private String codeProduct;
     private String codePet;
     private String productName;
     private BigDecimal salePrice;
     private int quantity;
     private BigDecimal weight;
-    private Map<String, Object> additionalData; // To hold additional attributes like breed
+    private Map<String, Object> additionalData;
 
     public OrderDetail(int orderDetailId, String orderId, String productType, String codeProduct, String codePet,
                        String productName, BigDecimal salePrice, int quantity, double weight) {
@@ -27,7 +27,7 @@ public class OrderDetail {
         this.salePrice = salePrice;
         this.quantity = quantity;
         this.weight = BigDecimal.valueOf(weight);
-        this.additionalData = new HashMap<>(); // Initialize the map
+        this.additionalData = new HashMap<>();
     }
 
     // Getters and setters
@@ -62,7 +62,7 @@ public class OrderDetail {
         return salePrice.multiply(BigDecimal.valueOf(quantity));
     }
 
-    // Methods to handle additional data
+
     public void addAdditionalData(String key, Object value) {
         additionalData.put(key, value);
     }
