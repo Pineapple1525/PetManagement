@@ -192,7 +192,7 @@ public class LayoutController {
 //           System.out.println("Loading view: " + file); // debug
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
             Parent root = fxmlLoader.load();
-            borderPane.setCenter(root);
+            borderPane.setRight(root);
 
 
         } catch (IOException e) {

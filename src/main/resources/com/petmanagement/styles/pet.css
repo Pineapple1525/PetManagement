@@ -1,0 +1,112 @@
+/* Gốc toàn trang */
+.root {
+    -fx-font-family: "Patrick Hand";
+    -fx-background-color: #00C8B3;
+
+}
+.table-view {
+    -fx-padding: 0;
+    -fx-snap-to-pixel: true;
+}
+
+.scroll-bar:vertical {
+    -fx-padding: 0;
+    -fx-pref-width: 10;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #D2B48C; /* Light brown border */
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-table-cell-border-color: #EEDFCC;
+}
+
+/* Header bảng */
+.table-view .column-header {
+    -fx-background-color: #A67B5B; /* Darker brown */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-color: #8B5E3C;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-style: solid;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-padding: 8 4 8 4;
+    -fx-alignment: center;
+}
+
+
+.table-row-cell {
+    -fx-background-color: #FFF5E1;
+    -fx-border-color: transparent transparent #EEDFCC transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-font-size: 14px;
+}
+
+
+.table-row-cell:hover {
+    -fx-background-color: #FDEBC4;
+}
+
+
+.table-row-cell:focused, .table-row-cell:selected {
+    -fx-background-color: #EBC49F;
+    -fx-text-fill: #3E2723;
+}
+
+
+.table-cell {
+    -fx-padding: 6 4 6 4;
+    -fx-text-fill: #3E2723;
+    -fx-alignment: center-left;
+}
+
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: #EEDFCC;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #A67B5B;
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: #D2B48C;
+    -fx-background-radius: 5;
+}
+.dialog-pane {
+    -fx-background-color: #f5eee0;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 20px;
+    -fx-font-family: "Patrick Hand";
+}
+
+.label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #3e2c1c;
+}
+
+.text-field, .text-area, .combo-box, .date-picker {
+    -fx-background-color: #fff8ed;
+    -fx-border-color: #d3bfa3;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 6px;
+    -fx-text-fill: #4a3826;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #eadcc2;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5c4226;
+    -fx-background-radius: 10px 10px 0 0;
+}
+ư

@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.petmanagement.controller.PetController"
+            stylesheets="@../styles/pet.css"
+            style="-fx-background-color: #00C8B3; -fx-font-family: 'Patrick Hand';"
+            prefWidth="1300" prefHeight="800">
 
-            prefHeight="400.0" prefWidth="600.0">
+    <!-- Top: Header -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10;">
+            <Label text="Pet" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Search pets..." prefWidth="300" prefHeight="45"/>
+            <Button text="Search" style="-fx-pref-width: 100px;">
 
-</AnchorPane>
+            </Button>
+
+            <Button fx:id="" text="Add pet"
+                    style="-fx-background-color: #A67B5B; -fx-text-fill: white; -fx-pref-width: 100px;"
+                    onAction="#openAddPetDialog">
+                <HBox.margin>
+                    <Insets right="250"/>
+                </HBox.margin>
+            </Button>
+
+
+
+        </HBox>
+    </top>
+
+    <!-- Center: Pet Table -->
+    <center>
+        <AnchorPane>
+            <TableView fx:id="petTable" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" style="-fx-padding: 30 50 100 50;">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="nameColumn" text="Name" prefWidth="90"/>
+                    <TableColumn fx:id="codeColumn" text="Mã pet" prefWidth="90"/>
+                    <TableColumn fx:id="speciesColumn" text="Loài " prefWidth="100"/>
+                    <TableColumn fx:id="breedColumn" text="Giống" prefWidth="100"/>
+                    <TableColumn fx:id="genderColumn" text="Giới tính" prefWidth="150"/>
+                    <TableColumn fx:id="birthdateColumn" text="Ngày sinh" prefWidth="100"/>
+                    <TableColumn fx:id="colorColumn" text="Màu sắc " prefWidth="60"/>
+                    <TableColumn fx:id="weightColumn" text="Cân nặng" prefWidth="100"/>
+                    <TableColumn fx:id="healthStatusColumn" text="Tình trạng sức khỏe" prefWidth="100"/>
+                    <TableColumn fx:id="imageColumn" text="Ảnh" prefWidth="100"/>
+                    <TableColumn fx:id="sourceTypeColumn" text="Nguồn cung cấp" prefWidth="100"/>
+                    <TableColumn fx:id="POIdColumn" text="Id người sở hữu trước" prefWidth="100"/>
+                    <TableColumn fx:id="breederColumn" text="Người chăm sóc" prefWidth="100"/>
+                    <TableColumn fx:id="importDateColumn" text="Ngày nhập" prefWidth="100"/>
+                    <TableColumn fx:id="adoptionStatusColumn" text="Trạng thái" prefWidth="100"/>
+                    <TableColumn fx:id="priceColumn" text="Giá bán" prefWidth="100"/>
+
+                    <TableColumn fx:id="actionColumn" text="Hành động" prefWidth="150"/>
+
+                </columns>
+            </TableView>
+        </AnchorPane>
+    </center>
+
+</BorderPane>

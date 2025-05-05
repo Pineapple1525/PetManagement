@@ -11,9 +11,9 @@
 
 .scroll-bar:vertical {
     -fx-padding: 0;
-    -fx-pref-width: 10; /* hoặc nhỏ hơn nếu bạn thích */
+    -fx-pref-width: 10;
 }
-/* TableView chung */
+
 .table-view {
     -fx-background-color: transparent;
     -fx-border-color: #D2B48C; /* Light brown border */
@@ -40,33 +40,32 @@
     -fx-alignment: center;
 }
 
-/* Dòng dữ liệu */
+
 .table-row-cell {
-    -fx-background-color: #FFF5E1; /* Light beige */
+    -fx-background-color: #FFF5E1;
     -fx-border-color: transparent transparent #EEDFCC transparent;
     -fx-border-width: 0 0 1px 0;
     -fx-font-size: 14px;
 }
 
-/* Hover hàng */
+
 .table-row-cell:hover {
     -fx-background-color: #FDEBC4;
 }
 
-/* Dòng được chọn */
+
 .table-row-cell:focused, .table-row-cell:selected {
     -fx-background-color: #EBC49F;
     -fx-text-fill: #3E2723;
 }
 
-/* Cell */
+
 .table-cell {
     -fx-padding: 6 4 6 4;
     -fx-text-fill: #3E2723;
     -fx-alignment: center-left;
 }
 
-/* Scrollbar */
 .scroll-bar:vertical, .scroll-bar:horizontal {
     -fx-background-color: #EEDFCC;
 }
@@ -86,7 +85,7 @@
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-padding: 20px;
-    -fx-font-family: "Comic Sans MS", "Segoe Print", cursive;
+    -fx-font-family: "Patrick Hand";
 }
 
 .label {
