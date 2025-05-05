@@ -7,16 +7,28 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class OrderController {
 
@@ -55,6 +67,11 @@ public class OrderController {
         deliveryFilter.getSelectionModel().select("All");
 
         loadOrders();
+
+        statusFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadOrders());
+        deliveryFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadOrders());
+
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> loadOrders());
     }
 
     private void loadOrders() {
@@ -71,10 +88,10 @@ public class OrderController {
             query += " AND (o.code_order LIKE ? OR c.name LIKE ?)";
         }
         if (!"All".equals(status)) {
-            query += " AND o.status = ?";
+            query += " AND LOWER(o.status) = ?";
         }
         if (!"All".equals(delivery)) {
-            query += " AND o.delivery_status = ?";
+            query += " AND LOWER(o.delivery_status) = ?";
         }
 
         try (Connection conn = DBConnection.getConn();
@@ -86,10 +103,10 @@ public class OrderController {
                 stmt.setString(paramIndex++, "%" + searchText + "%");
             }
             if (!"All".equals(status)) {
-                stmt.setString(paramIndex++, status);
+                stmt.setString(paramIndex++, status.toLowerCase());
             }
             if (!"All".equals(delivery)) {
-                stmt.setString(paramIndex++, delivery);
+                stmt.setString(paramIndex++, delivery.toLowerCase());
             }
 
             ResultSet rs = stmt.executeQuery();
@@ -227,7 +244,6 @@ public class OrderController {
         Order selected = orderTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             try {
-                // Create a simple print preview window
                 Stage printStage = new Stage();
                 printStage.setTitle("In đơn hàng - " + selected.getCodeOrder());
                 printStage.initModality(Modality.APPLICATION_MODAL);
@@ -238,25 +254,25 @@ public class OrderController {
 
                 Button printButton = new Button("In");
                 printButton.setOnAction(e -> {
-                    // Simulate printing (in a real application, integrate with a printer API)
-                    showAlert("Đơn hàng đã được gửi đến máy in!");
+                    exportOrderToPDF(selected);
                     printStage.close();
                 });
 
                 Button closeButton = new Button("Đóng");
                 closeButton.setOnAction(e -> printStage.close());
 
-                javafx.scene.layout.HBox buttonBox = new javafx.scene.layout.HBox(10, printButton, closeButton);
-                buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
-                buttonBox.setPadding(new javafx.geometry.Insets(10));
+                HBox buttonBox = new HBox(10, printButton, closeButton);
+                buttonBox.setAlignment(Pos.CENTER);
+                buttonBox.setPadding(new Insets(10));
 
-                javafx.scene.layout.VBox layout = new javafx.scene.layout.VBox(10, printContent, buttonBox);
-                layout.setPadding(new javafx.geometry.Insets(10));
+                VBox layout = new VBox(10, printContent, buttonBox);
+                layout.setPadding(new Insets(10));
 
                 Scene scene = new Scene(layout, 400, 300);
                 printStage.setScene(scene);
                 printStage.showAndWait();
             } catch (Exception e) {
+                e.printStackTrace();
                 showAlert("Lỗi khi mở cửa sổ in: " + e.getMessage());
             }
         } else {
@@ -270,13 +286,123 @@ public class OrderController {
         summary.append("----------------------------------------\n");
         summary.append("Khách hàng: ").append(order.getCustomerName()).append("\n");
         summary.append("Ngày đặt: ").append(order.getOrderDate()).append("\n");
-        summary.append("Tổng tiền: ").append(String.format("%,.0f đ", order.getTotalPrice())).append("\n");
+        // Fix total price formatting to display correctly with thousands separator
+        summary.append("Tổng tiền: ").append(String.format("%,.2f đ", order.getTotalPrice().setScale(0, BigDecimal.ROUND_HALF_UP))).append("\n");
         summary.append("Trạng thái: ").append(order.getStatus()).append("\n");
         summary.append("Phương thức thanh toán: ").append(order.getPaymentMethod()).append("\n");
         summary.append("Trạng thái giao hàng: ").append(order.getDeliveryStatus()).append("\n");
         summary.append("Ghi chú: ").append(order.getNote() != null ? order.getNote() : "").append("\n");
         summary.append("----------------------------------------\n");
+
+        summary.append("Sản phẩm đã mua:\n");
+        summary.append(String.format("%-25s %-10s %-15s\n", "Tên sản phẩm", "Số lượng", "Đơn giá"));
+
+        try (Connection conn = DBConnection.getConn()) {
+            String query = "SELECT od.product_type, od.product_name, od.sale_price, od.quantity, " +
+                    "od.code_product, od.code_pet " +
+                    "FROM order_details od " +
+                    "WHERE od.order_id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, order.getCodeOrder());
+                ResultSet rs = stmt.executeQuery();
+                boolean hasProducts = false;
+                while (rs.next()) {
+                    hasProducts = true;
+                    String productName = rs.getString("product_name");
+                    int quantity = rs.getInt("quantity");
+                    BigDecimal salePrice = rs.getBigDecimal("sale_price");
+                    if (productName == null) {
+                        productName = "Unknown Product (Type: " + rs.getString("product_type") + ")";
+                    }
+                    // Fix sale price formatting to display correctly with thousands separator
+                    summary.append(String.format("%-25s %-10d %,15.2f đ\n", productName, quantity, salePrice.setScale(0, BigDecimal.ROUND_HALF_UP)));
+                }
+                if (!hasProducts) {
+                    summary.append("Không có sản phẩm nào trong đơn hàng này.\n");
+                }
+            }
+        } catch (SQLException e) {
+            summary.append("Lỗi khi lấy chi tiết sản phẩm: ").append(e.getMessage()).append("\n");
+        }
+
         return summary.toString();
+    }
+
+    private void exportOrderToPDF(Order order) {
+        String outputPath = "Invoice_" + order.getCodeOrder() + ".pdf";
+
+        try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, new java.io.FileOutputStream(outputPath));
+            document.open();
+
+            // Add Unicode font to support Vietnamese characters
+            InputStream fontStream = getClass().getResourceAsStream("/com/petmanagement/styles/font/Roboto-VariableFont_wdth,wght.ttf");
+            BaseFont baseFont = BaseFont.createFont("DellaRespira-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true,
+                    fontStream.readAllBytes(), null);
+
+            Font font = new Font(baseFont, 12);
+            Font boldFont = new Font(baseFont, 12, Font.BOLD);
+
+            // Add title
+            document.add(new Paragraph("Hóa đơn - " + order.getCodeOrder(), boldFont));
+            document.add(new Paragraph(" ", font)); // Spacer
+
+            // Add order details
+            document.add(new Paragraph("Khách hàng: " + order.getCustomerName(), font));
+            document.add(new Paragraph("Ngày đặt: " + order.getOrderDate(), font));
+            // Fix total price formatting to display correctly with thousands separator
+            document.add(new Paragraph("Tổng tiền: " + String.format("%,.2f đ", order.getTotalPrice().setScale(0, BigDecimal.ROUND_HALF_UP)), font));
+            document.add(new Paragraph("Trạng thái: " + order.getStatus(), font));
+            document.add(new Paragraph("Phương thức thanh toán: " + order.getPaymentMethod(), font));
+            document.add(new Paragraph("Trạng thái giao hàng: " + order.getDeliveryStatus(), font));
+            document.add(new Paragraph("Ghi chú: " + (order.getNote() != null ? order.getNote() : ""), font));
+            document.add(new Paragraph("----------------------------------------", font));
+
+            // Add product table
+            PdfPTable table = new PdfPTable(3);
+            table.setWidths(new float[]{4, 1, 2});
+            table.addCell(new com.itextpdf.text.Phrase("Tên sản phẩm", boldFont));
+            table.addCell(new com.itextpdf.text.Phrase("Số lượng", boldFont));
+            table.addCell(new com.itextpdf.text.Phrase("Đơn giá", boldFont));
+
+            boolean hasProducts = false;
+            try (Connection conn = DBConnection.getConn()) {
+                String query = "SELECT od.product_type, od.product_name, od.sale_price, od.quantity, " +
+                        "od.code_product, od.code_pet " +
+                        "FROM order_details od " +
+                        "WHERE od.order_id = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                    stmt.setString(1, order.getCodeOrder());
+                    ResultSet rs = stmt.executeQuery();
+                    while (rs.next()) {
+                        hasProducts = true;
+                        String productName = rs.getString("product_name");
+                        if (productName == null) {
+                            productName = "Unknown Product (Type: " + rs.getString("product_type") + ")";
+                        }
+                        table.addCell(new com.itextpdf.text.Phrase(productName, font));
+                        table.addCell(new com.itextpdf.text.Phrase(String.valueOf(rs.getInt("quantity")), font));
+                        // Fix sale price formatting to display correctly with thousands separator
+                        table.addCell(new com.itextpdf.text.Phrase(String.format("%,.2f đ", rs.getBigDecimal("sale_price").setScale(0, BigDecimal.ROUND_HALF_UP)), font));
+                    }
+                }
+            } catch (SQLException e) {
+
+                document.add(new Paragraph("Lỗi khi lấy chi tiết sản phẩm: " + e.getMessage(), font));
+            }
+
+            if (!hasProducts) {
+                document.add(new Paragraph("Không có sản phẩm nào trong đơn hàng này.", font));
+            } else {
+                document.add(table);
+            }
+
+            document.close();
+            showAlert("Đã xuất hóa đơn PDF tại: " + outputPath);
+        } catch (DocumentException | IOException e) {
+            showAlert("Lỗi khi xuất PDF: " + e.getMessage());
+        }
     }
 
     private void showAlert(String message) {
