@@ -41,16 +41,17 @@ public class AddEmployeeController {
                 userStmt.setString(3, emp.getEmail());
                 userStmt.executeUpdate();
 
-                // Get user_id from users table
+
                 ResultSet rs = userStmt.getGeneratedKeys();
                 int userId = -1;
+                if (rs.next()) {
                     userId = rs.getInt(1);
                 }
-
 
                 stmt.setString(1, emp.getCodeEmployee());
                 stmt.setString(2, emp.getFullname());
                 stmt.setString(3, emp.getGender());
+
                 if (emp.getBirthdate() != null) {
                     stmt.setDate(4, Date.valueOf(emp.getBirthdate()));
                 } else {
@@ -77,17 +78,18 @@ public class AddEmployeeController {
                 stmt.setInt(13, userId);
 
                 stmt.executeUpdate();
-                System.out.println("Successfully added employee!");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Employee added successfully!");
+                System.out.println("Thêm nhân viên thành công!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm nhân viên thành công!");
                 alert.showAndWait();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Error when adding employee: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi thêm nhân viên: " + e.getMessage());
             alert.showAndWait();
         }
     }
+
 
     private String generateEmployeeCode() {
         String sql = "SELECT MAX(CAST(SUBSTRING(code_employee, 4) AS UNSIGNED)) FROM employees";
@@ -107,7 +109,7 @@ public class AddEmployeeController {
 
     @FXML
     private void handleSave() {
-        // Get data from UI
+        // Lấy thông tin từ giao diện
         String fullname = txtFullname.getText().trim();
         String gender = cbGender.getValue();
         String address = txtAddress.getText().trim();
@@ -117,71 +119,70 @@ public class AddEmployeeController {
         String salaryStr = txtSalary.getText().trim();
         String workShift = cbWorkShift.getValue();
         String status = cbStatus.getValue();
-        String username = txtUsername.getText().trim(); // Get username
-        String password = txtPassword.getText().trim(); // Get password
+        String username = txtUsername.getText().trim(); // Lấy username
+        String password = txtPassword.getText().trim(); // Lấy password
 
-        // Check data validity
         if (fullname.isEmpty()) {
-            showAlert("Please enter full name!");
+            showAlert("Vui lòng nhập họ tên!");
             return;
         }
         if (gender == null) {
-            showAlert("Please select gender!");
+            showAlert("Vui lòng chọn giới tính!");
             return;
         }
         if (dpBirthdate.getValue() == null) {
-            showAlert("Please select birthdate!");
+            showAlert("Vui lòng chọn ngày sinh!");
             return;
         }
         if (address.isEmpty()) {
-            showAlert("Please enter address!");
+            showAlert("Vui lòng nhập địa chỉ!");
             return;
         }
         if (!phone.matches("\\d{10,11}")) {
-            showAlert("Invalid phone number (must be 10-11 digits)!");
+            showAlert("Số điện thoại không hợp lệ (chỉ 10-11 chữ số)! ");
             return;
         }
         if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            showAlert("Invalid email!");
+            showAlert("Email không hợp lệ!");
             return;
         }
         if (role == null) {
-            showAlert("Please select role!");
+            showAlert("Vui lòng chọn vai trò!");
             return;
         }
         BigDecimal salary;
         try {
             salary = salaryStr.isEmpty() ? BigDecimal.ZERO : new BigDecimal(salaryStr);
             if (salary.compareTo(BigDecimal.ZERO) < 0) {
-                showAlert("Salary cannot be negative!");
+                showAlert("Lương không được âm!");
                 return;
             }
         } catch (NumberFormatException e) {
-            showAlert("Invalid salary!");
+            showAlert("Lương không hợp lệ!");
             return;
         }
         if (workShift == null) {
-            showAlert("Please select work shift!");
+            showAlert("Vui lòng chọn ca làm việc!");
             return;
         }
         if (status == null) {
-            showAlert("Please select status!");
+            showAlert("Vui lòng chọn trạng thái!");
             return;
         }
         if (dpHiringDate.getValue() == null) {
-            showAlert("Please select hiring date!");
+            showAlert("Vui lòng chọn ngày vào làm!");
             return;
         }
         if (username.isEmpty()) {
-            showAlert("Please enter username!");
+            showAlert("Vui lòng nhập tài khoản!");
             return;
         }
         if (password.isEmpty()) {
-            showAlert("Please enter password!");
+            showAlert("Vui lòng nhập mật khẩu!");
             return;
         }
 
-        // Assign data to Employee object
+        // Gán dữ liệu vào đối tượng Employee
         Employee emp = new Employee();
         emp.setCodeEmployee(generateEmployeeCode());
         emp.setFullname(fullname);
@@ -195,18 +196,18 @@ public class AddEmployeeController {
         emp.setWorkShift(workShift);
         emp.setStatus(status);
         emp.setHiringDate(dpHiringDate.getValue().atStartOfDay());
-        emp.setUsername(username);  // Set username
-        emp.setPassword(password);  // Set password
+        emp.setUsername(username);  // Gán username
+        emp.setPassword(password);  // Gán password
 
-        // Add employee to database
+        // Thêm nhân viên vào cơ sở dữ liệu
         insertEmployee(emp);
 
-        // Trigger callback if exists
+        // Gọi callback nếu có
         if (onUpdateCallback != null) {
             onUpdateCallback.run();
         }
 
-        // Close window
+        // Đóng cửa sổ
         ((Stage) txtFullname.getScene().getWindow()).close();
     }
 
