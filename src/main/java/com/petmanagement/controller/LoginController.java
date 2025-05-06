@@ -28,13 +28,30 @@ public class LoginController {
     private void initialize() {
         loginButton.setOnAction(this::handleLogin);
 
+        // Mặc định chỉ hiện ô mật khẩu dạng ẩn
+        visiblePasswordField.setVisible(false);
+        visiblePasswordField.setManaged(false);
+
+        togglePasswordIcon.setText("👁"); // Mắt đóng
+
         togglePasswordIcon.setOnMouseClicked(event -> togglePasswordVisibility());
 
-        passwordField.textProperty().addListener((obs, oldText, newText) -> visiblePasswordField.setText(newText));
-        visiblePasswordField.textProperty().addListener((obs, oldText, newText) -> passwordField.setText(newText));
+        // Cập nhật 2 chiều nếu chuyển qua lại
+        passwordField.textProperty().addListener((obs, oldText, newText) -> {
+            if (!visiblePasswordField.isVisible()) {
+                visiblePasswordField.setText(newText);
+            }
+        });
+
+        visiblePasswordField.textProperty().addListener((obs, oldText, newText) -> {
+            if (!passwordField.isVisible()) {
+                passwordField.setText(newText);
+            }
+        });
 
         forgotPasswordLink.setOnAction(this::handleForgotPassword);
     }
+
 
     private void togglePasswordVisibility() {
         boolean showing = passwordField.isVisible();
