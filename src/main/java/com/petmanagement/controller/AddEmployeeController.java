@@ -34,7 +34,6 @@ public class AddEmployeeController {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Insert information into users table and get user_id
             String userSql = "INSERT INTO users (username,password,email) VALUES (?,?,?)";
             try (PreparedStatement userStmt = conn.prepareStatement(userSql, Statement.RETURN_GENERATED_KEYS)) {
                 userStmt.setString(1, emp.getUsername());
@@ -45,15 +44,13 @@ public class AddEmployeeController {
                 // Get user_id from users table
                 ResultSet rs = userStmt.getGeneratedKeys();
                 int userId = -1;
-                if (rs.next()) {
-                    userId = rs.getInt(1);  // Get ID of the newly added user
+                    userId = rs.getInt(1);
                 }
 
-                // Proceed to add employee into employees table
+
                 stmt.setString(1, emp.getCodeEmployee());
                 stmt.setString(2, emp.getFullname());
                 stmt.setString(3, emp.getGender());
-
                 if (emp.getBirthdate() != null) {
                     stmt.setDate(4, Date.valueOf(emp.getBirthdate()));
                 } else {
@@ -67,7 +64,6 @@ public class AddEmployeeController {
                     email = "default@email.com";
                 }
                 stmt.setString(7, email);
-//                stmt.setString(7, emp.getEmail());
                 stmt.setString(8, emp.getRole());
                 stmt.setBigDecimal(9, emp.getSalary());
                 stmt.setString(10, emp.getWorkShift());
@@ -78,7 +74,7 @@ public class AddEmployeeController {
                 } else {
                     stmt.setNull(12, Types.TIMESTAMP);
                 }
-                stmt.setInt(13, userId);  // Add user_id to employees table
+                stmt.setInt(13, userId);
 
                 stmt.executeUpdate();
                 System.out.println("Successfully added employee!");

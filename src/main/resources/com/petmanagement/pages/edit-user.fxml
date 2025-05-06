@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.petmanagement.controller.EditUserController"
+            prefHeight="450.0" prefWidth="600.0"
+            style="-fx-background-color: #FFF9E6;">
+
+    <children>
+        <VBox alignment="CENTER" spacing="20.0"
+              AnchorPane.topAnchor="30.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
+
+            <children>
+
+                <!-- Tiêu đề -->
+                <Label text="Edit User Information"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #5C3D2E;"/>
+
+                <!-- Form nhập dữ liệu -->
+                <GridPane hgap="15" vgap="15"
+                          style="-fx-background-color: #FFF3D0; -fx-padding: 20px;
+                                 -fx-border-radius: 10px; -fx-background-radius: 10px;
+                                 -fx-border-color: #A97142; -fx-border-style: dashed;">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" minWidth="120"/>
+                        <ColumnConstraints halignment="LEFT" minWidth="300"/>
+                    </columnConstraints>
+
+                    <padding>
+                        <Insets top="10" left="20" right="20" bottom="10"/>
+                    </padding>
+
+                    <children>
+                        <!-- User Name -->
+                        <Label text="User Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                               style="-fx-font-size: 14px; -fx-text-fill: #5C3D2E;"/>
+                        <TextField fx:id="usernameField" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                   style="-fx-font-size: 14px; -fx-padding: 8px;
+                                          -fx-border-radius: 10px; -fx-background-radius: 10px;
+                                          -fx-background-color: #FFF9E6;
+                                          -fx-border-color: #A97142; -fx-border-style: dashed;"/>
+
+                        <!-- Email -->
+                        <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                               style="-fx-font-size: 14px; -fx-text-fill: #5C3D2E;"/>
+                        <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                   style="-fx-font-size: 14px; -fx-padding: 8px;
+                                          -fx-border-radius: 10px; -fx-background-radius: 10px;
+                                          -fx-background-color: #FFF9E6;
+                                          -fx-border-color: #A97142; -fx-border-style: dashed;"/>
+
+                        <!-- Password -->
+                        <Label text="Password:" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                               style="-fx-font-size: 14px; -fx-text-fill: #5C3D2E;"/>
+                        <PasswordField fx:id="passwordField" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                       style="-fx-font-size: 14px; -fx-padding: 8px;
+                                              -fx-border-radius: 10px; -fx-background-radius: 10px;
+                                              -fx-background-color: #FFF9E6;
+                                              -fx-border-color: #A97142; -fx-border-style: dashed;"/>
+
+                        <!-- Role -->
+                        <Label text="Role:" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                               style="-fx-font-size: 14px; -fx-text-fill: #5C3D2E;"/>
+                        <ComboBox fx:id="roleField" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                  style="-fx-font-size: 14px; -fx-padding: 8px;
+                                         -fx-border-radius: 10px; -fx-background-radius: 10px;
+                                         -fx-background-color: #FFF9E6;
+                                         -fx-border-color: #A97142; -fx-border-style: dashed;">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Boss"/>
+                                    <String fx:value="Manager"/>
+                                    <String fx:value="Employee"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                    </children>
+                </GridPane>
+
+                <!-- Nút Save -->
+                <Button text="Save Change" fx:id="saveButton" onAction="#handleUpdateUser"
+                        style="-fx-background-color: #C58B5E; -fx-text-fill: white;
+                               -fx-font-size: 14px; -fx-padding: 10px 20px;
+                               -fx-border-radius: 15px; -fx-background-radius: 15px;
+                               -fx-border-color: #804000; -fx-border-style: dashed;"/>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -21,31 +21,26 @@
             </padding>
 
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="621.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Thêm nhân viên mới" />
-            <TextField fx:id="txtFullname" prefWidth="250" promptText="Họ và tên" style="-fx-background-radius: 5;" />
-            <ComboBox fx:id="cbGender" prefWidth="250" promptText="Giới tính" style="-fx-background-radius: 5;" />
-            <DatePicker fx:id="dpBirthdate" prefWidth="250" promptText="Ngày sinh" style="-fx-background-radius: 5;" />
-            <TextField fx:id="txtAddress" prefWidth="250" promptText="Địa chỉ" style="-fx-background-radius: 5;" />
-            <TextField fx:id="txtPhone" prefWidth="250" promptText="Số điện thoại" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtFullname" prefWidth="250" promptText="Full Name" style="-fx-background-radius: 5;" />
+            <ComboBox fx:id="cbGender" prefWidth="250" promptText="Gender" style="-fx-background-radius: 5;" />
+            <DatePicker fx:id="dpBirthdate" prefWidth="250" promptText="Birth Date" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtAddress" prefWidth="250" promptText="Address" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtPhone" prefWidth="250" promptText="Phone" style="-fx-background-radius: 5;" />
             <TextField fx:id="txtEmail" prefWidth="250" promptText="Email" style="-fx-background-radius: 5;" />
 
-            <!-- Thay txtRole thành ComboBox -->
-            <ComboBox fx:id="cbRole" prefWidth="250" promptText="Vai trò" style="-fx-background-radius: 5;">
+            <ComboBox fx:id="cbRole" prefWidth="250" promptText="Role" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Manager" />
-                        <String fx:value="Cashier" />
-                        <String fx:value="Pet Care" />
-                        <String fx:value="Veterinarian" />
-                        <String fx:value="Sales" />
-                        <String fx:value="Other" />
+                        <String fx:value="Boss" />
+                        <String fx:value="Employee" />
                     </FXCollections>
                 </items>
             </ComboBox>
 
-            <TextField fx:id="txtSalary" prefWidth="250" promptText="Lương" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtSalary" prefWidth="250" promptText="Salary" style="-fx-background-radius: 5;" />
 
-            <!-- Thay txtWorkShift thành ComboBox -->
-            <ComboBox fx:id="cbWorkShift" prefWidth="250" promptText="Ca làm" style="-fx-background-radius: 5;">
+            <ComboBox fx:id="cbWorkShift" prefWidth="250" promptText="Work Shift" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Morning" />
@@ -56,7 +51,7 @@
                 </items>
             </ComboBox>
 
-            <ComboBox fx:id="cbStatus" prefWidth="250" promptText="Trạng thái" style="-fx-background-radius: 5;">
+            <ComboBox fx:id="cbStatus" prefWidth="250" promptText="Status" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Active" />
@@ -65,16 +60,12 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-
-
             <DatePicker fx:id="dpHiringDate" prefWidth="250" promptText="Ngày vào làm" style="-fx-background-radius: 5;" />
-
             <TextField fx:id="txtUsername" promptText="Username" />
             <PasswordField fx:id="txtPassword" promptText="Password" />
-
             <HBox alignment="CENTER_RIGHT" spacing="10">
-                <Button onAction="#handleSave" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Lưu" />
-                <Button onAction="#handleCancel" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Hủy" />
+                <Button onAction="#handleSave" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Save" />
+                <Button onAction="#handleCancel" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Cancel" />
             </HBox>
         </VBox>
     </children>
