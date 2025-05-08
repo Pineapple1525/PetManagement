@@ -21,19 +21,6 @@ public class DBConnection {
         }
         return conn;
     }
-
-//    public static void close() {
-//        if (conn != null) {
-//            try {
-//                conn.close();
-//                conn = null;
-//                System.out.println("🔌 Kết nối đã đóng!");
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     // ✅ Hàm test kết nối CSDL
     public static void main(String[] args) {
         Connection conn = DBConnection.getConn();

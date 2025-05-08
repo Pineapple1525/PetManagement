@@ -78,14 +78,14 @@ public class AddEmployeeController {
                 stmt.setInt(13, userId);
 
                 stmt.executeUpdate();
-                System.out.println("Thêm nhân viên thành công!");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm nhân viên thành công!");
+                System.out.println("Successfully!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Successfully!");
                 alert.showAndWait();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi thêm nhân viên: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error" + e.getMessage());
             alert.showAndWait();
         }
     }
@@ -109,7 +109,6 @@ public class AddEmployeeController {
 
     @FXML
     private void handleSave() {
-        // Lấy thông tin từ giao diện
         String fullname = txtFullname.getText().trim();
         String gender = cbGender.getValue();
         String address = txtAddress.getText().trim();

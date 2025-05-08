@@ -274,8 +274,11 @@ public class EmployeeController {
         for (Employee emp : fullEmployeeList) {
             boolean matchesGender = (gender == null || gender.isEmpty() || emp.getGender().equalsIgnoreCase(gender));
             boolean matchesRole = (role == null || role.isEmpty() || emp.getRole().equalsIgnoreCase(role));
-            boolean matchesSearch = emp.getCodeEmployee().toLowerCase().contains(keyword)
-                    || emp.getFullname().toLowerCase().contains(keyword);
+            boolean matchesSearch =
+                    emp.getCodeEmployee().toLowerCase().contains(keyword)
+                            || emp.getFullname().toLowerCase().contains(keyword)
+                            || emp.getEmail().toLowerCase().contains(keyword)
+                            || emp.getPhone().toLowerCase().contains(keyword);
 
             if (matchesGender && matchesRole && matchesSearch) {
                 filteredList.add(emp);
