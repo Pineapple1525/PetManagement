@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.petmanagement.controller.AddUserController"
+            prefWidth="400" prefHeight="400" style="-fx-background-color: #FFF9E6; -fx-padding: 20;">
+
+    <VBox spacing="20" alignment="CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+
+        <!-- Tiêu đề -->
+        <Label text="Add New User" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #5C3D2E;"/>
+
+        <!-- Form nhập dữ liệu -->
+        <TextField fx:id="usernameField" promptText="User Name" style="-fx-font-size: 14px; -fx-padding: 8px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FFF3D0; -fx-border-color: #A97142; -fx-border-style: dashed;"/>
+        <TextField fx:id="emailField" promptText="Email" style="-fx-font-size: 14px; -fx-padding: 8px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FFF3D0; -fx-border-color: #A97142; -fx-border-style: dashed;"/>
+        <PasswordField fx:id="passwordField" promptText="Password" style="-fx-font-size: 14px; -fx-padding: 8px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #FFF3D0; -fx-border-color: #A97142; -fx-border-style: dashed;"/>
+
+        <!-- ComboBox cho Role -->
+        <ComboBox fx:id="roleComboBox" promptText="Role" style="-fx-font-size: 14px; -fx-padding: 8px; -fx-background-radius: 10px; -fx-background-color: #FFF3D0; -fx-border-color: #A97142; -fx-border-radius: 10px; -fx-border-style: dashed;">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Manager"/>
+                    <String fx:value="Employee"/>
+                    <String fx:value="Boss"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <!-- Các nút Save và Cancel -->
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Save" onAction="#handleSaveUser"
+                    style="-fx-background-color: #C58B5E; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-border-style: dashed; -fx-border-color: #804000;"/>
+            <Button text="Cancel" onAction="#handleCancel"
+                    style="-fx-background-color: #A97142; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-border-style: dashed; -fx-border-color: #5C3D2E;"/>
+        </HBox>
+    </VBox>
+
+</AnchorPane>

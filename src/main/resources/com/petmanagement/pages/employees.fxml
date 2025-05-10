@@ -17,13 +17,11 @@
                 <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
 
-            <Label text="Danh sách nhân viên"
+            <Label text="List Employee"
                    styleClass="header-label"/>
-
-            <!-- Thanh tìm kiếm -->
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <TextField fx:id="searchField"
-                           promptText="Tìm theo mã / họ tên..."
+                           promptText="Search By Name And ID..."
                            prefWidth="300"
                            id="searchField"/>
 
@@ -34,60 +32,62 @@
 <!--                        style="-fx-font-size: 14px; -fx-background-radius: 20;"/>-->
 
                 <ComboBox fx:id="genderFilter"
-                          promptText="Giới tính"
+                          promptText="Gender"
                           prefWidth="120"
                           styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Nam"/>
-                            <String fx:value="Nữ"/>
-                            <String fx:value="Khác"/>
+                            <String fx:value="Male"/>
+                            <String fx:value="Female"/>
+                            <String fx:value="Other"/>
                         </FXCollections>
                     </items>
                 </ComboBox>
 
                 <ComboBox fx:id="roleFilter"
-                          promptText="Vai trò"
+                          promptText="Role"
                           prefWidth="150"
                           styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Quản lý"/>
-                            <String fx:value="Nhân viên"/>
-                            <String fx:value="Khách"/>
+                            <String fx:value="Manager"/>
+                            <String fx:value="Employee"/>
+                            <String fx:value="Boss"/>
                         </FXCollections>
                     </items>
                 </ComboBox>
             </HBox>
-
-            <!-- Bảng danh sách -->
             <HBox alignment="CENTER">
                 <TableView fx:id="employeeTable"
                            prefHeight="400"
                            maxWidth="1100"
                            styleClass="table-view">
                     <columns>
-                        <TableColumn fx:id="colId" text="Mã ID" prefWidth="60"/>
-                        <TableColumn fx:id="colCode" text="Mã nhân viên" prefWidth="100"/>
-                        <TableColumn fx:id="colName" text="Họ tên" prefWidth="150"/>
-                        <TableColumn fx:id="colGender" text="Giới tính" prefWidth="80"/>
-                        <TableColumn fx:id="colBirth" text="Ngày sinh" prefWidth="120"/>
-                        <TableColumn fx:id="colPhone" text="SĐT" prefWidth="120"/>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="colCode" text="Employee Code" prefWidth="100"/>
+                        <TableColumn fx:id="colName" text="Full Name" prefWidth="150"/>
+                        <TableColumn fx:id="colGender" text="Gender" prefWidth="80"/>
+                        <TableColumn fx:id="colBirth" text="Date Of Birth" prefWidth="120"/>
+                        <TableColumn fx:id="colPhone" text="Phone Number" prefWidth="120"/>
                         <TableColumn fx:id="colEmail" text="Email" prefWidth="180"/>
-                        <TableColumn fx:id="colRole" text="Vai trò" prefWidth="100"/>
-                        <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="150"/>
-                        <TableColumn fx:id="colSalary" text="Lương" prefWidth="100"/>
-                        <TableColumn fx:id="colWorkShift" text="Ca làm" prefWidth="100"/>
-                        <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100"/>
-                        <TableColumn fx:id="colHiringDate" text="Ngày vào làm" prefWidth="120"/>
-                        <TableColumn fx:id="colActions" text="Hành động" prefWidth="150"/>
+                        <TableColumn fx:id="colRole" text="Role" prefWidth="100"/>
+                        <TableColumn fx:id="colAddress" text="Address" prefWidth="150"/>
+                        <TableColumn fx:id="colSalary" text="Salary" prefWidth="100"/>
+                        <TableColumn fx:id="colWorkShift" text="Work Shift" prefWidth="100"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="100"/>
+                        <TableColumn fx:id="colHiringDate" text="Hiring Date" prefWidth="120"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="150"/>
                     </columns>
                 </TableView>
             </HBox>
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnPrev" text="Trước" onAction="#handlePrevPage"/>
+                <Label fx:id="lblPageInfo" text="Trang 1"/>
+                <Button fx:id="btnNext" text="Sau" onAction="#handleNextPage"/>
+            </HBox>
 
-            <!-- Các nút -->
             <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button text="Thêm"
+                <Button text="Add"
                         fx:id="btnAdd"
                         onAction="#handleAddEmployee"
                         styleClass="button"/>

@@ -19,11 +19,11 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="621.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Chỉnh sửa thông tin nhân viên" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="621.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Edit Employee" />
 
-            <TextField fx:id="txtCode" prefWidth="250" promptText="Mã nhân viên" style="-fx-background-radius: 5;" editable="false"/>
-            <TextField fx:id="txtFullName" prefWidth="250" promptText="Họ và tên" style="-fx-background-radius: 5;" />
-            <ComboBox fx:id="comboGender" prefWidth="250" promptText="Giới tính" style="-fx-background-radius: 5;">
+            <TextField fx:id="txtCode" prefWidth="250" promptText="Code" style="-fx-background-radius: 5;" editable="false"/>
+            <TextField fx:id="txtFullName" prefWidth="250" promptText="Full Name" style="-fx-background-radius: 5;" />
+            <ComboBox fx:id="comboGender" prefWidth="250" promptText="Gender" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Male" />
@@ -32,27 +32,24 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <DatePicker fx:id="dateBirth" prefWidth="250" promptText="Ngày sinh" style="-fx-background-radius: 5;" />
-            <TextField fx:id="txtAddress" prefWidth="250" promptText="Địa chỉ" style="-fx-background-radius: 5;" />
-            <TextField fx:id="txtPhone" prefWidth="250" promptText="Số điện thoại" style="-fx-background-radius: 5;" />
+            <DatePicker fx:id="dateBirth" prefWidth="250" promptText="Birth" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtAddress" prefWidth="250" promptText="Address" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtPhone" prefWidth="250" promptText="Phone" style="-fx-background-radius: 5;" />
             <TextField fx:id="txtEmail" prefWidth="250" promptText="Email" style="-fx-background-radius: 5;" />
 
-            <ComboBox fx:id="txtRole" prefWidth="250" promptText="Vai trò" style="-fx-background-radius: 5;">
+            <ComboBox fx:id="txtRole" prefWidth="250" promptText="Role" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Manager" />
-                        <String fx:value="Cashier" />
-                        <String fx:value="Pet Care" />
-                        <String fx:value="Veterinarian" />
-                        <String fx:value="Sales" />
-                        <String fx:value="Other" />
+                        <String fx:value="Boss" />
+                        <String fx:value="Employee" />
                     </FXCollections>
                 </items>
             </ComboBox>
 
-            <TextField fx:id="txtSalary" prefWidth="250" promptText="Lương" style="-fx-background-radius: 5;" />
+            <TextField fx:id="txtSalary" prefWidth="250" promptText="Salary" style="-fx-background-radius: 5;" />
 
-            <ComboBox fx:id="txtWorkShift" prefWidth="250" promptText="Ca làm" style="-fx-background-radius: 5;">
+            <ComboBox fx:id="txtWorkShift" prefWidth="250" promptText="Work Shift" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Morning" />
@@ -64,7 +61,7 @@
                 </items>
             </ComboBox>
 
-            <ComboBox fx:id="txtStatus" prefWidth="250" promptText="Trạng thái" style="-fx-background-radius: 5;">
+            <ComboBox fx:id="txtStatus" prefWidth="250" promptText="Status" style="-fx-background-radius: 5;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Active" />
@@ -74,11 +71,11 @@
                 </items>
             </ComboBox>
 
-            <DatePicker fx:id="dpHiringDate" prefWidth="250" promptText="Ngày vào làm" style="-fx-background-radius: 5;" />
+<!--            <DatePicker fx:id="dpHiringDate" prefWidth="250" promptText="Ngày vào làm" style="-fx-background-radius: 5;" />-->
 
             <HBox alignment="CENTER_RIGHT" spacing="10">
-                <Button onAction="#handleSave" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Lưu" />
-                <Button onAction="#handleCancel" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Hủy" />
+                <Button onAction="#handleSave" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Save" />
+                <Button onAction="#handleCancel" prefWidth="80" style="-fx-background-color: #D1A989; -fx-text-fill: white; -fx-background-radius: 5;" text="Cancel" />
             </HBox>
         </VBox>
     </children>
