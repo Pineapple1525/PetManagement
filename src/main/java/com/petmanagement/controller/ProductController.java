@@ -262,9 +262,14 @@ public class ProductController {
                 createGroup("Nhà Cung Cấp & Ngày Nhập", group4)
         );
         content.setPadding(new Insets(20));
-        content.setPrefHeight(500);
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(700);
+        scrollPane.setMaxHeight(700);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().setContent(scrollPane);
+
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com/petmanagement/styles/product.css").toExternalForm());
 
@@ -359,8 +364,7 @@ public class ProductController {
                             product.getName().toLowerCase().contains(keyword) ||
                             product.getCategory().toString().toLowerCase().contains(keyword) ||
                             product.getBrand().toLowerCase().contains(keyword) ||
-                            product.getDescription().toLowerCase().contains(keyword) ||
-                            product.getSupplierName().toLowerCase().contains(keyword)
+                            product.getDescription().toLowerCase().contains(keyword)
             ) {
                 filteredList.add(product);
             }

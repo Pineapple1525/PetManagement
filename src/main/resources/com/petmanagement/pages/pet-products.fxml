@@ -8,7 +8,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.petmanagement.controller.ProductController"
             stylesheets="@../styles/product.css"
-            style="-fx-background-color: #00C8B3; -fx-font-family: 'Patrick Hand';"
+            style=" -fx-font-family: 'Patrick Hand'; -fx-background-color:#CBB69D;"
             prefWidth="1300" prefHeight="800">
 
     <!-- Top: Header -->
@@ -37,7 +37,11 @@
     <!-- Center: Product Table -->
     <center>
         <AnchorPane>
-            <TableView fx:id="productTable" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" style="-fx-padding: 30 50 100 50;">
+            <TableView fx:id="productTable"
+                       AnchorPane.topAnchor="30"
+                       AnchorPane.bottomAnchor="100"
+                       AnchorPane.leftAnchor="50"
+                       AnchorPane.rightAnchor="50">
                 <columns>
                     <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
                     <TableColumn fx:id="codeColumn" text="Mã SP" prefWidth="90"/>

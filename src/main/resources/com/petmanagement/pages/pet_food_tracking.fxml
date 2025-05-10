@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.petmanagement.controller.PetFoodTrackingController"
+            prefWidth="800" prefHeight="500">
+
+    <TableView fx:id="foodTrackingTable"
+               layoutX="20" layoutY="20"
+               prefWidth="760" prefHeight="460"
+               AnchorPane.topAnchor="10"
+               AnchorPane.bottomAnchor="10"
+               AnchorPane.leftAnchor="10"
+               AnchorPane.rightAnchor="10">
+
+        <columns>
+            <TableColumn fx:id="foodNameColumn" text="Tên Thức Ăn" prefWidth="180"/>
+            <TableColumn fx:id="foodTypeColumn" text="Loại" prefWidth="120"/>
+            <TableColumn fx:id="feedingDateColumn" text="Ngày Cho Ăn" prefWidth="200"/>
+            <TableColumn fx:id="portionSizeColumn" text="Khẩu phần" prefWidth="120"/>
+        </columns>
+    </TableView>
+</AnchorPane>

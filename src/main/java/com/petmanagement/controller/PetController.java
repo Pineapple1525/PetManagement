@@ -2,14 +2,19 @@ package com.petmanagement.controller;
 
 
 import com.petmanagement.model.Pet;
+import com.petmanagement.model.PetFoodTracking;
 import com.petmanagement.connection.DBConnection;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -23,13 +28,17 @@ import javafx.scene.layout.HBox;
 
 
 import javafx.geometry.Insets;
+import javafx.stage.Stage;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class PetController {
@@ -80,12 +89,32 @@ public class PetController {
     private TableColumn<Pet, Double> priceColumn;
 
 
+
     private ObservableList<Pet> petList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         idColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPetId()));
         nameColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getName()));
+        nameColumn.setCellFactory(column -> new TableCell<Pet, String>() {
+            @Override
+            protected void updateItem(String name, boolean empty) {
+                super.updateItem(name, empty);
+                if (empty || name == null) {
+                    setText(null);
+                    setOnMouseClicked(null);
+                } else {
+                    setText(name);
+                    setStyle("-fx-text-fill: blue; -fx-underline: true;");
+                    setOnMouseClicked(event -> {
+                        Pet selectedPet = getTableView().getItems().get(getIndex());
+                        openPetFoodTrackingStage(selectedPet.getPetCode());
+                    });
+                }
+            }
+        });
+
+
         codeColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPetCode()));
         speciesColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSpecies()));
         breedColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBreed()));
@@ -336,9 +365,17 @@ public class PetController {
                 createGroup("Thông Tin Chủ Cũ & Nhân Viên", group4)
         );
         content.setPadding(new Insets(20));
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(700);
+        scrollPane.setMaxHeight(700);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().setContent(scrollPane);
+
+
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com/petmanagement/styles/product.css").toExternalForm());
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == ButtonType.OK) {
@@ -404,6 +441,22 @@ public class PetController {
         dialog.showAndWait();
     }
 
+    private void openPetFoodTrackingStage(String petCode) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/pet_food_tracking.fxml"));
+            Parent root = loader.load();
+
+            PetFoodTrackingController controller = loader.getController();
+            controller.setPetCode(petCode);
+
+            Stage stage = new Stage();
+            stage.setTitle("Theo dõi thức ăn thú cưng");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private TitledPane createGroup(String title, Node content) {
@@ -440,9 +493,7 @@ public class PetController {
             if (
                     pet.getPetCode().toLowerCase().contains(keyword) ||
                             pet.getName().toLowerCase().contains(keyword) ||
-                            pet.getSpecies().toLowerCase().contains(keyword) ||
-                            pet.getBreed().toLowerCase().contains(keyword) ||
-                            pet.getGender().toLowerCase().contains(keyword)
+                            pet.getSpecies().toLowerCase().contains(keyword)
 
             ) {
                 filteredList.add(pet);
@@ -455,6 +506,34 @@ public class PetController {
 
 
 
+
+    public List<PetFoodTracking> getByPetCode(String petCode) {
+        List<PetFoodTracking> list = new ArrayList<>();
+        String sql = "SELECT * FROM pet_food_tracking WHERE pet_code = ?";
+
+        try (Connection conn = DBConnection.getConn();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, petCode);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PetFoodTracking pft = new PetFoodTracking(
+                        rs.getInt("food_id"),
+                        rs.getString("pet_code"),
+                        rs.getString("food_name"),
+                        rs.getString("food_type"),
+                        rs.getTimestamp("feeding_date").toLocalDateTime(),
+                        rs.getString("portion_size")
+                );
+                list.add(pft);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 
 }
 
