@@ -118,71 +118,68 @@ public class AddEmployeeController {
         String salaryStr = txtSalary.getText().trim();
         String workShift = cbWorkShift.getValue();
         String status = cbStatus.getValue();
-        String username = txtUsername.getText().trim(); // Lấy username
-        String password = txtPassword.getText().trim(); // Lấy password
-
-        // Kiểm tra thông tin
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
         if (fullname.isEmpty()) {
-            showAlert("Vui lòng nhập họ tên!");
+            showAlert("Please enter your name!");
             return;
         }
         if (gender == null) {
-            showAlert("Vui lòng chọn giới tính!");
+            showAlert("Please select gender!");
             return;
         }
         if (dpBirthdate.getValue() == null) {
-            showAlert("Vui lòng chọn ngày sinh!");
+            showAlert("Please select date of birth!");
             return;
         }
         if (address.isEmpty()) {
-            showAlert("Vui lòng nhập địa chỉ!");
+            showAlert("Please enter address!");
             return;
         }
         if (!phone.matches("\\d{10,11}")) {
-            showAlert("Số điện thoại không hợp lệ (chỉ 10-11 chữ số)! ");
+            showAlert("Invalid phone number (10-11 digits only)!");
             return;
         }
         if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            showAlert("Email không hợp lệ!");
+            showAlert("Invalid email!");
             return;
         }
         if (role == null) {
-            showAlert("Vui lòng chọn vai trò!");
+            showAlert("Please select role!");
             return;
         }
         BigDecimal salary;
         try {
             salary = salaryStr.isEmpty() ? BigDecimal.ZERO : new BigDecimal(salaryStr);
             if (salary.compareTo(BigDecimal.ZERO) < 0) {
-                showAlert("Lương không được âm!");
+                showAlert("Salary cannot be negative!");
                 return;
             }
         } catch (NumberFormatException e) {
-            showAlert("Lương không hợp lệ!");
+            showAlert("Invalid salary!");
             return;
         }
         if (workShift == null) {
-            showAlert("Vui lòng chọn ca làm việc!");
+            showAlert("Please select a shift!");
             return;
         }
         if (status == null) {
-            showAlert("Vui lòng chọn trạng thái!");
+            showAlert("Please select status!");
             return;
         }
         if (dpHiringDate.getValue() == null) {
-            showAlert("Vui lòng chọn ngày vào làm!");
+            showAlert("Please select start date!");
             return;
         }
         if (username.isEmpty()) {
-            showAlert("Vui lòng nhập tài khoản!");
+            showAlert("Please enter account!");
             return;
         }
         if (password.isEmpty()) {
-            showAlert("Vui lòng nhập mật khẩu!");
+            showAlert("Please enter password!");
             return;
         }
 
-        // Gán dữ liệu vào đối tượng Employee
         Employee emp = new Employee();
         emp.setCodeEmployee(generateEmployeeCode());
         emp.setFullname(fullname);
@@ -196,18 +193,14 @@ public class AddEmployeeController {
         emp.setWorkShift(workShift);
         emp.setStatus(status);
         emp.setHiringDate(dpHiringDate.getValue().atStartOfDay());
-        emp.setUsername(username);  // Gán username
-        emp.setPassword(password);  // Gán password
+        emp.setUsername(username);
+        emp.setPassword(password);
 
-        // Thêm nhân viên vào cơ sở dữ liệu
         insertEmployee(emp);
-
-        // Gọi callback nếu có
         if (onUpdateCallback != null) {
             onUpdateCallback.run();
         }
 
-        // Đóng cửa sổ
         ((Stage) txtFullname.getScene().getWindow()).close();
     }
 

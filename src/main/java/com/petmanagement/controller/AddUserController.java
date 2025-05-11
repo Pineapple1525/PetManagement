@@ -41,7 +41,7 @@ public class AddUserController {
         String role = roleComboBox.getValue();
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || role == null) {
-            showAlert(Alert.AlertType.ERROR, "Vui lòng điền đầy đủ thông tin.");
+            showAlert(Alert.AlertType.ERROR, "Fill all fields.");
             return;
         }
         String hashedPassword = hashPassword(password);
@@ -55,11 +55,11 @@ public class AddUserController {
             stmt.setString(4, role);
 
             stmt.executeUpdate();
-            showAlert(Alert.AlertType.INFORMATION, "Thêm người dùng thành công.");
+            showAlert(Alert.AlertType.INFORMATION, "Add User Success.");
             closeWindow();
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Lỗi khi thêm người dùng: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error: " + e.getMessage());
         }
     }
 

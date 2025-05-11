@@ -199,18 +199,18 @@ public class UserController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/petmanagement/pages/add-user.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Thêm người dùng");
+            stage.setTitle("Add User");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showErrorAlert("Lỗi khi mở trang thêm người dùng: " + e.getMessage());
+            showErrorAlert("Error: " + e.getMessage());
         }
     }
 
     private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Lỗi");
+        alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

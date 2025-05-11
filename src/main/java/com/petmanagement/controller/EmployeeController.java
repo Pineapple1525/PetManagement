@@ -105,13 +105,13 @@ public class EmployeeController {
         colActions.setCellFactory(column -> new TableCell<Employee, Void>() {
             private final HBox buttons = new HBox();
             {
-                Button editButton = new Button("Sửa");
+                Button editButton = new Button("Edit");
                 editButton.setOnAction(event -> {
                     Employee employee = getTableView().getItems().get(getIndex());
                     handleEditEmployee(employee);
                 });
 
-                Button deleteButton = new Button("Xóa");
+                Button deleteButton = new Button("Delete");
                 deleteButton.setOnAction(event -> {
                     Employee employee = getTableView().getItems().get(getIndex());
                     handleDeleteEmployee(employee);
@@ -181,9 +181,9 @@ public class EmployeeController {
     public void handleDeleteEmployee(Employee employee) {
         // Xác nhận xóa
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Xác nhận xóa");
-        alert.setHeaderText("Bạn có chắc chắn muốn xóa nhân viên này không?");
-        alert.setContentText("Nhân viên: " + employee.getFullname());
+        alert.setTitle("Confrim Delete");
+        alert.setHeaderText("Do you want to delete this employee?");
+        alert.setContentText("Employee: " + employee.getFullname());
 
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             String sql = "DELETE FROM employees WHERE employee_id = ?";
@@ -196,10 +196,10 @@ public class EmployeeController {
 
                 // Cập nhật bảng sau khi xóa
                 employeeTable.setItems(getAllEmployees());
-                System.out.println("Nhân viên đã được xóa: " + employee.getFullname());
+                System.out.println("Delete Success: " + employee.getFullname());
             } catch (SQLException e) {
                 e.printStackTrace();
-                showErrorAlert("Lỗi khi xóa nhân viên: " + e.getMessage());
+                showErrorAlert("Error: " + e.getMessage());
             }
         }
     }
@@ -213,18 +213,18 @@ public class EmployeeController {
             AddEmployeeController addController = loader.getController();
             addController.setOnUpdateCallback(this::loadData);
             Stage stage = new Stage();
-            stage.setTitle("Thêm nhân viên");
+            stage.setTitle("Add Employee");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showErrorAlert("Lỗi khi mở trang thêm nhân viên: " + e.getMessage());
+            showErrorAlert("Error: " + e.getMessage());
         }
     }
 
     private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Lỗi");
+        alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
@@ -241,7 +241,7 @@ public class EmployeeController {
             editController.setOnUpdateCallback(this::loadData);
 
             Stage stage = new Stage();
-            stage.setTitle("Chỉnh sửa nhân viên");
+            stage.setTitle("Edit Employee");
             stage.setScene(new Scene(root));
 
             stage.setOnHiding(e -> Platform.runLater(() -> {
@@ -251,7 +251,7 @@ public class EmployeeController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showErrorAlert("Lỗi khi mở trang chỉnh sửa: " + e.getMessage());
+            showErrorAlert("Error: " + e.getMessage());
         }
     }
 
@@ -279,7 +279,6 @@ public class EmployeeController {
                             || emp.getFullname().toLowerCase().contains(keyword)
                             || emp.getEmail().toLowerCase().contains(keyword)
                             || emp.getPhone().toLowerCase().contains(keyword);
-
             if (matchesGender && matchesRole && matchesSearch) {
                 filteredList.add(emp);
             }
@@ -305,7 +304,7 @@ public class EmployeeController {
         }
 
         int totalPages = (int) Math.ceil((double) fullEmployeeList.size() / rowsPerPage);
-        lblPageInfo.setText("Trang " + currentPage + " / " + totalPages);
+        lblPageInfo.setText("Pages " + currentPage + " / " + totalPages);
 
         btnPrev.setDisable(currentPage == 1);
         btnNext.setDisable(currentPage == totalPages || totalPages == 0);

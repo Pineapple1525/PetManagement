@@ -11,8 +11,8 @@ public class ExitController {
     public static void showExitDialog(Stage currentStage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Exit Confirmation");
-        alert.setHeaderText("Bạn có chắc chắn muốn thoát?");
-        alert.setContentText("Chọn 'Yes' để quay lại trang đăng nhập hoặc 'No' để hủy.");
+        alert.setHeaderText("Are you sure you want to exit?");
+        alert.setContentText("Select 'Yes' to return to the login page or 'No' to cancel.");
 
         ButtonType yesBtn = new ButtonType("Yes", ButtonBar.ButtonData.YES);
         ButtonType noBtn = new ButtonType("No", ButtonBar.ButtonData.NO);
