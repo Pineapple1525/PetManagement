@@ -80,7 +80,7 @@ public class PetController {
     private TableColumn<Pet, Integer> POIdColumn;
 
     @FXML
-    private TableColumn<Pet, Integer> breederColumn;
+    private TableColumn<Pet, String> breederColumn;
     @FXML
     private TableColumn<Pet, LocalDateTime> importDateColumn;
     @FXML
@@ -156,7 +156,7 @@ public class PetController {
         });
         sourceTypeColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSourceType()));
         POIdColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPreviousOwnerId()));
-        breedColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getBreed()));
+        breederColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getEmployeeId()));
         importDateColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getImportDate()));
         adoptionStatusColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getAdoptionStatus()));
 
@@ -223,7 +223,8 @@ public class PetController {
                     pet.setHealthStatus(rs.getString("health_status"));
                     pet.setSourceType(rs.getString("source_type"));
                     pet.setPreviousOwnerId(rs.getInt("previous_owner_id"));
-                    pet.setBreed(rs.getString("breed"));
+                    pet.setEmployeeId(rs.getString("employee_id"));
+
                     pet.setImportDate(rs.getObject("import_date", LocalDateTime.class));
                     pet.setPrice(rs.getDouble("price"));
                     petList.add(pet);
@@ -251,7 +252,7 @@ public class PetController {
         confirm.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
                 try (Connection conn = new DBConnection().getConn()) {
-                    String deleteSQL = "DELETE FROM pets WHERE id=?";
+                    String deleteSQL = "DELETE FROM pets WHERE pet_id=?";
                     try (PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
                         pstmt.setInt(1, pet.getPetId());
                         int rowsAffected = pstmt.executeUpdate();
@@ -387,7 +388,7 @@ public class PetController {
 
                 try (Connection conn = new DBConnection().getConn()) {
                     if (pet == null) {
-                        String insertSQL = "INSERT INTO pets (code_product, name, species, breed, gender, birth_date, color, weight, health_status, image_url, source_type, previous_owner_id, employee_id, adoption_status, price) " +
+                        String insertSQL = "INSERT INTO pets (pet_code, name, species, breed, gender, birthdate, color, weight, health_status, image_url, source_type, previous_owner_id, employee_id, adoption_status, price) " +
                                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
                             pstmt.setString(1, txtCode.getText());
@@ -402,13 +403,14 @@ public class PetController {
                             pstmt.setString(10, txtImage.getText());
                             pstmt.setString(11, cbSourceType.getValue());
                             pstmt.setInt(12, txtPreviousOwnerId.getText().isEmpty() ? null : Integer.parseInt(txtPreviousOwnerId.getText()));
-                            pstmt.setInt(13, txtEmployeeId.getText().isEmpty() ? null : Integer.parseInt(txtEmployeeId.getText()));
+                            pstmt.setString(13, txtEmployeeId.getText().isEmpty() ? null : txtEmployeeId.getText());
+
                             pstmt.setString(14, cbAdoptionStatus.getValue());
                             pstmt.setDouble(15, Double.parseDouble(txtPrice.getText()));
                             pstmt.executeUpdate();
                         }
                     } else {
-                        String updateSQL = "UPDATE pets SET code_product=?, name=?, species=?, breed=?, gender=?, birth_date=?, color=?, weight=?, health_status=?, image_url=?, source_type=?, previous_owner_id=?, employee_id=?, adoption_status=?, price=? WHERE id=?";
+                        String updateSQL = "UPDATE pets SET pet_code=?, name=?, species=?, breed=?, gender=?, birthdate=?, color=?, weight=?, health_status=?, image_url=?, source_type=?, previous_owner_id=?, employee_id=?, adoption_status=?, price=? WHERE pet_id=?";
                         try (PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
                             pstmt.setString(1, txtCode.getText());
                             pstmt.setString(2, txtName.getText());
@@ -422,7 +424,8 @@ public class PetController {
                             pstmt.setString(10, txtImage.getText());
                             pstmt.setString(11, cbSourceType.getValue());
                             pstmt.setInt(12, txtPreviousOwnerId.getText().isEmpty() ? null : Integer.parseInt(txtPreviousOwnerId.getText()));
-                            pstmt.setInt(13, txtEmployeeId.getText().isEmpty() ? null : Integer.parseInt(txtEmployeeId.getText()));
+                            pstmt.setString(13, txtEmployeeId.getText().isEmpty() ? null : txtEmployeeId.getText());
+
                             pstmt.setString(14, cbAdoptionStatus.getValue());
                             pstmt.setDouble(15, Double.parseDouble(txtPrice.getText()));
                             pstmt.setInt(16, pet.getPetId());

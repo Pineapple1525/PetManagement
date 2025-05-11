@@ -18,7 +18,7 @@ public class Pet {
     private String imageUrl;
     private String sourceType; // Enum: Previous Owner, Breeding Farm
     private Integer previousOwnerId; // Can be null
-    private Integer employeeId;
+    private String employeeId;
     private LocalDateTime importDate;
     private String adoptionStatus; // Enum: Available, Adopted, Reserved
     private Double price;
@@ -28,7 +28,7 @@ public class Pet {
 
     public Pet(int petId, String name, String petCode, String species, String breed, String gender,
                LocalDate birthdate, String color, Double weight, String healthStatus,
-               String imageUrl, String sourceType, Integer previousOwnerId, Integer employeeId,
+               String imageUrl, String sourceType, Integer previousOwnerId, String employeeId,
                LocalDateTime importDate, String adoptionStatus, Double price) {
         this.petId = petId;
         this.name = name;
@@ -154,11 +154,11 @@ public class Pet {
         this.previousOwnerId = previousOwnerId;
     }
 
-    public Integer getEmployeeId() {
+    public String getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
+    public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
 
