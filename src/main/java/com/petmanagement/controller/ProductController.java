@@ -67,27 +67,34 @@ public class ProductController {
         ));
         imageColumn.setCellFactory(col -> new TableCell<PetProduct, String>() {
             private final ImageView imageView = new ImageView();
+            private final Image fallbackImage = new Image(getClass().getResource("/images/default.png").toExternalForm());
 
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
 
-                if (empty || item == null) {
+                if (empty || item == null || item.trim().isEmpty()) {
                     setGraphic(null);
                 } else {
+                    Image image;
                     try {
-                        Image image = new Image(item);
-                        imageView.setImage(image);
-                        imageView.setFitHeight(50);
-                        imageView.setFitWidth(50);
-                        setGraphic(imageView);
+                        image = new Image(item, true);
+                        if (image.isError()) {
+                            image = fallbackImage;
+                        }
                     } catch (Exception e) {
-                        setGraphic(null);
-                        e.printStackTrace();
+                        image = fallbackImage;
                     }
+
+                    imageView.setImage(image);
+                    imageView.setFitHeight(50);
+                    imageView.setFitWidth(50);
+                    imageView.setPreserveRatio(true);
+                    setGraphic(imageView);
                 }
             }
         });
+
         setupActionColumn();
         productTable.setItems(productList);
         loadProductsFromDatabase();
