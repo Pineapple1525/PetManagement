@@ -23,7 +23,9 @@ import javafx.scene.layout.HBox;
 
 import javafx.geometry.Insets;
 
+import java.io.File;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -67,7 +69,6 @@ public class ProductController {
         ));
         imageColumn.setCellFactory(col -> new TableCell<PetProduct, String>() {
             private final ImageView imageView = new ImageView();
-            private final Image fallbackImage = new Image(getClass().getResource("/images/default.png").toExternalForm());
 
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -76,21 +77,32 @@ public class ProductController {
                 if (empty || item == null || item.trim().isEmpty()) {
                     setGraphic(null);
                 } else {
-                    Image image;
                     try {
-                        image = new Image(item, true);
-                        if (image.isError()) {
-                            image = fallbackImage;
-                        }
-                    } catch (Exception e) {
-                        image = fallbackImage;
-                    }
+                        String imageUrl;
 
-                    imageView.setImage(image);
-                    imageView.setFitHeight(50);
-                    imageView.setFitWidth(50);
-                    imageView.setPreserveRatio(true);
-                    setGraphic(imageView);
+                        if (item.startsWith("http://") || item.startsWith("https://")) {
+                            imageUrl = item;
+                        } else if (item.startsWith("file:")) {
+                            imageUrl = item;
+                        } else {
+                            URL resource = getClass().getResource(item.startsWith("/") ? item : "/" + item);
+                            if (resource != null) {
+                                imageUrl = resource.toExternalForm();
+                            } else {
+                                File file = new File(item);
+                                imageUrl = file.toURI().toString();
+                            }
+                        }
+
+                        Image image = new Image(imageUrl);
+                        imageView.setImage(image);
+                        imageView.setFitHeight(50);
+                        imageView.setFitWidth(50);
+                        setGraphic(imageView);
+                    } catch (Exception e) {
+                        setGraphic(null);
+                        e.printStackTrace();
+                    }
                 }
             }
         });

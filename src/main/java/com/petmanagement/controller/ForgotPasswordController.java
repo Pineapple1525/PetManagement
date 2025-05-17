@@ -19,7 +19,7 @@ public class ForgotPasswordController {
     @FXML private Label statusLabel;
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/petshop", "root", "duy2692005");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/petshop", "root", "");
     }
 
     @FXML

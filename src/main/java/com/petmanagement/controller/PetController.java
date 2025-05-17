@@ -31,8 +31,10 @@ import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -138,11 +140,27 @@ public class PetController {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
 
-                if (empty || item == null) {
+                if (empty || item == null || item.trim().isEmpty()) {
                     setGraphic(null);
                 } else {
                     try {
-                        Image image = new Image(item);
+                        String imageUrl;
+
+                        if (item.startsWith("http://") || item.startsWith("https://")) {
+                            imageUrl = item;
+                        } else if (item.startsWith("file:")) {
+                            imageUrl = item;
+                        } else {
+                            URL resource = getClass().getResource(item.startsWith("/") ? item : "/" + item);
+                            if (resource != null) {
+                                imageUrl = resource.toExternalForm();
+                            } else {
+                                File file = new File(item);
+                                imageUrl = file.toURI().toString();
+                            }
+                        }
+
+                        Image image = new Image(imageUrl);
                         imageView.setImage(image);
                         imageView.setFitHeight(50);
                         imageView.setFitWidth(50);
